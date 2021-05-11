@@ -1,5 +1,6 @@
 package com.example.appitup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -10,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -139,10 +141,17 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+
                                 setResultsUI("User Registered Successfully!! We had sent a verification link to email. Please verify your email to Login");
+                                Intent intent = new Intent(SignUpActivity.this, SignIn.class);
+                                startActivity(intent);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                //Toast.makeText(getApplicationContext(), "Signed In.", Toast.LENGTH_SHORT).show();
+                                finish();
+
                             } else
-                                setResultsUI("User Registered Successfully. But failed to send verification Link to Email.\n Error : " + task.getException().getMessage());
-                            FirebaseAuth.getInstance().signOut();
+                            {setResultsUI("User Registered Successfully. But failed to send verification Link to Email.\n Error : " + task.getException().getMessage());
+                            FirebaseAuth.getInstance().signOut();}
                         }
                     });
                     createUserInDB(userName, email, name, mAuth.getCurrentUser().getUid());
