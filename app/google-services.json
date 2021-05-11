@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "842435634928",
+    "project_id": "appitup-4ed23",
+    "storage_bucket": "appitup-4ed23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842435634928:android:ce4809271023e12bdc8435",
+        "android_client_info": {
+          "package_name": "com.example.appitup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842435634928-a539kkdkl359k3klag7b5hk67pkmj3rr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUhtU-cNjo5D0NOc_0DOv7Ln4suhUJaFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842435634928-a539kkdkl359k3klag7b5hk67pkmj3rr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
