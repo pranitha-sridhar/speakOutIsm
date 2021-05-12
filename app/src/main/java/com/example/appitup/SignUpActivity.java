@@ -126,6 +126,12 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 } else textInputPassword.setError(null);
 
+                if(!email.endsWith(".iitism.ac.in")){
+                    textInputEmail.setError("Only ISM mail ids are allowed");
+                    textInputEmail.requestFocus();
+                    return;
+                }else textInputEmail.setError(null);
+
                 signUp(userName, email, name, password);
             }
         });
@@ -150,8 +156,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 finish();
 
                             } else
-                            {setResultsUI("User Registered Successfully. But failed to send verification Link to Email.\n Error : " + task.getException().getMessage());
-                            FirebaseAuth.getInstance().signOut();}
+                                setResultsUI("User Registered Successfully. But failed to send verification Link to Email.\n Error : " + task.getException().getMessage());
+                            FirebaseAuth.getInstance().signOut();
                         }
                     });
                     createUserInDB(userName, email, name, mAuth.getCurrentUser().getUid());
