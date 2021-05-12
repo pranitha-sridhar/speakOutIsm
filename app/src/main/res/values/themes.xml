@@ -22,4 +22,6 @@
     <style name="Theme.AppItUp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.AppItUp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
 </resources>

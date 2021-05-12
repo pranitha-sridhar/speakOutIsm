@@ -1,0 +1,221 @@
+package com.example.appitup;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.appitup.Models.Complaints;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+public class Register_Complaint extends AppCompatActivity {
+
+TextView subcat;
+ChipGroup chipGroup1,chipGroup2;
+String category, subcategory=null;
+int k=3;
+String[] subcatTitle ={"null","null","null","null","null","null"};
+Switch switchh;
+CheckBox checkBox;
+Button submit;
+FirebaseAuth mAuth;
+TextInputLayout title, bodyinput;
+ProgressBar progressBar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register__complaint);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Create a complaint");
+        actionBar.show();
+
+        //final ChipGroup[] chipGroup2 = {new ChipGroup(this)};
+        chipGroup1=findViewById(R.id.chip_group1);
+        chipGroup2=findViewById(R.id.chip_group2);
+        subcat=findViewById(R.id.subcat);
+        switchh=findViewById(R.id.switchmat);
+        checkBox=findViewById(R.id.box);
+        submit=findViewById(R.id.submit);
+        mAuth=FirebaseAuth.getInstance();
+        title=findViewById(R.id.textInputTitle);
+        bodyinput =findViewById(R.id.textInputBody);
+        progressBar=findViewById(R.id.progressBar2);
+        //chipGroup1.isSingleSelection();
+
+        Context context=this;
+        subcatTitle[0]=("Pre-Registration");subcatTitle[1]=("Fees Issue");subcatTitle[2]=("Others");
+        category ="Registration";
+        //subcategory ="Pre-Registration";
+        fun(context);
+
+        chipGroup2.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup group, int checkedId) {
+                Chip chip=chipGroup2.findViewById(checkedId);
+                subcategory =chip.getText().toString();
+            }
+        });
+
+        chipGroup1.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup group, int checkedId) {
+                if(checkedId==-1){
+                    return;
+                }
+                chipGroup2.removeAllViews();
+                subcategory=null;
+                if(checkedId==R.id.registration){
+                    category ="Registration";
+                    subcatTitle[0]=("Pre-Registration");subcatTitle[1]=("Fees Issue");subcatTitle[2]=("Others");
+                    k=3;
+                }
+                if(checkedId==R.id.academics){
+                    category ="Academics";
+                    subcatTitle[0]=("Lecture Timings");subcatTitle[1]=("Paper Evaluation");subcatTitle[2]=("Attendance");subcatTitle[3]=("Others");
+                    k=4;
+                }
+                if(checkedId==R.id.dsw){
+                    category ="DSW";
+                    subcatTitle[0]=("Scholarships");subcatTitle[1]=("Clubs");subcatTitle[2]=("Sports");subcatTitle[3]=("Guest Rooms");
+                    k=4;
+                }
+                if(checkedId==R.id.vendors){
+                    category ="Vendors";
+                    subcatTitle[0]=("RD");subcatTitle[1]=("Barista");subcatTitle[2]=("Guruji");
+                    k=3;
+                }
+                if(checkedId==R.id.mis){
+                    category ="MIS";
+                    subcatTitle[0]=("Technical Issue");
+                    k=1;
+                }
+                if(checkedId==R.id.hostel){
+                    category ="Hostel";
+                    subcatTitle[0]=("Electricity");subcatTitle[1]=("Hygiene");subcatTitle[2]=("Warden");subcatTitle[3]="Mess";
+                    k=4;
+                }
+                if(checkedId==R.id.health){
+                    category ="Health";
+                    subcatTitle[0]=("Hygiene");subcatTitle[1]=("Doctor Unavailability");subcatTitle[2]=("Medicine Unavailability");subcatTitle[3]="Beds Unavailability";subcatTitle[4]="Ambulance Issue";subcatTitle[5]="Others";
+                    k=6;
+                }
+                if(checkedId==R.id.library){
+                    category ="Library";
+                    subcatTitle[0]=("Timing");subcatTitle[1]=("Issue/Re-Issue/Submit");subcatTitle[2]=("Fine");subcatTitle[3]="Others";
+                    k=4;
+                }
+                if(checkedId==R.id.personal){
+                    category ="Personal";
+                    subcatTitle[0]="Personal";
+                    k=1;
+                }
+                fun(context);
+            }
+        });
+
+        switchh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) checkBox.setVisibility(View.VISIBLE);
+                else checkBox.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String uid=mAuth.getUid();
+                String subject=title.getEditText().getText().toString();
+                String body= bodyinput.getEditText().getText().toString();
+                if(subject.isEmpty()){
+                    title.setError("Title should not be empty");
+                    title.requestFocus();
+                    return;
+                }else title.setError(null);
+                if(body.isEmpty()){
+                    bodyinput.setError("Body should not be empty");
+                    bodyinput.requestFocus();
+                    return;
+                }else bodyinput.setError(null);
+                boolean public_private=false;
+                if(switchh.isChecked())public_private=true;
+                boolean anonymous=false;
+                if(checkBox.isChecked())anonymous=true;
+                String visibility="public";
+                if(anonymous)visibility="anonymous";
+                if(!public_private)visibility="private";
+
+                if(subcategory ==null){
+                    Toast.makeText(context, "Choose a sub-category", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Toast.makeText(context, ""+uid+" "+heading+" "+message+" "+permission+" "+cat+" "+sub, Toast.LENGTH_SHORT).show();
+                String status="PENDING";
+                String username=getSharedPreferences("username",MODE_PRIVATE).getString("username",null);
+                //Toast.makeText(context, ""+username, Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.VISIBLE);
+                DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Complaints");
+                Complaints complaints=new Complaints(username,uid,subject,body,category,subcategory,visibility,status);
+                reference.push().setValue(complaints).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "Submitted", Toast.LENGTH_SHORT).show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }, 1000);
+                    }
+                });
+            }
+        });
+
+
+
+
+    }
+
+    public void fun(Context context){
+        for(int j=0;j<k;j++){
+            Chip chip1=new Chip(context);
+            chip1.setText(subcatTitle[j]);
+            chip1.setChipBackgroundColorResource(R.color.stroke_tint);
+            chip1.setCheckable(true);
+            chip1.setFocusable(true);
+            chip1.setClickable(true);
+            //if(j==0)chip1.setChecked(true);
+            chipGroup2.addView(chip1);
+        }
+    }
+
+}
