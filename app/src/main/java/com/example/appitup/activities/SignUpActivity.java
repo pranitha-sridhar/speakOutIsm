@@ -16,8 +16,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.agrawalsuneet.dotsloader.loaders.PullInLoader;
-import com.example.appitup.Models.User;
 import com.example.appitup.R;
+import com.example.appitup.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;

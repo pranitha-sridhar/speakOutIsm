@@ -1,24 +1,21 @@
-package com.example.appitup;
+package com.example.appitup.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Patterns;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Patterns;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.agrawalsuneet.dotsloader.loaders.PullInLoader;
+import com.example.appitup.R;
+import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -27,7 +24,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -172,7 +168,6 @@ AlertDialog alertDialogProgress;
                 }
                 else{
                     check_admin(username,passwords);
-
                 }
             }
 
@@ -250,8 +245,8 @@ AlertDialog alertDialogProgress;
                             getSharedPreferences("logged", MODE_PRIVATE).edit().putInt("type", 1).apply();
                             type=1;
                             Intent intent = new Intent(SignIn.this, MainActivity.class);
-                            startActivity(intent);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
                         else {
                             getSharedPreferences("logged", MODE_PRIVATE).edit().putInt("type", 2).apply();
@@ -261,13 +256,13 @@ AlertDialog alertDialogProgress;
                             //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         }
                         Toast.makeText(getApplicationContext(), "Signed In ", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
+                    } else {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "Please verify", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Please Verify your Email first!!", Toast.LENGTH_SHORT).show();
+                        FirebaseAuth.getInstance().signOut();
                         //setResultsUI("Please verify you mail id");
                     }
-                }
+                } else Helper.toast(SignIn.this, task.getException().getMessage());
             }
         });
     }

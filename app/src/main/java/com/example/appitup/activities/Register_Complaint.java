@@ -1,35 +1,32 @@
-package com.example.appitup;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.appitup.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.appitup.Models.Complaints;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.appitup.R;
+import com.example.appitup.models.Complaints;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class Register_Complaint extends AppCompatActivity {
 
@@ -37,11 +34,11 @@ TextView subcat;
 ChipGroup chipGroup1,chipGroup2;
 String category, subcategory=null;
 int k=3;
-String[] subcatTitle ={"null","null","null","null","null","null"};
-Switch switchh;
-CheckBox checkBox;
-Button submit;
-FirebaseAuth mAuth;
+    String[] subcatTitle = {"null", "null", "null", "null", "null", "null"};
+    SwitchMaterial switchh;
+    CheckBox checkBox;
+    MaterialButton submit;
+    FirebaseAuth mAuth;
 TextInputLayout title, bodyinput;
 ProgressBar progressBar;
 

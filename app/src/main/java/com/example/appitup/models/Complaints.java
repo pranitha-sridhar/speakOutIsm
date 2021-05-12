@@ -1,4 +1,4 @@
-package com.example.appitup.Models;
+package com.example.appitup.models;
 
 public class Complaints {
     String username;
@@ -7,7 +7,7 @@ public class Complaints {
     String body;
     String category;
     String subcategory;
-    String visibilty;
+    String visibility;
     String status;
 
     public Complaints(String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status) {
@@ -17,7 +17,7 @@ public class Complaints {
         this.body = body;
         this.category = category;
         this.subcategory = subcategory;
-        this.visibilty = visibilty;
+        this.visibility = visibilty;
         this.status = status;
     }
 
@@ -45,8 +45,8 @@ public class Complaints {
         this.subcategory = subcategory;
     }
 
-    public void setVisibilty(String visibilty) {
-        this.visibilty = visibilty;
+    public String getVisibility() {
+        return visibility;
     }
 
     public void setStatus(String status) {
@@ -77,8 +77,8 @@ public class Complaints {
         return subcategory;
     }
 
-    public String getVisibilty() {
-        return visibilty;
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
     }
 
     public String getStatus() {

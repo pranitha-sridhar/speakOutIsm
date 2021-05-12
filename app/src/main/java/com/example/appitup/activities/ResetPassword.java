@@ -1,8 +1,4 @@
-package com.example.appitup;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.appitup.activities;
 
 import android.os.Bundle;
 import android.view.Gravity;
@@ -12,15 +8,17 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.agrawalsuneet.dotsloader.loaders.PullInLoader;
+import com.example.appitup.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-
-import butterknife.Unbinder;
 
 public class ResetPassword extends AppCompatActivity {
 EditText mail;

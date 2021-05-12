@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppItUp">
-        <activity android:name=".Register_Complaint"/>
+        <activity android:name=".activities.Register_Complaint" />
         <activity android:name=".activities.NotificationsActivity"/>
         <activity
-            android:name=".SignIn"
+            android:name=".activities.SignIn"
             android:theme="@style/Theme.AppItUp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResetPassword" />
+        <activity android:name=".activities.ResetPassword" />
         <activity android:name=".activities.MainActivity"
             android:theme="@style/Theme.AppItUp.NoActionBar"/>
         <activity android:name=".activities.SignUpActivity" />

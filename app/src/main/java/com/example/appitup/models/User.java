@@ -1,4 +1,4 @@
-package com.example.appitup.Models;
+package com.example.appitup.models;
 
 public class User {
     String username;
