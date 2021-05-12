@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">AppItUp</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <!--    Navigation Drawer-->
+    <string name="home">Home</string>
+    <string name="trending">Trending</string>
+    <string name="status">Status</string>
+    <string name="user_account">User Account</string>
+    <string name="about_us">About Us</string>
+    <string name="faq_help"><![CDATA[FAQ & HELP]]></string>
+    <string name="sign_out">Sign Out</string>
+    <string name="notification">Notification</string>
+    <string name="file_a_complaint">File a Complaint</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

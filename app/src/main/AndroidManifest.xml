@@ -9,18 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppItUp">
-        <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".SignIn">
+        <activity android:name=".activities.NotificationsActivity"></activity>
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.AppItUp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResetPassword"></activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".activities.SignUpActivity" />
     </application>
 
 </manifest>

@@ -1,6 +1,5 @@
-package com.example.appitup;
+package com.example.appitup.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -11,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.agrawalsuneet.dotsloader.loaders.PullInLoader;
 import com.example.appitup.Models.User;
+import com.example.appitup.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -149,12 +148,11 @@ public class SignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
 
                                 setResultsUI("User Registered Successfully!! We had sent a verification link to email. Please verify your email to Login");
-                                Intent intent = new Intent(SignUpActivity.this, SignIn.class);
-                                startActivity(intent);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                Intent intent = new Intent(SignUpActivity.this, SignIn.class);
+//                                startActivity(intent);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 //Toast.makeText(getApplicationContext(), "Signed In.", Toast.LENGTH_SHORT).show();
-                                finish();
-
+//                                finish();
                             } else
                                 setResultsUI("User Registered Successfully. But failed to send verification Link to Email.\n Error : " + task.getException().getMessage());
                             FirebaseAuth.getInstance().signOut();
