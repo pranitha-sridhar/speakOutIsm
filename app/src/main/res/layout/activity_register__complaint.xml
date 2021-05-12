@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Register_Complaint">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        android:id="@+id/progressBar2"/>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:text="Choose a category:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/text"/>
+
+        <com.google.android.material.chip.ChipGroup
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text"
+            android:layout_width="match_parent"
+            android:layout_margin="20sp"
+            app:singleSelection="true"
+            android:id="@+id/chip_group1"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            >
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:checked="true"
+                android:layout_height="wrap_content"
+                android:text="Registration"
+                android:id="@+id/registration"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Academics"
+                android:id="@+id/academics"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DSW"
+                android:id="@+id/dsw"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vendors of ISM"
+                android:id="@+id/vendors"/>
+
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MIS/Parent Portal"
+                android:id="@+id/mis"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hostel"
+                android:id="@+id/hostel"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Health Centre"
+                android:id="@+id/health"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Library"
+                android:id="@+id/library"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Personal"
+                android:id="@+id/personal"/>
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chip_group1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose a sub-category"
+            android:layout_margin="20dp"
+            android:id="@+id/subcat" />
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subcat"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/chip_group2"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+        </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chip_group2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeErrorColor="@android:color/holo_red_light"
+        app:errorTextAppearance="@android:color/holo_red_light"
+        app:errorTextColor="@android:color/holo_red_light"
+        app:helperText="Subject of the grievence">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/textInputBody"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Message"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeErrorColor="@android:color/holo_red_light"
+        app:errorTextAppearance="@android:color/holo_red_light"
+        app:errorTextColor="@android:color/holo_red_light"
+        app:helperText="Mention your grievance elaborately">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="190dp"
+            android:inputType="textCapSentences"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/relative"
+        app:layout_constraintTop_toBottomOf="@id/textInputBody">
+
+        <Switch
+            android:id="@+id/switchmat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:checked="true"
+            android:textOff="NO"
+            android:textOn="YES"
+            android:switchMinWidth="50dp"
+            android:text="Visible to Public" />
+
+        <CheckBox
+            android:id="@+id/box"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:text="Post as an Anonymous User" />
+
+
+    </RelativeLayout>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/submit"/>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
