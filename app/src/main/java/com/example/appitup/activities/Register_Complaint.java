@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +37,11 @@ ChipGroup chipGroup1,chipGroup2;
 String category, subcategory=null;
 int k=3;
     String[] subcatTitle = {"null", "null", "null", "null", "null", "null"};
-    SwitchMaterial switchh;
+    Switch switchh;
     CheckBox checkBox;
-    MaterialButton submit;
+    Button submit;
     FirebaseAuth mAuth;
+
 TextInputLayout title, bodyinput;
 ProgressBar progressBar;
 
@@ -161,10 +164,9 @@ ProgressBar progressBar;
                 }else bodyinput.setError(null);
                 boolean public_private=false;
                 if(switchh.isChecked())public_private=true;
-                boolean anonymous=false;
-                if(checkBox.isChecked())anonymous=true;
+                String anonymous="false";
+                if(checkBox.isChecked())anonymous="true";
                 String visibility="public";
-                if(anonymous)visibility="anonymous";
                 if(!public_private)visibility="private";
 
                 if(subcategory ==null){
@@ -178,7 +180,7 @@ ProgressBar progressBar;
                 //Toast.makeText(context, ""+username, Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.VISIBLE);
                 DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Complaints");
-                Complaints complaints=new Complaints(username,uid,subject,body,category,subcategory,visibility,status);
+                Complaints complaints=new Complaints(username,uid,subject,body,category,subcategory,visibility,status,anonymous);
                 reference.push().setValue(complaints).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
