@@ -146,13 +146,7 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-
                                 setResultsUI("User Registered Successfully!! We had sent a verification link to email. Please verify your email to Login");
-//                                Intent intent = new Intent(SignUpActivity.this, SignIn.class);
-//                                startActivity(intent);
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                //Toast.makeText(getApplicationContext(), "Signed In.", Toast.LENGTH_SHORT).show();
-//                                finish();
                             } else
                                 setResultsUI("User Registered Successfully. But failed to send verification Link to Email.\n Error : " + task.getException().getMessage());
                             FirebaseAuth.getInstance().signOut();

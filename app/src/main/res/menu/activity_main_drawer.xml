@@ -43,10 +43,5 @@
             android:id="@+id/nav_faq_help"
             android:icon="@drawable/ic_faq_help"
             android:title="@string/faq_help" />
-
-        <item
-            android:id="@+id/nav_sign_out"
-            android:icon="@drawable/ic_sign_out"
-            android:title="@string/sign_out" />
     </group>
 </menu>

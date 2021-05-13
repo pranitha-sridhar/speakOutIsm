@@ -54,4 +54,7 @@ dependencies {
 
     // Dots Loading Animations
     implementation 'com.agrawalsuneet.androidlibs:dotsloader:1.4'
+
+    // dependency for converting from json to POJO and vice versa
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
