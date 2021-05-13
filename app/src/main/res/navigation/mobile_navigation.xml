@@ -30,6 +30,12 @@
         tools:layout="@layout/fragment_user_account" />
 
     <fragment
+        android:id="@+id/nav_all_user"
+        android:name="com.example.appitup.fragments.AllUsersFragment"
+        android:label="@string/all_users"
+        tools:layout="@layout/fragment_all_users" />
+
+    <fragment
         android:id="@+id/nav_about_us"
         android:name="com.example.appitup.fragments.AboutUsFragment"
         android:label="@string/about_us"

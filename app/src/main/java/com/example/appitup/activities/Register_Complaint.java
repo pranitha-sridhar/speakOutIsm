@@ -17,14 +17,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.models.Complaints;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -175,8 +174,8 @@ ProgressBar progressBar;
                 }
 
                 //Toast.makeText(context, ""+uid+" "+heading+" "+message+" "+permission+" "+cat+" "+sub, Toast.LENGTH_SHORT).show();
-                String status="PENDING";
-                String username=getSharedPreferences("username",MODE_PRIVATE).getString("username",null);
+                String status = "PENDING";
+                String username = Prefs.getUser(Register_Complaint.this).getUsername();
                 //Toast.makeText(context, ""+username, Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.VISIBLE);
                 DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Complaints");

@@ -1,6 +1,7 @@
 package com.example.appitup.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,17 +40,17 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         Complaints complaints = list.get(position);
-        holder.textUserName.setText(complaints.getUsername());
+        holder.textUserName.setText("@" + complaints.getUsername());
         holder.textViewTitle.setText(complaints.getSubject());
         holder.textViewBody.setText(complaints.getBody());
         //holder.textViewDateTime.setText(complaints.getDateTime());
         holder.chipStatus.setText(complaints.getStatus());
         if (complaints.getStatus().equals(Helper.PENDING)) {
-            holder.chipStatus.setBackgroundColor(context.getResources().getColor(R.color.pending_color));
+            holder.chipStatus.setChipBackgroundColor(ColorStateList.valueOf(context.getResources().getColor(R.color.pending_color)));
         } else if (complaints.getStatus().equals(Helper.IN_PROGRESS)) {
-            holder.chipStatus.setBackgroundColor(context.getResources().getColor(R.color.inprogress_color));
+            holder.chipStatus.setChipBackgroundColor(ColorStateList.valueOf(context.getResources().getColor(R.color.inprogress_color)));
         } else if (complaints.getStatus().equals(Helper.RESOLVED)) {
-            holder.chipStatus.setBackgroundColor(context.getResources().getColor(R.color.resolved_color));
+            holder.chipStatus.setChipBackgroundColor(ColorStateList.valueOf(context.getResources().getColor(R.color.resolved_color)));
         }
         holder.chipCategory.setText(complaints.getCategory());
         holder.chipSubcategory.setText(complaints.getSubcategory());
