@@ -9,8 +9,9 @@ public class Complaints {
     String subcategory;
     String visibility;
     String status;
+    String anonymous;
 
-    public Complaints(String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status) {
+    public Complaints(String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status,String anonymous) {
         this.username = username;
         this.uid = uid;
         this.subject = subject;
@@ -19,6 +20,15 @@ public class Complaints {
         this.subcategory = subcategory;
         this.visibility = visibilty;
         this.status = status;
+        this.anonymous=anonymous;
+    }
+
+    public String getAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(String anonymous) {
+        this.anonymous = anonymous;
     }
 
     public void setUsername(String username) {
