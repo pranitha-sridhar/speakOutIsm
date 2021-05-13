@@ -178,9 +178,10 @@ ProgressBar progressBar;
                 String username = Prefs.getUser(Register_Complaint.this).getUsername();
                 //Toast.makeText(context, ""+username, Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.VISIBLE);
-                DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Complaints");
-                Complaints complaints=new Complaints(username,uid,subject,body,category,subcategory,visibility,status,anonymous);
-                reference.push().setValue(complaints).addOnCompleteListener(new OnCompleteListener<Void>() {
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Complaints");
+                String complaintId = reference.push().getKey();
+                Complaints complaints = new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status, anonymous);
+                reference.child(complaintId).setValue(complaints).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         progressBar.setVisibility(View.GONE);

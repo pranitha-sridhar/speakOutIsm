@@ -5,16 +5,19 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.models.Complaints;
 import com.example.appitup.utility.Helper;
 import com.google.android.material.chip.Chip;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.viewHolder> {
@@ -54,6 +57,94 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         }
         holder.chipCategory.setText(complaints.getCategory());
         holder.chipSubcategory.setText(complaints.getSubcategory());
+
+        if (complaints.getListOfUpVoter() == null)
+            complaints.setListOfUpVoter(new ArrayList<>());
+        if (complaints.getListOfDownVoter() == null)
+            complaints.setListOfDownVoter(new ArrayList<>());
+        if (complaints.getListOfCommenter() == null)
+            complaints.setListOfCommenter(new ArrayList<>());
+
+        int upVoters = (complaints.getListOfUpVoter() != null) ? complaints.getListOfUpVoter().size() : 0;
+        int downVoters = (complaints.getListOfDownVoter() != null) ? complaints.getListOfDownVoter().size() : 0;
+        int commenter = (complaints.getListOfCommenter() != null) ? complaints.getListOfCommenter().size() : 0;
+
+        holder.upVoteNumber.setText(upVoters + " upvotes");
+        holder.downVoteNumber.setText(downVoters + " downvotes");
+        holder.commentNumber.setText(commenter + " comments");
+
+        int status = 0;
+        if (complaints.getListOfUpVoter() != null && complaints.getListOfUpVoter().contains(Prefs.getUser(context).getUsername())) {
+            holder.upVote.setImageResource(R.drawable.ic_upvote_filled);
+            holder.downVote.setImageResource(R.drawable.ic_downvote_outlined);
+            status = 1;
+        }
+
+        if (complaints.getListOfDownVoter() != null && complaints.getListOfDownVoter().contains(Prefs.getUser(context).getUsername())) {
+            holder.downVote.setImageResource(R.drawable.ic_downvote_filled);
+            holder.upVote.setImageResource(R.drawable.ic_upvote_outlined);
+            status = -1;
+        }
+
+        int finalStatus = status;
+        holder.upVote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (finalStatus == -1) {
+                    holder.upVoteNumber.setText(upVoters + 1 + " upvotes");
+                    holder.downVoteNumber.setText(downVoters - 1 + " downvotes");
+                } else if (finalStatus == 0) {
+                    holder.upVoteNumber.setText(upVoters + 1 + " upvotes");
+                    holder.downVoteNumber.setText(downVoters + " downvotes");
+                } else if (finalStatus == 1) {
+                    holder.upVoteNumber.setText(upVoters + " upvotes");
+                    holder.downVoteNumber.setText(downVoters + " downvotes");
+                }
+
+                holder.upVote.setImageResource(R.drawable.ic_upvote_filled);
+                holder.downVote.setImageResource(R.drawable.ic_downvote_outlined);
+                if (mListener != null)
+                    mListener.upVoteClicked(complaints);
+            }
+        });
+
+        holder.downVote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (finalStatus == 1) {
+                    holder.upVoteNumber.setText(upVoters - 1 + " upvotes");
+                    holder.downVoteNumber.setText(downVoters + 1 + " downvotes");
+                } else if (finalStatus == 0) {
+                    holder.upVoteNumber.setText(upVoters + " upvotes");
+                    holder.downVoteNumber.setText(downVoters + 1 + " downvotes");
+                } else if (finalStatus == -1) {
+                    holder.upVoteNumber.setText(upVoters + " upvotes");
+                    holder.downVoteNumber.setText(downVoters + " downvotes");
+                }
+
+                holder.downVote.setImageResource(R.drawable.ic_downvote_filled);
+                holder.upVote.setImageResource(R.drawable.ic_upvote_outlined);
+                if (mListener != null)
+                    mListener.downVoteClicked(complaints);
+            }
+        });
+
+        holder.comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null)
+                    mListener.commentsClicked(complaints);
+            }
+        });
+    }
+
+    private int getStatus(Complaints complaints) {
+        int status = 0;
+        if (complaints.getListOfUpVoter() != null && complaints.getListOfUpVoter().contains(Prefs.getUser(context).getUsername()))
+            status = 1;
+        if (complaints.getListOfDownVoter() != null && complaints.getListOfDownVoter().contains(Prefs.getUser(context).getUsername()))
+            status = -1;
+        return status;
     }
 
     @Override
@@ -61,12 +152,18 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         return (list != null) ? list.size() : 0;
     }
 
-    interface ComplaintsListener {
+    public interface ComplaintsListener {
+        void upVoteClicked(Complaints complaint);
+
+        void downVoteClicked(Complaints complaint);
+
+        void commentsClicked(Complaints complaint);
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {
-        TextView textUserName, textViewDateTime, textViewTitle, textViewBody;
+        TextView textUserName, textViewDateTime, textViewTitle, textViewBody, upVoteNumber, downVoteNumber, commentNumber;
         Chip chipCategory, chipSubcategory, chipStatus;
+        ImageButton upVote, downVote, comment;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,6 +174,12 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
             chipCategory = itemView.findViewById(R.id.chipCategory);
             chipSubcategory = itemView.findViewById(R.id.chipSubcategory);
             chipStatus = itemView.findViewById(R.id.chipStatus);
+            upVoteNumber = itemView.findViewById(R.id.upVoteNumber);
+            downVoteNumber = itemView.findViewById(R.id.downVoteNumber);
+            commentNumber = itemView.findViewById(R.id.commentNumber);
+            upVote = itemView.findViewById(R.id.upVote);
+            downVote = itemView.findViewById(R.id.downVote);
+            comment = itemView.findViewById(R.id.comment);
         }
     }
 }

@@ -1,6 +1,9 @@
 package com.example.appitup.models;
 
+import java.util.ArrayList;
+
 public class Complaints {
+    String complaintId;
     String username;
     String uid;
     String subject;
@@ -10,8 +13,12 @@ public class Complaints {
     String visibility;
     String status;
     String anonymous;
+    ArrayList<String> listOfUpVoter;
+    ArrayList<String> listOfDownVoter;
+    ArrayList<Comment> listOfCommenter;
 
-    public Complaints(String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status,String anonymous) {
+    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status, String anonymous) {
+        this.complaintId = complaintId;
         this.username = username;
         this.uid = uid;
         this.subject = subject;
@@ -20,7 +27,55 @@ public class Complaints {
         this.subcategory = subcategory;
         this.visibility = visibilty;
         this.status = status;
-        this.anonymous=anonymous;
+        this.anonymous = anonymous;
+    }
+
+    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibility, String status, String anonymous, ArrayList<String> listOfUpVoter, ArrayList<String> listOfDownVoter, ArrayList<Comment> listOfCommenter) {
+        this.complaintId = complaintId;
+        this.username = username;
+        this.uid = uid;
+        this.subject = subject;
+        this.body = body;
+        this.category = category;
+        this.subcategory = subcategory;
+        this.visibility = visibility;
+        this.status = status;
+        this.anonymous = anonymous;
+        this.listOfUpVoter = listOfUpVoter;
+        this.listOfDownVoter = listOfDownVoter;
+        this.listOfCommenter = listOfCommenter;
+    }
+
+    public String getComplaintId() {
+        return complaintId;
+    }
+
+    public void setComplaintId(String complaintId) {
+        this.complaintId = complaintId;
+    }
+
+    public ArrayList<String> getListOfUpVoter() {
+        return listOfUpVoter;
+    }
+
+    public void setListOfUpVoter(ArrayList<String> listOfUpVoter) {
+        this.listOfUpVoter = listOfUpVoter;
+    }
+
+    public ArrayList<String> getListOfDownVoter() {
+        return listOfDownVoter;
+    }
+
+    public void setListOfDownVoter(ArrayList<String> listOfDownVoter) {
+        this.listOfDownVoter = listOfDownVoter;
+    }
+
+    public ArrayList<Comment> getListOfCommenter() {
+        return listOfCommenter;
+    }
+
+    public void setListOfCommenter(ArrayList<Comment> listOfCommenter) {
+        this.listOfCommenter = listOfCommenter;
     }
 
     public String getAnonymous() {

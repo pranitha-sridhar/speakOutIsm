@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="/@19je235"
+            android:text="19je235"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +29,7 @@
             android:id="@+id/textViewTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25sp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="2"
@@ -86,14 +87,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="IN-PROGRESS"
+            android:layout_marginEnd="10dp"
             android:textColor="@color/white"
             app:checkedIconTint="@color/white"
             app:chipBackgroundColor="@color/inprogress_color"
             app:chipStrokeColor="@android:color/darker_gray"
             app:chipStrokeWidth="1dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textViewUsername"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewDateTime"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textViewUsername" />
+            app:layout_constraintTop_toTopOf="@+id/textViewUsername"
+            app:layout_constraintVertical_bias="0.0" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -105,17 +108,17 @@
             app:layout_constraintTop_toBottomOf="@+id/chipSubcategory">
 
             <ImageButton
-                android:id="@+id/upvote"
+                android:id="@+id/upVote"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="20dp"
                 android:layout_weight="1"
                 android:background="#FDFBFB"
                 android:src="@drawable/ic_upvote_outlined" />
 
             <ImageButton
-                android:id="@+id/downvote"
+                android:id="@+id/downVote"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="20dp"
                 android:layout_weight="1"
                 android:background="#FDFBFB"
                 android:src="@drawable/ic_downvote_outlined" />
@@ -123,7 +126,7 @@
             <ImageButton
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="20dp"
                 android:layout_weight="1"
                 android:background="#FDFBFB"
                 android:padding="5dp"
@@ -140,31 +143,31 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <TextView
-                android:id="@+id/upvoteNumber"
+                android:id="@+id/upVoteNumber"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="20dp"
                 android:layout_weight="1"
                 android:background="#FDFBFB"
                 android:gravity="center"
-                android:text="Upvote\n1k" />
+                android:text="upvotes" />
 
             <TextView
-                android:id="@+id/downvoteNumber"
+                android:id="@+id/downVoteNumber"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="20dp"
                 android:layout_weight="1"
                 android:background="#FDFBFB"
                 android:gravity="center"
-                android:text="Downvote\n1k" />
+                android:text="downvotes" />
 
             <TextView
                 android:id="@+id/commentNumber"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="20dp"
                 android:layout_weight="1"
                 android:background="#FDFBFB"
                 android:gravity="center"
-                android:text="Comments\n1k" />
+                android:text="comments" />
 
         </LinearLayout>
 
@@ -177,7 +180,7 @@
             android:background="@android:color/darker_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout1" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewDateTime" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
