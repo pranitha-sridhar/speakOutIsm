@@ -3,11 +3,154 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.UserAccountFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="User Accounts Frag" />
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:padding="30dp">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical"
+           android:layout_centerInParent="true"
+           android:weightSum="5">
+
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:gravity="center"
+               android:textColor="@color/black"
+               android:fontFamily="@font/rubik_light"
+               android:text="Update Your Profile"
+               android:textSize="25dp" />
+
+           <com.mikhaellopez.circularimageview.CircularImageView
+               android:layout_width="wrap_content"
+               android:layout_margin="15dp"
+               android:layout_height="wrap_content"
+               android:src="@drawable/usericon"
+               android:layout_weight="1"
+               android:id="@+id/profile_picture"/>
+          <LinearLayout
+              android:layout_marginTop="30dp"
+              android:weightSum="5"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+              <TextView
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_weight="3"
+                  android:fontFamily="@font/rubik_light"
+                  android:textSize="15sp"
+                  android:textColor="@color/black"
+                  android:text="Username"/>
+              <TextView
+                  android:fontFamily="@font/rubik_light"
+                  android:textSize="15sp"
+                  android:textColor="@color/black"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_weight="2"
+                  android:text="19JE0725"
+                  android:id="@+id/username"/>
+          </LinearLayout>
+
+           <LinearLayout
+               android:paddingTop="20dp"
+               android:weightSum="5"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+               <TextView
+                   android:textColor="@color/black"
+                   android:gravity="center_vertical"
+                   android:fontFamily="@font/rubik_light"
+                   android:textSize="15sp"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="3"
+                   android:text="Display Name"/>
+               <EditText
+                   android:textColor="@color/black"
+                   android:gravity="center_vertical"
+                   android:fontFamily="@font/rubik_light"
+                   android:textSize="15sp"
+                   android:layout_marginStart="20dp"
+                   android:inputType="textCapWords"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:hint="Enter new name"
+                   android:layout_weight="2"
+                   android:id="@+id/display_name_edittext"
+                   android:visibility="gone"/>
+               <TextView
+
+                   android:textColor="@color/black"
+                   android:gravity="center_vertical"
+                   android:fontFamily="@font/rubik_light"
+                   android:textSize="15sp"
+                   android:layout_marginStart="20dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="2"
+                   android:text="XYZ"
+                   android:id="@+id/display_name"/>
+               <ImageView
+                   android:visibility="gone"
+                   android:layout_width="30dp"
+                   android:layout_height="30dp"
+                   android:id="@+id/checked_icon"
+                   android:src="@drawable/ic_check_circle"/>
+               <ImageView
+                   android:layout_width="30dp"
+                   android:layout_height="30dp"
+                   android:src="@drawable/ic_edit"
+                   android:id="@+id/edit_icon"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:textColor="@color/black"
+               android:layout_marginTop="20dp"
+               android:weightSum="5"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+               <TextView
+                   android:textColor="@color/black"
+                   android:fontFamily="@font/rubik_light"
+                   android:textSize="15sp"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="3"
+                   android:text="Email ID"/>
+               <TextView
+                   android:textColor="@color/black"
+                   android:fontFamily="@font/rubik_light"
+                   android:textSize="15sp"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="2"
+                   android:id="@+id/mailid"
+                   android:text="xyz@ee.iitism.ac.in"/>
+           </LinearLayout>
+
+           <Button
+               android:layout_marginTop="50dp"
+               android:layout_weight="0.5"
+               android:layout_gravity="center_horizontal"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="SAVE"
+               android:id="@+id/save"/>
+
+       </LinearLayout>
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

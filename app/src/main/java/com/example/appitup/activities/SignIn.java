@@ -33,36 +33,52 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class SignIn extends AppCompatActivity {
     FirebaseAuth mAuth;
-    TextInputLayout username, password;
+    @BindView(R.id.textInputUsername2)
+    TextInputLayout username;
+    @BindView(R.id.textInputPassword2)
+    TextInputLayout password;
+    @BindView(R.id.button)
     Button signInButton;
     String userNameStr;
-    TextView forgot_password, signup;
+    @BindView(R.id.textView2)
+    TextView forgot_password;
+    @BindView(R.id.textView)
+    TextView signup;
     TextView progressDialogueTitle;
     PullInLoader progressDialogueLoader;
     MaterialButton progressDialogueDismissButton;
     AlertDialog alertDialogProgress;
 
+    Unbinder unbinder;
+
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
+
+    /*@Override
     protected void onStart() {
         if (mAuth.getCurrentUser() != null && Prefs.isUserLoggedIn(this) && Prefs.getUser(this).getUsername() != null) {
             startActivity(new Intent(SignIn.this, MainActivity.class));
         }
         super.onStart();
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        unbinder = ButterKnife.bind(this);
 
         mAuth = FirebaseAuth.getInstance();
-        username = findViewById(R.id.textInputUsername2);
-        password = findViewById(R.id.textInputPassword2);
-        signInButton = findViewById(R.id.button);
-        forgot_password = findViewById(R.id.textView2);
-        signup = findViewById(R.id.textView);
+
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override

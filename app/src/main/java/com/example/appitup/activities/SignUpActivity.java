@@ -162,7 +162,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void createUserInDB(String userName, String email, String name, String uid) {
-        User user = new User(userName, email, name, null, uid);
+        User user = new User(userName, email, name, "", uid);
         if (userType == 1) {
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("StudentUsers");
             db.child(uid).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {

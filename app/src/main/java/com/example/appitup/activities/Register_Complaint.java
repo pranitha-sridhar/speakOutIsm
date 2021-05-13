@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.models.Complaints;
+import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
@@ -28,42 +29,60 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class Register_Complaint extends AppCompatActivity {
 
-TextView subcat;
-ChipGroup chipGroup1,chipGroup2;
-String category, subcategory=null;
-int k=3;
-    String[] subcatTitle = {"null", "null", "null", "null", "null", "null"};
+    @BindView(R.id.chip_group1)
+    ChipGroup chipGroup1;
+    @BindView(R.id.chip_group2)
+    ChipGroup chipGroup2;
+    @BindView(R.id.switchmat)
     Switch switchh;
+    @BindView(R.id.box)
     CheckBox checkBox;
+    @BindView(R.id.submit)
     Button submit;
-    FirebaseAuth mAuth;
+    @BindView(R.id.textInputTitle)
+    TextInputLayout title;
+    @BindView(R.id.textInputBody)
+    TextInputLayout bodyinput;
+    @BindView(R.id.progressBar2)
+    ProgressBar progressBar;
 
-TextInputLayout title, bodyinput;
-ProgressBar progressBar;
+    FirebaseAuth mAuth;
+    Unbinder unbinder;
+    String category, subcategory=null;
+    int k=3;
+    String[] subcatTitle = {"null", "null", "null", "null", "null", "null"};
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register__complaint);
+        unbinder = ButterKnife.bind(this);
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Create a complaint");
         actionBar.show();
 
-        //final ChipGroup[] chipGroup2 = {new ChipGroup(this)};
-        chipGroup1=findViewById(R.id.chip_group1);
-        chipGroup2=findViewById(R.id.chip_group2);
-        subcat=findViewById(R.id.subcat);
-        switchh=findViewById(R.id.switchmat);
-        checkBox=findViewById(R.id.box);
-        submit=findViewById(R.id.submit);
         mAuth=FirebaseAuth.getInstance();
-        title=findViewById(R.id.textInputTitle);
-        bodyinput =findViewById(R.id.textInputBody);
-        progressBar=findViewById(R.id.progressBar2);
+
+        //final ChipGroup[] chipGroup2 = {new ChipGroup(this)};
         //chipGroup1.isSingleSelection();
 
         Context context=this;
@@ -180,12 +199,16 @@ ProgressBar progressBar;
                 progressBar.setVisibility(View.VISIBLE);
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Complaints");
                 String complaintId = reference.push().getKey();
-                Complaints complaints = new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status, anonymous);
+                Map map=new HashMap();
+                map.put("timeStamp",ServerValue.TIMESTAMP);
+
+                Complaints complaints = new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status, anonymous, map);
                 reference.child(complaintId).setValue(complaints).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "Submitted", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Submitted", Toast.LENGTH_SHORT).show();
+                        Helper.toast(getApplicationContext(),"Submitted");
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -212,7 +235,6 @@ ProgressBar progressBar;
             chip1.setCheckable(true);
             chip1.setFocusable(true);
             chip1.setClickable(true);
-            //if(j==0)chip1.setChecked(true);
             chipGroup2.addView(chip1);
         }
     }

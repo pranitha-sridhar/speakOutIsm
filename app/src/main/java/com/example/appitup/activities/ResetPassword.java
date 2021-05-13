@@ -20,22 +20,35 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ResetPassword extends AppCompatActivity {
-EditText mail;
-Button reset;
-FirebaseAuth mAuth;
-TextView progressDialogueTitle;
-PullInLoader progressDialogueLoader;
-MaterialButton progressDialogueDismissButton;
-AlertDialog alertDialogProgress;
+    @BindView(R.id.editTextTextEmailAddress)
+    EditText mail;
+    @BindView(R.id.button2)
+    Button reset;
+    FirebaseAuth mAuth;
+    TextView progressDialogueTitle;
+    PullInLoader progressDialogueLoader;
+    MaterialButton progressDialogueDismissButton;
+    AlertDialog alertDialogProgress;
+
+Unbinder unbinder;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
+        unbinder = ButterKnife.bind(this);
 
-        mail=findViewById(R.id.editTextTextEmailAddress);
-        reset=findViewById(R.id.button2);
         mAuth=FirebaseAuth.getInstance();
         //Toast.makeText(this, ""+mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
 
