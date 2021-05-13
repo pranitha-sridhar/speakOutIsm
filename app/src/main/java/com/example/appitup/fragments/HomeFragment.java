@@ -61,13 +61,12 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mAuth=FirebaseAuth.getInstance();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, view);
-        progressBar=view.findViewById(R.id.progress);
+        progressBar = view.findViewById(R.id.progress);
 
         adapter = new ComplaintsAdapter(getContext(), list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
@@ -164,6 +163,10 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
 
     @Override
     public void commentsClicked(Complaints complaint) {
-
+        CommentsDialogFragment commentsDialogFragment = new CommentsDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("complaint_id", complaint.getComplaintId());
+        commentsDialogFragment.setArguments(bundle);
+        commentsDialogFragment.show(getChildFragmentManager(), "TAG");
     }
 }

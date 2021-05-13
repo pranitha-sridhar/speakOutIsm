@@ -1,8 +1,9 @@
 package com.example.appitup.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Complaints {
+public class Complaints implements Serializable {
     String complaintId;
     String username;
     String uid;
