@@ -1,5 +1,6 @@
 package com.example.appitup.activities;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
+import com.example.appitup.fragments.HomeFragment;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, NotificationsActivity.class));
         } else if (item.getItemId() == R.id.action_sign_out) {
             signOut();
-        }
+        }/*else if(item.getItemId()==R.id.action_filter){
+            HomeFragment.filter_icon(this);
+        }*/
         return super.onOptionsItemSelected(item);
     }
 

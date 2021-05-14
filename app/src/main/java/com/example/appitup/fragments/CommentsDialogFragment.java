@@ -30,8 +30,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.text.DateFormat.getDateTimeInstance;
 
 public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
@@ -87,7 +94,9 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
                     editTextMessage.setError(null);
                 }
 
-                Comment comment = new Comment(Prefs.getUser(getContext()).getUsername(), commentMsg);
+                Map map=new HashMap();
+                map.put("timeStamp",ServerValue.TIMESTAMP);
+                Comment comment = new Comment(Prefs.getUser(getContext()).getUsername(), commentMsg,map);
                 addComment(comment);
             }
         });
@@ -104,7 +113,18 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
                 String commentId = ds.child("commentId").getValue().toString();
                 String comment = ds.child("comment").getValue().toString();
                 String username = ds.child("username").getValue().toString();
-                list.add(new Comment(username, commentId, comment));
+                String time=null;
+                long timeStamp= 0;
+                Map<String, Long> map=new HashMap();
+                if(ds.child("timeStampMap").child("timeStamp").exists())
+                {
+                    timeStamp= (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                    DateFormat dateFormat = getDateTimeInstance();
+                    Date netDate = (new Date(timeStamp));
+                    time= dateFormat.format(netDate);
+                    map.put("timeStamp",timeStamp);
+                }
+                list.add(new Comment(username, commentId, comment,map,time));
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(list.size());
                 progressLoader.setVisibility(View.GONE);
@@ -132,7 +152,6 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void addComment(Comment comment) {
-
         editTextMessage.setText(null);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Complaints").child(complaintId).child("listOfCommenter");
         String commentId = reference.push().getKey();

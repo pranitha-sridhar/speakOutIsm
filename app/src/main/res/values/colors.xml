@@ -12,5 +12,6 @@
     <color name="resolved_color">#4CAF50</color>
     <color name="inprogress_color">#FFC107</color>
     <color name="pending_color">#B5AEAE</color>
+    <color name="background">#B3B2B2</color>
 
 </resources>

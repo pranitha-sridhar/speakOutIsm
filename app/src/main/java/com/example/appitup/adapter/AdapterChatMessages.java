@@ -53,11 +53,11 @@ public class AdapterChatMessages extends RecyclerView.Adapter {
         if (isMyMessage(chatMessages.getUsername())) {
             ((viewHolderSentMsgs) holder).messageBody.setText(chatMessages.getComment());
             // TODO : Add Date Time in Comment
-            //((viewHolderSentMsgs)holder).time.setText(chatMessages.getTime());
+            ((viewHolderSentMsgs)holder).time.setText(chatMessages.getTimeStampStr());
         } else {
             ((viewHolderReceivedMsgs) holder).messageBody.setText(chatMessages.getComment());
             // TODO : Add Date Time in Comment
-            //((viewHolderReceivedMsgs)holder).time.setText(chatMessages.getTime());
+            ((viewHolderReceivedMsgs)holder).time.setText(chatMessages.getTimeStampStr());
             ((viewHolderReceivedMsgs) holder).name.setText(chatMessages.getUsername());
         }
     }

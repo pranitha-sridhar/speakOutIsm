@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FILTERS"
+        android:textSize="20sp"
+        android:background="@color/purple_500"
+        android:textColor="@color/white"
+        android:fontFamily="@font/rubik_light"
+        android:gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/textview"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categories"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview"
+        android:id="@+id/textview2"/>
+
+    <com.google.android.material.chip.ChipGroup
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textview2"
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        app:singleSelection="true"
+        android:id="@+id/chip_group3"
+        android:layout_height="wrap_content"
+        >
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_height="wrap_content"
+            android:text="Registration"
+            android:id="@+id/registration1"/>
+        <com.google.android.material.chip.Chip
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Academics"
+            android:id="@+id/academics1"/>
+        <com.google.android.material.chip.Chip
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DSW"
+            android:id="@+id/dsw1"/>
+        <com.google.android.material.chip.Chip
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vendors of ISM"
+            android:id="@+id/vendors1"/>
+
+        <com.google.android.material.chip.Chip
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MIS/Parent Portal"
+            android:id="@+id/mis1"/>
+        <com.google.android.material.chip.Chip
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hostel"
+            android:id="@+id/hostel1"/>
+        <com.google.android.material.chip.Chip
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Health Centre"
+            android:id="@+id/health1"/>
+        <com.google.android.material.chip.Chip
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Library"
+            android:id="@+id/library1"/>
+        <com.google.android.material.chip.Chip
+            app:chipBackgroundColor="@color/stroke_tint"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Personal"
+            android:id="@+id/personal1"/>
+    </com.google.android.material.chip.ChipGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chip_group3"
+        android:text="Sort"
+        android:id="@+id/sort"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
