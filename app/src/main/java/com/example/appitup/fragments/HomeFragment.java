@@ -39,6 +39,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 
 import butterknife.BindView;
@@ -121,13 +123,25 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     String status = ds.child("status").getValue().toString();
                     String anonymous = ds.child("anonymous").getValue().toString();
                     String time=null;
-                    if(ds.child("timeStamp").child("timeStamp").getValue()!=null)
+                    long timeStamp= 0;
+                    Map<String, Long> map=new HashMap();
+
+                    if(ds.child("timeStampmap").child("timeStamp").exists())
                     {
-                        long timeStamp= (long) ds.child("timeStamp").child("timeStamp").getValue();
+                        timeStamp= (long) ds.child("timeStampmap").child("timeStamp").getValue();
                         DateFormat dateFormat = getDateTimeInstance();
                         Date netDate = (new Date(timeStamp));
                         time= dateFormat.format(netDate);
+                        map.put("timeStamp",timeStamp);
                     }
+
+                    else{
+                        if(ds.child("timeStampStr").exists()){
+                            time=ds.child("timeStampStr").getValue().toString();
+                        }
+                    }
+
+
 
                     //time+=(""+timeStamp);
                     ArrayList<String> upvoters = new ArrayList<>();
@@ -141,7 +155,7 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                         commenters.add(new Comment(s.child("username").getValue().toString(), s.child("comment").getValue().toString()));
 
                     if (anonymous.equals("true")) username = "Anonymous";
-                    list.add(new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status, anonymous, upvoters, downvoters, commenters,time));
+                    list.add(new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status, anonymous, upvoters, downvoters, commenters,map,time));
 
                 }
 

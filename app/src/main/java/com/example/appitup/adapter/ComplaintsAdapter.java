@@ -46,7 +46,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         holder.textUserName.setText("@" + complaints.getUsername());
         holder.textViewTitle.setText(complaints.getSubject());
         holder.textViewBody.setText(complaints.getBody());
-        holder.textViewDateTime.setText(complaints.getTimeStampLong());
+        holder.textViewDateTime.setText(complaints.getTimeStampStr());
         //holder.textViewDateTime.setText(complaints.getDateTime());
         holder.chipStatus.setText(complaints.getStatus());
         if (complaints.getStatus().equals(Helper.PENDING)) {
@@ -88,6 +88,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         }
 
         int finalStatus = status;
+
         holder.upVote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

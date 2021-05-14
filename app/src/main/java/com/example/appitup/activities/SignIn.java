@@ -63,13 +63,13 @@ public class SignIn extends AppCompatActivity {
         unbinder.unbind();
     }
 
-    /*@Override
+    @Override
     protected void onStart() {
         if (mAuth.getCurrentUser() != null && Prefs.isUserLoggedIn(this) && Prefs.getUser(this).getUsername() != null) {
             startActivity(new Intent(SignIn.this, MainActivity.class));
         }
         super.onStart();
-    }*/
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -18,8 +18,8 @@ public class Complaints implements Serializable {
     ArrayList<String> listOfUpVoter;
     ArrayList<String> listOfDownVoter;
     ArrayList<Comment> listOfCommenter;
-    Map timeStamp;
-    String timeStampLong;
+    Map timeStampmap;
+    String timeStampStr;
 
     public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status, String anonymous) {
         this.complaintId = complaintId;
@@ -34,7 +34,7 @@ public class Complaints implements Serializable {
         this.anonymous = anonymous;
     }
 
-    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status, String anonymous, Map timeStamp) {
+    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status, String anonymous, Map timeStampmap) {
         this.complaintId = complaintId;
         this.username = username;
         this.uid = uid;
@@ -45,7 +45,7 @@ public class Complaints implements Serializable {
         this.visibility = visibilty;
         this.status = status;
         this.anonymous = anonymous;
-        this.timeStamp=timeStamp;
+        this.timeStampmap=timeStampmap;
     }
 
     public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibility, String status, String anonymous, ArrayList<String> listOfUpVoter, ArrayList<String> listOfDownVoter, ArrayList<Comment> listOfCommenter) {
@@ -64,7 +64,7 @@ public class Complaints implements Serializable {
         this.listOfCommenter = listOfCommenter;
     }
 
-    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibility, String status, String anonymous, ArrayList<String> listOfUpVoter, ArrayList<String> listOfDownVoter, ArrayList<Comment> listOfCommenter,String timeStampLong) {
+    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibility, String status, String anonymous, ArrayList<String> listOfUpVoter, ArrayList<String> listOfDownVoter, ArrayList<Comment> listOfCommenter,Map timeStampmap,String timeStampStr) {
         this.complaintId = complaintId;
         this.username = username;
         this.uid = uid;
@@ -78,23 +78,25 @@ public class Complaints implements Serializable {
         this.listOfUpVoter = listOfUpVoter;
         this.listOfDownVoter = listOfDownVoter;
         this.listOfCommenter = listOfCommenter;
-        this.timeStampLong=timeStampLong;
+        this.timeStampmap=timeStampmap;
+        this.timeStampStr=timeStampStr;
     }
 
-    public String getTimeStampLong() {
-        return timeStampLong;
+    public void setTimeStampmap(Map timeStampmap) {
+        this.timeStampmap = timeStampmap;
     }
 
-    public void setTimeStampLong(String timeStampLong) {
-        this.timeStampLong = timeStampLong;
+    public void setTimeStampStr(String timeStampStr) {
+        this.timeStampStr = timeStampStr;
     }
 
-    public Map getTimeStamp() {
-        return timeStamp;
+
+    public Map getTimeStampmap() {
+        return timeStampmap;
     }
 
-    public void setTimeStamp(Map timeStamp) {
-        this.timeStamp = timeStamp;
+    public String getTimeStampStr() {
+        return timeStampStr;
     }
 
     public String getComplaintId() {
