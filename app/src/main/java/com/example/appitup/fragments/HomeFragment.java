@@ -1,13 +1,13 @@
 package com.example.appitup.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appitup.Database.Prefs;
 import com.agrawalsuneet.dotsloader.loaders.PullInLoader;
+import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
-import com.example.appitup.activities.SignIn;
+import com.example.appitup.activities.ConversationActivity;
 import com.example.appitup.adapter.ComplaintsAdapter;
 import com.example.appitup.models.Comment;
 import com.example.appitup.models.Complaints;
@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -217,8 +216,16 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         CommentsDialogFragment commentsDialogFragment = new CommentsDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString("complaint_id", complaint.getComplaintId());
+        bundle.putString("complaint_title", complaint.getSubject());
         commentsDialogFragment.setArguments(bundle);
         commentsDialogFragment.show(getChildFragmentManager(), "TAG");
+    }
+
+    @Override
+    public void onCardClicked(Complaints complaints) {
+        Intent intent = new Intent(getContext(), ConversationActivity.class);
+        intent.putExtra("complaint", complaints);
+        startActivity(intent);
     }
 
     public void setResultsUI(String message) {

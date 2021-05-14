@@ -11,23 +11,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
-import com.example.appitup.models.Comment;
+import com.example.appitup.models.Reply;
 
 import java.util.ArrayList;
 
-public class AdapterChatMessages extends RecyclerView.Adapter {
+public class ReplyAdapter extends RecyclerView.Adapter {
 
-    ArrayList<Comment> list;
+    ArrayList<Reply> list;
     Context context;
+    boolean isUserSegregated = true;
 
-    public AdapterChatMessages(ArrayList<Comment> list, Context context) {
+    public ReplyAdapter(ArrayList<Reply> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
+    public ReplyAdapter(ArrayList<Reply> list, Context context, boolean isUserSegregated) {
+        this.list = list;
+        this.context = context;
+        this.isUserSegregated = isUserSegregated;
+    }
+
     @Override
     public int getItemViewType(int position) {
-        if (list.get(position).getUsername().equals(Prefs.getUser(context).getUsername()))
+        if (!isUserSegregated) return 2;
+
+        if (list.get(position).getSent_from().equals(Prefs.getUser(context).getUsername()))
             return 1;
         else
             return 2;
@@ -49,16 +58,16 @@ public class AdapterChatMessages extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Comment chatMessages = list.get(position);
-        if (isMyMessage(chatMessages.getUsername())) {
-            ((viewHolderSentMsgs) holder).messageBody.setText(chatMessages.getComment());
-            // TODO : Add Date Time in Comment
+        Reply chatMessages = list.get(position);
+        if (isMyMessage(chatMessages.getSent_from()) && isUserSegregated) {
+            ((viewHolderSentMsgs) holder).messageBody.setText(chatMessages.getMessage());
+            // TODO : Add Date Time in Reply
             //((viewHolderSentMsgs)holder).time.setText(chatMessages.getTime());
         } else {
-            ((viewHolderReceivedMsgs) holder).messageBody.setText(chatMessages.getComment());
-            // TODO : Add Date Time in Comment
+            ((viewHolderReceivedMsgs) holder).messageBody.setText(chatMessages.getMessage());
+            // TODO : Add Date Time in Reply
             //((viewHolderReceivedMsgs)holder).time.setText(chatMessages.getTime());
-            ((viewHolderReceivedMsgs) holder).name.setText(chatMessages.getUsername());
+            ((viewHolderReceivedMsgs) holder).name.setText(chatMessages.getSent_from());
         }
     }
 
@@ -72,12 +81,10 @@ public class AdapterChatMessages extends RecyclerView.Adapter {
     }
 
     public class viewHolderReceivedMsgs extends RecyclerView.ViewHolder {
-        // private ImageView profileImg;
         TextView name, messageBody, time;
 
         public viewHolderReceivedMsgs(@NonNull View itemView) {
             super(itemView);
-            //profileImg = itemView.findViewById(R.id.image_message_profile);
             name = itemView.findViewById(R.id.text_message_name);
             time = itemView.findViewById(R.id.text_message_time);
             messageBody = itemView.findViewById(R.id.text_message_body);

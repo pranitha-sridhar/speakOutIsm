@@ -8,13 +8,13 @@
 
     <TextView
         android:id="@+id/text_message_body"
-        android:layout_width="231dp"
-        android:layout_height="36dp"
-        android:layout_marginRight="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/background_message_sent"
         android:maxWidth="240dp"
         android:padding="8dp"
-        android:text="hello, hello! I am Bhavesh sharma "
+        android:text="hello"
         android:textColor="#363131"
         app:layout_constraintRight_toLeftOf="@id/msg_status"
         app:layout_constraintTop_toTopOf="parent" />

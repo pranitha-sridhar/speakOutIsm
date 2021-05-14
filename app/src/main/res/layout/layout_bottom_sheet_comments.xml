@@ -9,15 +9,58 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Comments"
-            android:textSize="20sp"
+            android:elevation="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_toolbar_conversation"
+                android:backgroundTint="@color/pending_color"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/toolbarTitle"
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Comments"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.842"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbarTitle" />
+
+                <TextView
+                    android:id="@+id/textViewComplaintTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Cource is Missing"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="@+id/textView6"
+                    app:layout_constraintStart_toStartOf="@+id/textView6"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/comments_recycler"
@@ -26,7 +69,7 @@
             app:layout_constraintBottom_toTopOf="@id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -57,10 +100,14 @@
 
             <ImageView
                 android:id="@+id/send"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:background="@drawable/sent_button_background"
+                android:padding="6dp"
+                android:visibility="gone"
+                app:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/editTextMessage"

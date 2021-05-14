@@ -138,6 +138,15 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
                     mListener.commentsClicked(complaints);
             }
         });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.onCardClicked(complaints);
+                }
+            }
+        });
     }
 
     private int getStatus(Complaints complaints) {
@@ -160,6 +169,8 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         void downVoteClicked(Complaints complaint);
 
         void commentsClicked(Complaints complaint);
+
+        void onCardClicked(Complaints complaints);
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {

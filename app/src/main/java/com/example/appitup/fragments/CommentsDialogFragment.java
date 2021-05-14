@@ -3,6 +3,8 @@ package com.example.appitup.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.agrawalsuneet.dotsloader.loaders.TashieLoader;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
-import com.example.appitup.adapter.AdapterChatMessages;
+import com.example.appitup.adapter.CommentsAdapter;
 import com.example.appitup.models.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,10 +43,27 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
     EditText editTextMessage;
     TashieLoader progressLoader;
     RecyclerView recyclerView;
-    TextView no_data_found;
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            String msg = editTextMessage.getText().toString().trim();
+            if (msg.isEmpty()) send.setVisibility(View.GONE);
+            else send.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
     String complaintId;
     ArrayList<Comment> list = new ArrayList<>();
-    AdapterChatMessages adapter;
+    TextView no_data_found, textViewComplaintTitle;
 
     @Override
     public void onStart() {
@@ -57,6 +76,8 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         }
     }
 
+    CommentsAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,14 +88,17 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         progressLoader = view.findViewById(R.id.progressLoader);
         send = view.findViewById(R.id.send);
         no_data_found = view.findViewById(R.id.no_data_found);
+        textViewComplaintTitle = view.findViewById(R.id.textViewComplaintTitle);
 
         Bundle mArgs = getArguments();
         complaintId = mArgs.getString("complaint_id");
+        textViewComplaintTitle.setText(mArgs.getString("complaint_title"));
         list.clear();
 
         initRecyclerView();
         loadComments();
 
+        editTextMessage.addTextChangedListener(textWatcher);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +173,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void initRecyclerView() {
-        adapter = new AdapterChatMessages(list, getContext());
+        adapter = new CommentsAdapter(list, getContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
