@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppItUp">
+        <activity android:name=".activities.ConversationActivity"></activity>
         <activity android:name=".activities.Register_Complaint" />
-        <activity android:name=".activities.NotificationsActivity"/>
+        <activity android:name=".activities.NotificationsActivity" />
         <activity
             android:name=".activities.SignIn"
             android:theme="@style/Theme.AppItUp.NoActionBar">
@@ -21,8 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ResetPassword" />
-        <activity android:name=".activities.MainActivity"
-            android:theme="@style/Theme.AppItUp.NoActionBar"/>
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/Theme.AppItUp.NoActionBar" />
         <activity android:name=".activities.SignUpActivity" />
     </application>
 

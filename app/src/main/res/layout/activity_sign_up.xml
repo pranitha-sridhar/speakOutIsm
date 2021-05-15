@@ -126,6 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="Password"
+                app:passwordToggleEnabled="true"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeErrorColor="@android:color/holo_red_light"
                 app:errorTextAppearance="@android:color/holo_red_light"

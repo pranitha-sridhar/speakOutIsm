@@ -1,6 +1,8 @@
 package com.example.appitup.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import com.agrawalsuneet.dotsloader.loaders.PullInLoader;
 import com.bumptech.glide.Glide;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
+import com.example.appitup.activities.ConversationActivity;
 import com.example.appitup.adapter.ComplaintsAdapter;
 import com.example.appitup.models.Comment;
 import com.example.appitup.models.Complaints;
@@ -45,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,8 +104,9 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-
         adapter = new ComplaintsAdapter(getContext(), list);
+        //((LinearLayoutManager) layoutManager).setReverseLayout(true);
+        //((LinearLayoutManager) layoutManager).setStackFromEnd(true);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
@@ -142,8 +147,6 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         return view;
     }
 
-
-
     private void loadData() {
         //showProgressDialogue();
         //TODO: after getting data from firebase add this to list and cal ' adapter.notifyDataSetChanged(); '
@@ -167,6 +170,7 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     String time=null;
                     long timeStamp= 0;
                     Map<String, Long> map=new HashMap();
+
                     if(ds.child("timeStampmap").child("timeStamp").exists())
                     {
                         timeStamp= (long) ds.child("timeStampmap").child("timeStamp").getValue();
@@ -181,6 +185,9 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                             time=ds.child("timeStampStr").getValue().toString();
                         }
                     }
+
+
+
                     //time+=(""+timeStamp);
                     ArrayList<String> upvoters = new ArrayList<>();
                     for (DataSnapshot s : ds.child("listOfUpVoter").getChildren())
@@ -194,8 +201,11 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
 
                     if (anonymous.equals("true")) username = "Anonymous";
                     list.add(new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status, anonymous, upvoters, downvoters, commenters,map,time));
+
                 }
+
                 //Helper.toast(getContext(),"null "+time);
+
                 if (list.isEmpty()) {
                     //alertDialogProgress.dismiss();
                     Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
@@ -262,8 +272,16 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         CommentsDialogFragment commentsDialogFragment = new CommentsDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString("complaint_id", complaint.getComplaintId());
+        bundle.putString("complaint_title", complaint.getSubject());
         commentsDialogFragment.setArguments(bundle);
         commentsDialogFragment.show(getChildFragmentManager(), "TAG");
+    }
+
+    @Override
+    public void onCardClicked(Complaints complaints) {
+        Intent intent = new Intent(getContext(), ConversationActivity.class);
+        intent.putExtra("complaint", complaints);
+        startActivity(intent);
     }
 
     @Override
