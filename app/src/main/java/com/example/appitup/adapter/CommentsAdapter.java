@@ -36,8 +36,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.viewHo
         Comment chatMessages = list.get(position);
         holder.messageBody.setText(chatMessages.getComment());
         holder.name.setText(chatMessages.getUsername());
-        // TODO : Add Date Time in Comment
-        //holder.time.setText(chatMessages.getTime());
+        // Add Date Time in Comment
+        holder.time.setText(chatMessages.getTimeStampStr());
     }
 
     @Override

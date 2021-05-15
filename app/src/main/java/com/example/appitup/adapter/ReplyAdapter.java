@@ -62,11 +62,11 @@ public class ReplyAdapter extends RecyclerView.Adapter {
         if (isMyMessage(chatMessages.getSent_from()) && isUserSegregated) {
             ((viewHolderSentMsgs) holder).messageBody.setText(chatMessages.getMessage());
             // TODO : Add Date Time in Reply
-            //((viewHolderSentMsgs)holder).time.setText(chatMessages.getTime());
+            ((viewHolderSentMsgs)holder).time.setText(chatMessages.getTimeStampStr());
         } else {
             ((viewHolderReceivedMsgs) holder).messageBody.setText(chatMessages.getMessage());
             // TODO : Add Date Time in Reply
-            //((viewHolderReceivedMsgs)holder).time.setText(chatMessages.getTime());
+            ((viewHolderReceivedMsgs)holder).time.setText(chatMessages.getTimeStampStr());
             ((viewHolderReceivedMsgs) holder).name.setText(chatMessages.getSent_from());
         }
     }
