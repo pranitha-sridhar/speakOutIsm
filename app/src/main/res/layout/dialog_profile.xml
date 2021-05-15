@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/usericon"
+            android:layout_weight="1"
+            android:id="@+id/profile_picture1"/>
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:fontFamily="@font/rubik_light"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Username"/>
+            <TextView
+                android:fontFamily="@font/rubik_light"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="19JE0725"
+                android:id="@+id/username1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="20dp"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/rubik_light"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:text="Display Name"/>
+
+            <TextView
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/rubik_light"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="XYZ"
+                android:id="@+id/display_name1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:textColor="@color/black"
+                android:fontFamily="@font/rubik_light"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:text="Email ID"/>
+            <TextView
+                android:textColor="@color/black"
+                android:fontFamily="@font/rubik_light"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/mailid1"
+                android:text="xyz@ee.iitism.ac.in"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_margin="10dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Close"
+            android:id="@+id/closeButton"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

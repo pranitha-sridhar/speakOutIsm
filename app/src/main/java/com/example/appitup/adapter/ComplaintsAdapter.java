@@ -5,6 +5,8 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -20,19 +22,22 @@ import com.google.android.material.chip.Chip;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.viewHolder> {
+public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.viewHolder> implements Filterable {
     Context context;
     List<Complaints> list;
+    List<Complaints> filteredList1;
     ComplaintsListener mListener;
 
     public ComplaintsAdapter(Context context, List<Complaints> list) {
         this.context = context;
         this.list = list;
+        filteredList1=list;
     }
 
     public void setUpOnComplaintListener(ComplaintsListener mListener) {
         this.mListener = mListener;
     }
+
 
     @NonNull
     @Override
@@ -139,6 +144,14 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
             }
         });
 
+        holder.textUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null)
+                    mListener.usernameClicked(complaints);
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,6 +176,39 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         return (list != null) ? list.size() : 0;
     }
 
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+
+    private Filter exampleFilter=new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Complaints> filteredList=new ArrayList<>();
+            if(charSequence == null || getItemCount()==0){
+                filteredList.addAll(filteredList1);
+            }
+            else{
+                list.size();
+                String filterPattern=charSequence.toString().toLowerCase().trim();
+                for(Complaints complaint:filteredList1){
+                    if(complaint.getStatus().toLowerCase().contains(filterPattern))
+                        filteredList.add(complaint);
+                }
+            }
+            FilterResults filterResults=new FilterResults();
+            filterResults.values=filteredList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            list.clear();
+            list.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
     public interface ComplaintsListener {
         void upVoteClicked(Complaints complaint);
 
@@ -171,6 +217,8 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         void commentsClicked(Complaints complaint);
 
         void onCardClicked(Complaints complaints);
+
+        void usernameClicked(Complaints complaint);
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {

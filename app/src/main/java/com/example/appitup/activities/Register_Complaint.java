@@ -123,12 +123,12 @@ public class Register_Complaint extends AppCompatActivity {
                     k=4;
                 }
                 if(checkedId==R.id.vendors){
-                    category ="Vendors";
+                    category ="Vendors of ISM";
                     subcatTitle[0]=("RD");subcatTitle[1]=("Barista");subcatTitle[2]=("Guruji");
                     k=3;
                 }
                 if(checkedId==R.id.mis){
-                    category ="MIS";
+                    category ="MIS/Parent Portal";
                     subcatTitle[0]=("Technical Issue");
                     k=1;
                 }
@@ -138,7 +138,7 @@ public class Register_Complaint extends AppCompatActivity {
                     k=4;
                 }
                 if(checkedId==R.id.health){
-                    category ="Health";
+                    category ="Health Centre";
                     subcatTitle[0]=("Hygiene");subcatTitle[1]=("Doctor Unavailability");subcatTitle[2]=("Medicine Unavailability");subcatTitle[3]="Beds Unavailability";subcatTitle[4]="Ambulance Issue";subcatTitle[5]="Others";
                     k=6;
                 }

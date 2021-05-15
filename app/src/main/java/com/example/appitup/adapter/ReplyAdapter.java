@@ -81,10 +81,12 @@ public class ReplyAdapter extends RecyclerView.Adapter {
     }
 
     public class viewHolderReceivedMsgs extends RecyclerView.ViewHolder {
+        // private ImageView profileImg;
         TextView name, messageBody, time;
 
         public viewHolderReceivedMsgs(@NonNull View itemView) {
             super(itemView);
+            //profileImg = itemView.findViewById(R.id.image_message_profile);
             name = itemView.findViewById(R.id.text_message_name);
             time = itemView.findViewById(R.id.text_message_time);
             messageBody = itemView.findViewById(R.id.text_message_body);

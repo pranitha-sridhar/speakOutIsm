@@ -5,7 +5,95 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E5E2E2"
+
     tools:context=".fragments.HomeFragment">
+
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_margin="20dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            android:id="@+id/chip_group">
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:checked="true"
+                android:layout_height="wrap_content"
+                android:text="PENDING"
+                android:id="@+id/pending"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IN-PROGRESS"
+                android:id="@+id/inprogress"/>
+            <com.google.android.material.chip.Chip
+                app:chipBackgroundColor="@color/stroke_tint"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RESOLVED"
+                android:id="@+id/resolved"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <ImageView
+            android:padding="10dp"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_filter_list"
+            android:id="@+id/filter"
+            app:tint="@color/black" />
+
+    </LinearLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        android:orientation="vertical"
+        app:shimmer_duration="400"
+        android:id="@+id/shimmer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/placeholder" />
+            <include layout="@layout/placeholder" />
+            <include layout="@layout/placeholder" />
+            <include layout="@layout/placeholder" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/complaints_recycler"
@@ -14,5 +102,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/linearLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

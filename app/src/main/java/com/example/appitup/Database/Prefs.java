@@ -9,6 +9,16 @@ import com.example.appitup.utility.Helper;
 import com.google.gson.Gson;
 
 public class Prefs {
+    public static void setFilter_selectedChip(Context context,int i){
+        SharedPreferences.Editor editor=context.getSharedPreferences(Helper.MY_PREFS_NAME,Context.MODE_PRIVATE).edit();
+        editor.putInt("stateOfChip",i);
+        editor.apply();
+    }
+
+    public  static int getFilter_selectedChip(Context context){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(Helper.MY_PREFS_NAME,Context.MODE_PRIVATE);
+        return sharedPreferences.getInt("stateOfChip",-1);
+    }
 
     public static boolean isUserLoggedIn(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(Helper.MY_PREFS_NAME, Context.MODE_PRIVATE);
