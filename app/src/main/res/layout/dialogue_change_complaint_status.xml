@@ -46,28 +46,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.agrawalsuneet.dotsloader.loaders.PullInLoader
+        <com.agrawalsuneet.dotsloader.loaders.TashieLoader
             android:id="@+id/progressLoader"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:elevation="20dp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
-            app:pullin_animDur="3000"
-            app:pullin_bigCircleRadius="42dp"
-            app:pullin_dotsColor="@color/teal_200"
-            app:pullin_dotsRadius="10dp"
-            app:pullin_useMultipleColors="true" />
+            app:tashieloader_animDelay="150"
+            app:tashieloader_animDur="500"
+            app:tashieloader_dotsColor="@color/pending_color"
+            app:tashieloader_dotsDist="5dp"
+            app:tashieloader_dotsRadius="8dp"
+            app:tashieloader_interpolator="@android:anim/accelerate_interpolator"
+            app:tashieloader_noOfDots="6" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/submitButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Submit"
+            android:layout_marginTop="20dp"
+            android:text="Change Status"
             android:textColor="@color/inprogress_color"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"

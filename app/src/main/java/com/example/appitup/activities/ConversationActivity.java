@@ -51,6 +51,10 @@ import butterknife.Unbinder;
 
 public class ConversationActivity extends AppCompatActivity implements View.OnClickListener {
 
+
+    private static final int DELETING_THE_COMPLAINT = 101;
+    private static final int BLOCKING_THE_USER = 102;
+
     @BindView(R.id.imageViewArrowBack)
     ImageView imageViewArrowBack;
     @BindView(R.id.imageViewBlockUser)
@@ -69,6 +73,10 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     ImageView send;
     @BindView(R.id.editTextMessage)
     EditText editTextMessage;
+    @BindView(R.id.progressLoader)
+    TashieLoader progressLoader;
+    Unbinder unbinder;
+    Complaints complaint;
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -87,19 +95,16 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
 
         }
     };
-    @BindView(R.id.progressLoader)
-    TashieLoader progressLoader;
-    Unbinder unbinder;
-    Complaints complaint;
-    ArrayList<Reply> list;
     ReplyAdapter adapter;
     TashieLoader pdChangeStatusLoader, pdDeleteComplaintLoader;
-    AlertDialog alertDialogChangeStatus, alertDialogDeleteComplaint;
-    MaterialButton pdChangeStatusSubmitButton, pdDialogDeleteComplaintSubmitButton;
+    ArrayList<Reply> list = new ArrayList<>();
+    AlertDialog alertDialogChangeStatus, alertDialogDeleteBlock;
     RadioGroup pdChangeStatusRadioGroup;
     TextInputLayout textInputLayoutPassword;
-    int changeStatusState = 0, deleteComplaintState = 0;
-    TextView pdChangeStatusTitle, pdDialogDeleteComplaintTitle, pdDialogDeleteComplaintMessage;
+    MaterialButton pdChangeStatusSubmitButton, pdDialogDeleteBlockSubmitButton;
+    int changeStatusState = 0, deleteBlockState = 0;
+    TextView pdChangeStatusTitle, pdDialogDeleteBlockTitle, pdDialogDeleteBlockMessage;
+    int flag = -1;
 
     @Override
     protected void onDestroy() {
@@ -123,6 +128,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
 
         initRecyclerView();
         editTextMessage.addTextChangedListener(textWatcher);
+        loadReplies();
     }
 
     private void initRecyclerView() {
@@ -140,13 +146,19 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             case R.id.imageViewArrowBack:
                 onBackPressed();
                 break;
-            case R.id.imageViewBlockUser:
-                break;
             case R.id.imageViewStatus:
+                changeStatusState = 0;
                 showProgressDialogueChangeStatus();
                 break;
             case R.id.imageViewDeleteConvo:
-                showProgressDialogueDeleteComplaint();
+                deleteBlockState = 0;
+                flag = DELETING_THE_COMPLAINT;
+                showProgressDialogueDeleteBlock();
+                break;
+            case R.id.imageViewBlockUser:
+                deleteBlockState = 0;
+                flag = BLOCKING_THE_USER;
+                showProgressDialogueDeleteBlock();
                 break;
             case R.id.send:
                 sendMessage();
@@ -228,6 +240,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
 
         alertDialogChangeStatus = builder.create();
         alertDialogChangeStatus.show();
+        alertDialogChangeStatus.setCancelable(false);
 
         alertDialogChangeStatus.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         alertDialogChangeStatus.getWindow().setBackgroundDrawable(null);
@@ -241,58 +254,59 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                         String status = Helper.IN_PROGRESS;
                         if (pdChangeStatusRadioGroup.getCheckedRadioButtonId() == R.id.radio_resolved)
                             status = Helper.RESOLVED;
-                        changeStatus(status);
                         pdChangeStatusTitle.setText("Please wait we are changing the complaint status...");
                         pdChangeStatusLoader.setVisibility(View.VISIBLE);
                         pdChangeStatusSubmitButton.setVisibility(View.GONE);
                         pdChangeStatusRadioGroup.setVisibility(View.GONE);
                         changeStatusState = 1;
+                        changeStatus(status);
                         break;
                     case 2:
                         alertDialogChangeStatus.dismiss();
                         break;
                 }
-                alertDialogChangeStatus.dismiss();
             }
         });
     }
 
-    private void showProgressDialogueDeleteComplaint() {
+    private void showProgressDialogueDeleteBlock() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View v = inflater.inflate(R.layout.dialogue_delete, null);
         builder.setView(v);
-        pdDialogDeleteComplaintSubmitButton = v.findViewById(R.id.submitButton);
+        pdDialogDeleteBlockSubmitButton = v.findViewById(R.id.submitButton);
         pdDeleteComplaintLoader = v.findViewById(R.id.progressLoader);
-        pdDialogDeleteComplaintTitle = v.findViewById(R.id.textViewTitle);
-        pdDialogDeleteComplaintMessage = v.findViewById(R.id.textViewMessage);
+        pdDialogDeleteBlockTitle = v.findViewById(R.id.textViewTitle);
+        pdDialogDeleteBlockMessage = v.findViewById(R.id.textViewMessage);
         textInputLayoutPassword = v.findViewById(R.id.textInputPassword);
 
-        pdDialogDeleteComplaintTitle.setText("Are you sure you want to delete this complaint?");
-        pdDialogDeleteComplaintMessage.setText("Once deleted the following complaint cannot be restored.It will delete its whol data including it replies, upvotes, downvotes, comments, etc.After deleting this complaint a notification will be sent to the user regarding this delte of his complaint bu he will never be able to find it again from anywhere.");
+        if (flag == DELETING_THE_COMPLAINT) {
+            pdDialogDeleteBlockTitle.setText("Are you sure you want to delete this complaint?");
+            pdDialogDeleteBlockMessage.setText("Once deleted the following complaint cannot be restored.It will delete its whole data including it's replies, upvotes, downvotes, comments, etc.After deleting this complaint a notification will be sent to the user regarding this delete of his complaint but he will never be able to find it again from anywhere.");
+        } else if (flag == BLOCKING_THE_USER) {
+            pdDialogDeleteBlockTitle.setText("Are you sure you want to block this user?");
+            pdDialogDeleteBlockMessage.setText("Once this user get blocked he will be logout from the logged in devices and will not be able to login again until get unblocked by the admin.");
+        }
+        alertDialogDeleteBlock = builder.create();
+        alertDialogDeleteBlock.show();
 
-        alertDialogDeleteComplaint = builder.create();
-        alertDialogDeleteComplaint.show();
+        alertDialogDeleteBlock.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        alertDialogDeleteBlock.getWindow().setBackgroundDrawable(null);
+        alertDialogDeleteBlock.getWindow().setGravity(Gravity.BOTTOM);
 
-        alertDialogDeleteComplaint.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        alertDialogDeleteComplaint.getWindow().setBackgroundDrawable(null);
-        alertDialogDeleteComplaint.getWindow().setGravity(Gravity.BOTTOM);
-
-        pdDialogDeleteComplaintSubmitButton.setOnClickListener(new View.OnClickListener() {
+        pdDialogDeleteBlockSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (deleteComplaintState) {
+                switch (deleteBlockState) {
                     case 0:
-                        pdDialogDeleteComplaintTitle.setText("You are deleting this Complaint Completely?\n For the Security reasons please retype your password for Authentication.");
+                        if (flag == DELETING_THE_COMPLAINT) {
+                            pdDialogDeleteBlockTitle.setText("You are deleting this Complaint Completely?\nAuthenticate First!!");
+                        } else if (flag == BLOCKING_THE_USER) {
+                            pdDialogDeleteBlockTitle.setText("You are blocking this User?\nAuthenticate First!!");
+                        }
+                        pdDialogDeleteBlockMessage.setText("For the Security reasons please retype your password for Authentication.");
                         textInputLayoutPassword.setVisibility(View.VISIBLE);
-                        deleteComplaintState = 1;
-
-
-                        pdChangeStatusTitle.setText("Please wait we are changing the complaint status...");
-                        pdChangeStatusLoader.setVisibility(View.VISIBLE);
-                        pdChangeStatusSubmitButton.setVisibility(View.GONE);
-                        pdChangeStatusRadioGroup.setVisibility(View.GONE);
-                        changeStatusState = 1;
+                        deleteBlockState = 1;
                         break;
                     case 1:
                         String pass = textInputLayoutPassword.getEditText().getText().toString().trim();
@@ -302,21 +316,22 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                             return;
                         } else textInputLayoutPassword.setError(null);
 
+                        alertDialogDeleteBlock.setCancelable(false);
                         String email = Prefs.getUser(ConversationActivity.this).getEmail();
                         if (email == null || email.isEmpty()) {
-                            deleteComplaintState = 3;
+                            deleteBlockState = 3;
                             textInputLayoutPassword.setVisibility(View.GONE);
                             pdDeleteComplaintLoader.setVisibility(View.GONE);
-                            pdDialogDeleteComplaintMessage.setVisibility(View.GONE);
-                            pdDialogDeleteComplaintTitle.setText("Oops Error occurred unable to find you email. Please logout and login again.");
-                            pdDialogDeleteComplaintSubmitButton.setText("Dismiss");
+                            pdDialogDeleteBlockMessage.setVisibility(View.GONE);
+                            pdDialogDeleteBlockTitle.setText("Oops Error occurred unable to find you email. Please logout and login again.");
+                            pdDialogDeleteBlockSubmitButton.setText("Dismiss");
                             return;
                         }
 
-                        pdDialogDeleteComplaintMessage.setText("Please Wait We are verifying the details...");
+                        pdDialogDeleteBlockMessage.setText("Please Wait We are verifying the details...");
                         pdDeleteComplaintLoader.setVisibility(View.VISIBLE);
-                        textInputLayoutPassword.setEnabled(false);
-                        pdDialogDeleteComplaintSubmitButton.setEnabled(false);
+                        textInputLayoutPassword.setVisibility(View.GONE);
+                        pdDialogDeleteBlockSubmitButton.setVisibility(View.GONE);
                         authenticate(pass, email);
                         break;
                     case 3:
@@ -336,18 +351,36 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    pdDialogDeleteComplaintTitle.setText("Complaint Deleting Process");
-                    pdDialogDeleteComplaintMessage.setText("Authentication Success!!\nDeleting the Complaint...");
+                    alertDialogDeleteBlock.setCancelable(false);
+                    if (flag == DELETING_THE_COMPLAINT) {
+                        pdDialogDeleteBlockTitle.setText("Complaint Deleting Process");
+                        pdDialogDeleteBlockMessage.setText("Authentication Success!!\nDeleting the Complaint...");
+                    } else if (flag == BLOCKING_THE_USER) {
+                        pdDialogDeleteBlockTitle.setText("User Blocking Process");
+                        pdDialogDeleteBlockMessage.setText("Authentication Success!!\nBlocking the user...");
+                    }
                     textInputLayoutPassword.setVisibility(View.GONE);
-                    pdDialogDeleteComplaintSubmitButton.setVisibility(View.GONE);
-                    performDeleteTask();
-                    deleteComplaintState = 3;
+                    pdDialogDeleteBlockSubmitButton.setVisibility(View.GONE);
+                    deleteBlockState = 3;
+                    if (flag == DELETING_THE_COMPLAINT)
+                        deleteUserComplaint();
+                    else if (flag == BLOCKING_THE_USER)
+                        blockUser();
                 } else setResultsDelUI(task.getException().getMessage());
             }
         });
     }
 
-    private void performDeleteTask() {
+    private void blockUser() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setResultsDelUI("Blocked the User Successfully.");
+            }
+        }, 2000);
+    }
+
+    private void deleteUserComplaint() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -377,17 +410,18 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void setResultsDelUI(String message) {
-        if (deleteComplaintState == 1) {
-            pdDialogDeleteComplaintSubmitButton.setEnabled(true);
-            textInputLayoutPassword.setEnabled(true);
+        if (deleteBlockState == 1) {
+            alertDialogDeleteBlock.setCancelable(true);
+            pdDialogDeleteBlockSubmitButton.setVisibility(View.VISIBLE);
+            textInputLayoutPassword.setVisibility(View.VISIBLE);
             pdDeleteComplaintLoader.setVisibility(View.GONE);
-            pdDialogDeleteComplaintMessage.setText(message);
-        } else if (deleteComplaintState == 3) {
+            pdDialogDeleteBlockMessage.setText(message);
+        } else if (deleteBlockState == 3) {
             textInputLayoutPassword.setVisibility(View.GONE);
             pdDeleteComplaintLoader.setVisibility(View.GONE);
-            pdDialogDeleteComplaintMessage.setText(message);
-            pdDialogDeleteComplaintSubmitButton.setText("Dismiss");
-            pdChangeStatusSubmitButton.setEnabled(true);
+            pdDialogDeleteBlockMessage.setText(message);
+            pdDialogDeleteBlockSubmitButton.setText("Dismiss");
+            pdDialogDeleteBlockSubmitButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -406,8 +440,10 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void setResultsUI(String message) {
+        changeStatusState = 2;
         pdChangeStatusLoader.setVisibility(View.GONE);
         pdChangeStatusSubmitButton.setVisibility(View.VISIBLE);
         pdChangeStatusTitle.setText(message);
+        pdChangeStatusSubmitButton.setText("Dismiss");
     }
 }
