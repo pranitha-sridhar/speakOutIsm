@@ -9,12 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_toolbar_conversation"
+        android:backgroundTint="@color/background"
         android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/imageViewBlockUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,19 +25,19 @@
 
         <ImageView
             android:id="@+id/imageViewDeleteConvo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageViewBlockUser"
             app:layout_constraintEnd_toStartOf="@+id/imageViewBlockUser"
             app:layout_constraintTop_toTopOf="@+id/imageViewBlockUser"
             app:srcCompat="@drawable/ic_delete"
-            app:tint="@android:color/holo_blue_dark" />
+            app:tint="@color/purple_500" />
 
         <ImageView
             android:id="@+id/imageViewStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageViewDeleteConvo"
             app:layout_constraintEnd_toStartOf="@+id/imageViewDeleteConvo"
@@ -50,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Conversations"
-            android:textColor="@color/purple_200"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/imageViewStatus"
             app:layout_constraintEnd_toStartOf="@+id/imageViewStatus"
             app:layout_constraintStart_toEndOf="@+id/imageViewArrowBack"
@@ -61,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="#CAC7C7"
             app:layout_constraintEnd_toEndOf="@+id/imageViewBlockUser"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/imageViewArrowBack"
@@ -72,9 +73,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Cource is Missing"
+            android:maxHeight="60dp"
+            android:text="Subject : Cource is Missing"
+            android:textColor="@android:color/holo_red_light"
             app:layout_constraintEnd_toEndOf="@+id/textView6"
-            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/toolbarTitle"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <ImageView
@@ -87,6 +90,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/toolbarTitle"
             app:srcCompat="@drawable/ic_arrow_back"
-            app:tint="@color/material_on_primary_emphasis_high_type" />
+            app:tint="#FFFFFF" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

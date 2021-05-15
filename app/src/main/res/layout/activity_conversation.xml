@@ -41,6 +41,7 @@
             android:background="@drawable/button_background2"
             android:ems="10"
             android:gravity="start"
+            android:maxHeight="100dp"
             android:hint="Enter your Message here."
             android:inputType="textMultiLine"
             android:padding="10dp"

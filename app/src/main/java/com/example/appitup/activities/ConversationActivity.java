@@ -129,12 +129,21 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         initRecyclerView();
         editTextMessage.addTextChangedListener(textWatcher);
         loadReplies();
+
+        /*
+        TODO : Remove this comment so that right thig can work after testing completed
+        if(Prefs.getUser(this).getUserType()!=Helper.USER_ADMINISTRATOR
+                && !Prefs.getUser(this).getUsername().equals(complaint.getUsername())){
+            editTextMessage.setEnabled(false);
+            editTextMessage.setText("Only Admin or the owner of the complaint can participate to this conversation");
+            editTextMessage.setTextColor(Color.BLACK);
+        }
+        */
     }
 
     private void initRecyclerView() {
         adapter = new ReplyAdapter(list, ConversationActivity.this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ConversationActivity.this, RecyclerView.VERTICAL, false);
-        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
@@ -240,7 +249,6 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
 
         alertDialogChangeStatus = builder.create();
         alertDialogChangeStatus.show();
-        alertDialogChangeStatus.setCancelable(false);
 
         alertDialogChangeStatus.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         alertDialogChangeStatus.getWindow().setBackgroundDrawable(null);
@@ -259,6 +267,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                         pdChangeStatusSubmitButton.setVisibility(View.GONE);
                         pdChangeStatusRadioGroup.setVisibility(View.GONE);
                         changeStatusState = 1;
+                        alertDialogChangeStatus.setCancelable(false);
                         changeStatus(status);
                         break;
                     case 2:
