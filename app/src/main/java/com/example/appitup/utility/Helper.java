@@ -4,12 +4,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.activities.SignIn;
 import com.example.appitup.models.Complaints;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -22,6 +38,8 @@ public class Helper {
     public static final int NOT_VOTED = 0;
     public static final int UPVOTED = 1;
     public static final int DOWNVOTED = -1;
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
     public static String PENDING = "PENDING";
     public static String IN_PROGRESS = "IN-PROGRESS";
     public static String RESOLVED = "RESOLVED";
@@ -64,5 +82,79 @@ public class Helper {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private static final String LEGACY_SERVER_KEY = "AAAAxCUTpvA:APA91bHbHFwvexObt6OZghNuqZix9foVCp0fBxA2qon8K5rn7gxZndeligB-9qHuOWDXpVO-Wu7bgoS-S9U8BbZf7uE8npyiHkPnWphOTjwkzqau4vbzUhom-xQGcHOUXEhAuNsd9dss";
+
+    public static void sendNotificationToUser(final String username, final JSONObject dataJson) {
+        Query queryStudent = FirebaseDatabase.getInstance().getReference("StudentUsers");
+        Query queryAdmin = FirebaseDatabase.getInstance().getReference("AdminUsers");
+
+        queryStudent.orderByChild("username").equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String token = "";
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                if (ds.hasChild("fcm_token"))
+                                    token = ds.child("fcm_token").getValue().toString();
+                            }
+                            sendNotification(token, dataJson);
+                        } else {
+                            queryAdmin.orderByChild("username").equalTo(username)
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()) {
+                                                String token = "";
+                                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                                    if (ds.hasChild("fcm_token"))
+                                                        token = ds.child("fcm_token").getValue().toString();
+                                                }
+                                                sendNotification(token, dataJson);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    public static void sendNotification(final String regToken, final JSONObject dataJson) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    JSONObject json = new JSONObject();
+                    json.put("data", dataJson);
+                    json.put("to", regToken);
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+                    Request request = new Request.Builder()
+                            .header("Authorization", "key=" + Helper.LEGACY_SERVER_KEY)
+                            .url("https://fcm.googleapis.com/fcm/send")
+                            .post(body)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String finalResponse = response.body().string();
+                    Log.i("TAG", "doInBackground: " + finalResponse);
+                } catch (Exception e) {
+                    //Log.d(TAG,e+"");
+                }
+                return null;
+            }
+        }.execute();
+
     }
 }

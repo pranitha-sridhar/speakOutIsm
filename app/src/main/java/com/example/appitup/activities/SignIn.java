@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,9 +35,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.Objects;
 
@@ -311,6 +315,7 @@ public class SignIn extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                             Helper.toast(SignIn.this, "Signed In Success!!");
+                            getFCMToken();
                         } else {
                             // user is blocked by the admin
                             Helper.signOutUser(SignIn.this, false);
@@ -325,5 +330,38 @@ public class SignIn extends AppCompatActivity {
         });
     }
 
+    private void getFCMToken() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (!task.isSuccessful()) {
+                    Log.d("Task : ", "Hi getInstanceId failed * " + task.getException());
+                    return;
+                }
+                String token = task.getResult().getToken();
+                Log.d("FCM_TOKEN", token);
+                saveTokenToServer(token);
+            }
+        });
+    }
 
+    private void saveTokenToServer(String token) {
+        User user = Prefs.getUser(this);
+        DatabaseReference databaseReference;
+        if (user.getUserType() == Helper.USER_STUDENT)
+            databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");
+        else databaseReference = FirebaseDatabase.getInstance().getReference("AdminUsers");
+
+        databaseReference.child(user.getUid()).child("fcm_token").setValue(token).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // successfully saved
+                    Prefs.getUser(SignIn.this).setFcm_token(token);
+                } else {
+                    // error
+                }
+            }
+        });
+    }
 }
