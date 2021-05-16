@@ -1,6 +1,5 @@
 package com.example.appitup.activities;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,12 +15,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
-import com.example.appitup.fragments.HomeFragment;
+import com.example.appitup.utility.Helper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,21 +62,12 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_notification) {
             startActivity(new Intent(this, NotificationsActivity.class));
         } else if (item.getItemId() == R.id.action_sign_out) {
-            signOut();
+            Helper.signOutUser(MainActivity.this, true);
+            finish();
         }/*else if(item.getItemId()==R.id.action_filter){
             HomeFragment.filter_icon(this);
         }*/
         return super.onOptionsItemSelected(item);
-    }
-
-    private void signOut() {
-        FirebaseAuth.getInstance().signOut();
-        Prefs.setUserLoggedIn(this, false);
-        Prefs.setUserData(this, null);
-        Intent intent = new Intent(this, SignIn.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
     }
 
     @Override

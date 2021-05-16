@@ -170,12 +170,13 @@ public class SignIn extends AppCompatActivity {
 
             }
         });
-
     }
 
     private User getUserModelFromDS(DataSnapshot ds) {
         User user = new User((String) ds.child("username").getValue(), (String) ds.child("email").getValue(),
                 (String) ds.child("displayName").getValue(), (String) ds.child("profileUri").getValue(), (String) ds.child("uid").getValue());
+        if (ds.hasChild("isBlocked") && ds.child("isBlocked").getValue().equals(true))
+            user.setBlocked(true);
         return user;
     }
 
@@ -224,18 +225,23 @@ public class SignIn extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     if (Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified()) {
-                        alertDialogProgress.dismiss();
-                        Prefs.setUserData(SignIn.this, user);
-                        Prefs.setUserLoggedIn(SignIn.this, true);
+                        if (!user.isBlocked()) {
+                            alertDialogProgress.dismiss();
+                            Prefs.setUserData(SignIn.this, user);
+                            Prefs.setUserLoggedIn(SignIn.this, true);
 
-                        Intent intent = new Intent(SignIn.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-                        Helper.toast(SignIn.this, "Signed In Success!!");
+                            Intent intent = new Intent(SignIn.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                            Helper.toast(SignIn.this, "Signed In Success!!");
+                        } else {
+                            // user is blocked by the admin
+                            Helper.signOutUser(SignIn.this, false);
+                            setResultsUI("This User is blocked by the Admin.\nPlease contact to your college and ask them to unblock this user.");
+                        }
                     } else {
-                        FirebaseAuth.getInstance().signOut();
-                        Prefs.setUserLoggedIn(SignIn.this, false);
+                        Helper.signOutUser(SignIn.this, false);
                         setResultsUI("Email Id Not Verified\nPlease verify you mail id by clicking on the link sent to your email when you had created the account");
                     }
                 } else setResultsUI(task.getException().getMessage());

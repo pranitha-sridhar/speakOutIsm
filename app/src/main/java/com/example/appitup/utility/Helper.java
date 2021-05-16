@@ -1,9 +1,13 @@
 package com.example.appitup.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.appitup.Database.Prefs;
+import com.example.appitup.activities.SignIn;
 import com.example.appitup.models.Complaints;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -40,5 +44,16 @@ public class Helper {
             myObjectAsDict.put(field.getName(), value);
         }
         return myObjectAsDict;
+    }
+
+    public static void signOutUser(Context context, boolean sendToSignIn) {
+        FirebaseAuth.getInstance().signOut();
+        Prefs.setUserLoggedIn(context, false);
+        Prefs.setUserData(context, null);
+        if (sendToSignIn) {
+            Intent intent = new Intent(context, SignIn.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
+        }
     }
 }

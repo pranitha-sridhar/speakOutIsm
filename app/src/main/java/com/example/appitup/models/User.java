@@ -15,7 +15,7 @@ public class User implements Serializable {
 
     int userType;
 
-    boolean isBlocked;
+    boolean isBlocked = false;
 
     public User(String username, String email, String displayName, String profileUri, String uid) {
         this.username = username;

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.appitup.models.User;
 import com.example.appitup.utility.Helper;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
 public class Prefs {
@@ -22,7 +23,9 @@ public class Prefs {
 
     public static boolean isUserLoggedIn(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(Helper.MY_PREFS_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean("isUserLoggedIn", false);
+        return (sharedPreferences.getBoolean("isUserLoggedIn", false)
+                && Prefs.getUser(context) != null && Prefs.getUser(context).getUsername() != null
+                && FirebaseAuth.getInstance().getCurrentUser() != null);
     }
 
     public static void setUserData(Context context, User user) {
