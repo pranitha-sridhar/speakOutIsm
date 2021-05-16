@@ -1,11 +1,10 @@
 package com.example.appitup.models;
 
 import java.io.Serializable;
-
-public class Reply implements Serializable {
 import java.util.Map;
 
-public class Reply {
+public class Reply implements Serializable {
+
     String reply_id;
 
     String sent_from;

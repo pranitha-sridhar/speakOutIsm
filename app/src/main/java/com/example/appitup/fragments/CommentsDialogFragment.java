@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -81,8 +79,8 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         Dialog dialog = getDialog();
 
         if (dialog != null) {
-            Window window = dialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+            View bottomSheet = dialog.findViewById(R.id.design_bottom_sheet);
+            bottomSheet.getLayoutParams().height = 1300;
         }
     }
 

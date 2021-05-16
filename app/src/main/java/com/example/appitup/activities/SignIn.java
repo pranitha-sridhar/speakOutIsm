@@ -39,7 +39,7 @@ import butterknife.Unbinder;
 
 public class SignIn extends AppCompatActivity {
     FirebaseAuth mAuth;
-    @BindView(R.id.textInputUsername2)
+    @BindView(R.id.textInputUsernameLogin)
     TextInputLayout username;
     @BindView(R.id.textInputPassword2)
     TextInputLayout password;
@@ -76,7 +76,6 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         unbinder = ButterKnife.bind(this);
-
         mAuth = FirebaseAuth.getInstance();
 
 
