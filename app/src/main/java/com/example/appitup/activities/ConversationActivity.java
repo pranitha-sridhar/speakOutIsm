@@ -50,8 +50,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ConversationActivity extends AppCompatActivity implements View.OnClickListener {
-
-
     private static final int DELETING_THE_COMPLAINT = 101;
     private static final int BLOCKING_THE_USER = 102;
 
@@ -129,7 +127,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         initRecyclerView();
         editTextMessage.addTextChangedListener(textWatcher);
         loadReplies();
-
+        
         /*
         TODO : Remove this comment so that right thig can work after testing completed
         if(Prefs.getUser(this).getUserType()!=Helper.USER_ADMINISTRATOR

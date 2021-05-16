@@ -21,8 +21,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_toolbar_conversation"
-                android:backgroundTint="@color/pending_color"
                 android:paddingBottom="10dp">
 
                 <TextView
@@ -32,7 +30,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="Comments"
-                    android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.842"
                     app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +87,8 @@
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/button_background2"
                 android:ems="10"
-                android:gravity="center"
+                android:gravity="start"
+                android:maxHeight="100dp"
                 android:hint="Enter your Message here."
                 android:inputType="textMultiLine"
                 android:padding="10dp"

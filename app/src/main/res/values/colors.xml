@@ -14,6 +14,7 @@
     <color name="pending_color">#B5AEAE</color>
     <color name="background">#B3B2B2</color>
     <color name="student_color">@android:color/holo_blue_light</color>
+    <color name="users_color">#FFBB86FC</color>
     <color name="admin_color">@android:color/holo_green_light</color>
 
 </resources>

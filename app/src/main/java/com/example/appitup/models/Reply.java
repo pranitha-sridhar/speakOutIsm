@@ -1,6 +1,8 @@
 package com.example.appitup.models;
 
-public class Reply {
+import java.io.Serializable;
+
+public class Reply implements Serializable {
     String reply_id;
 
     String sent_from;

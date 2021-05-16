@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.models.Comment;
 
@@ -38,6 +40,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.viewHo
         holder.name.setText(chatMessages.getUsername());
         // TODO : Add Date Time in Comment
         //holder.time.setText(chatMessages.getTime());
+        if (chatMessages.getUsername().equals(Prefs.getUser(context).getUsername())) {
+            holder.cardViewPhoto.setCardBackgroundColor(context.getResources().getColor(R.color.student_color));
+            holder.cardText.setText("S");
+        } else {
+            holder.cardViewPhoto.setCardBackgroundColor(context.getResources().getColor(R.color.users_color));
+            holder.cardText.setText("U");
+        }
     }
 
     @Override
@@ -46,13 +55,16 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.viewHo
     }
 
     public class viewHolderReceivedMsgs extends RecyclerView.ViewHolder {
-        TextView name, messageBody, time;
+        TextView name, messageBody, time, cardText;
+        CardView cardViewPhoto;
 
         public viewHolderReceivedMsgs(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.text_message_name);
             time = itemView.findViewById(R.id.text_message_time);
             messageBody = itemView.findViewById(R.id.text_message_body);
+            cardText = itemView.findViewById(R.id.cardText);
+            cardViewPhoto = itemView.findViewById(R.id.cardViewPhoto);
         }
     }
 }

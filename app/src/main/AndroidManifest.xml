@@ -28,6 +28,7 @@
         <activity android:name=".activities.ResetPassword" />
         <activity
             android:name=".activities.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar" />
         <activity android:name=".activities.SignUpActivity" />
     </application>

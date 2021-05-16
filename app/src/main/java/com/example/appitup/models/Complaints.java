@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
-
-
-
 public class Complaints implements Serializable {
     String complaintId;
     String username;
@@ -18,24 +15,14 @@ public class Complaints implements Serializable {
     String visibility;
     String status;
     String anonymous;
-    ArrayList<String> listOfUpVoter;
-    ArrayList<String> listOfDownVoter;
+    long downvotes;
+    long upvotes;
+    ArrayList<Vote> listOfUpvoters;
+    ArrayList<Vote> listOfDownvoters;
     ArrayList<Comment> listOfCommenter;
     Map timeStampmap;
     String timeStampStr;
-
-    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status, String anonymous) {
-        this.complaintId = complaintId;
-        this.username = username;
-        this.uid = uid;
-        this.subject = subject;
-        this.body = body;
-        this.category = category;
-        this.subcategory = subcategory;
-        this.visibility = visibilty;
-        this.status = status;
-        this.anonymous = anonymous;
-    }
+    int voteStatus;
 
     public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibilty, String status, String anonymous, Map timeStampmap) {
         this.complaintId = complaintId;
@@ -48,10 +35,14 @@ public class Complaints implements Serializable {
         this.visibility = visibilty;
         this.status = status;
         this.anonymous = anonymous;
-        this.timeStampmap=timeStampmap;
+        this.timeStampmap = timeStampmap;
     }
 
-    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibility, String status, String anonymous, ArrayList<String> listOfUpVoter, ArrayList<String> listOfDownVoter, ArrayList<Comment> listOfCommenter) {
+    public Complaints(String complaintId, String username, String uid, String subject, String body,
+                      String category, String subcategory, String visibility, String status, String anonymous,
+                      long upvotes, long downvotes, ArrayList<Comment> listOfCommenter,
+                      ArrayList<Vote> listOfUpvoters, ArrayList<Vote> listOfDownvoters,
+                      Map timeStampmap, String timeStampStr, int voteStatus) {
         this.complaintId = complaintId;
         this.username = username;
         this.uid = uid;
@@ -62,27 +53,38 @@ public class Complaints implements Serializable {
         this.visibility = visibility;
         this.status = status;
         this.anonymous = anonymous;
-        this.listOfUpVoter = listOfUpVoter;
-        this.listOfDownVoter = listOfDownVoter;
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
         this.listOfCommenter = listOfCommenter;
+        this.listOfUpvoters = listOfUpvoters;
+        this.listOfDownvoters = listOfDownvoters;
+        this.timeStampmap = timeStampmap;
+        this.timeStampStr = timeStampStr;
+        this.voteStatus = voteStatus;
     }
 
-    public Complaints(String complaintId, String username, String uid, String subject, String body, String category, String subcategory, String visibility, String status, String anonymous, ArrayList<String> listOfUpVoter, ArrayList<String> listOfDownVoter, ArrayList<Comment> listOfCommenter,Map timeStampmap,String timeStampStr) {
-        this.complaintId = complaintId;
-        this.username = username;
-        this.uid = uid;
-        this.subject = subject;
-        this.body = body;
-        this.category = category;
-        this.subcategory = subcategory;
-        this.visibility = visibility;
-        this.status = status;
-        this.anonymous = anonymous;
-        this.listOfUpVoter = listOfUpVoter;
-        this.listOfDownVoter = listOfDownVoter;
-        this.listOfCommenter = listOfCommenter;
-        this.timeStampmap=timeStampmap;
-        this.timeStampStr=timeStampStr;
+    public int getVoteStatus() {
+        return voteStatus;
+    }
+
+    public void setVoteStatus(int voteStatus) {
+        this.voteStatus = voteStatus;
+    }
+
+    public ArrayList<Vote> getListOfUpvoters() {
+        return listOfUpvoters;
+    }
+
+    public void setListOfUpvoters(ArrayList<Vote> listOfUpvoters) {
+        this.listOfUpvoters = listOfUpvoters;
+    }
+
+    public ArrayList<Vote> getListOfDownvoters() {
+        return listOfDownvoters;
+    }
+
+    public void setListOfDownvoters(ArrayList<Vote> listOfDownvoters) {
+        this.listOfDownvoters = listOfDownvoters;
     }
 
     public void setTimeStampmap(Map timeStampmap) {
@@ -110,20 +112,20 @@ public class Complaints implements Serializable {
         this.complaintId = complaintId;
     }
 
-    public ArrayList<String> getListOfUpVoter() {
-        return listOfUpVoter;
+    public long getDownvotes() {
+        return downvotes;
     }
 
-    public void setListOfUpVoter(ArrayList<String> listOfUpVoter) {
-        this.listOfUpVoter = listOfUpVoter;
+    public void setDownvotes(long downvotes) {
+        this.downvotes = downvotes;
     }
 
-    public ArrayList<String> getListOfDownVoter() {
-        return listOfDownVoter;
+    public long getUpvotes() {
+        return upvotes;
     }
 
-    public void setListOfDownVoter(ArrayList<String> listOfDownVoter) {
-        this.listOfDownVoter = listOfDownVoter;
+    public void setUpvotes(long upvotes) {
+        this.upvotes = upvotes;
     }
 
     public ArrayList<Comment> getListOfCommenter() {

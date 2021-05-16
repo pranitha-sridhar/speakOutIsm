@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -78,8 +81,8 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         Dialog dialog = getDialog();
 
         if (dialog != null) {
-            View bottomSheet = dialog.findViewById(R.id.design_bottom_sheet);
-            bottomSheet.getLayoutParams().height = 1000;
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         }
     }
 
@@ -119,8 +122,8 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
                 }
 
                 Map map=new HashMap();
-                map.put("timeStamp",ServerValue.TIMESTAMP);
-                Comment comment = new Comment(Prefs.getUser(getContext()).getUsername(), commentMsg,map);
+                map.put("timeStamp", ServerValue.TIMESTAMP);
+                Comment comment = new Comment(Prefs.getUser(getContext()).getUsername(), commentMsg, map);
                 addComment(comment);
             }
         });
@@ -129,19 +132,52 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
     private void loadComments() {
         Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaintId).child("listOfCommenter");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String commentId = ds.child("commentId").getValue().toString();
+                    String comment = ds.child("comment").getValue().toString();
+                    String username = ds.child("username").getValue().toString();
+                    String time = null;
+                    long timeStamp = 0;
+                    Map<String, Long> map = new HashMap();
+                    if (ds.child("timeStampMap").child("timeStamp").exists()) {
+                        timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                        DateFormat dateFormat = getDateTimeInstance();
+                        Date netDate = (new Date(timeStamp));
+                        time = dateFormat.format(netDate);
+                        map.put("timeStamp", timeStamp);
+                    }
+                    list.add(new Comment(username, commentId, comment, map, time));
+                }
+                adapter.notifyDataSetChanged();
+                recyclerView.smoothScrollToPosition(list.size());
+                progressLoader.setVisibility(View.GONE);
+                takeUpdatesOfComments();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void takeUpdatesOfComments() {
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaintId).child("listOfCommenter");
 
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot ds, @Nullable String s) {
-                Log.i(TAG, "onChildAdded: " + ds.toString());
                 String commentId = ds.child("commentId").getValue().toString();
                 String comment = ds.child("comment").getValue().toString();
                 String username = ds.child("username").getValue().toString();
-                String time=null;
-                long timeStamp= 0;
-                Map<String, Long> map=new HashMap();
-                if(ds.child("timeStampMap").child("timeStamp").exists())
-                {
+                String time = null;
+                long timeStamp = 0;
+                Map<String, Long> map = new HashMap();
+                if(ds.child("timeStampMap").child("timeStamp").exists()) {
                     timeStamp= (long) ds.child("timeStampMap").child("timeStamp").getValue();
                     DateFormat dateFormat = getDateTimeInstance();
                     Date netDate = (new Date(timeStamp));
@@ -156,21 +192,22 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i(TAG, "onChildChanged: ");
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                Log.i(TAG, "onChildRemoved: ");
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Log.i(TAG, "onChildMoved: ");
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.i(TAG, "onCancelled: ");
             }
         });
     }

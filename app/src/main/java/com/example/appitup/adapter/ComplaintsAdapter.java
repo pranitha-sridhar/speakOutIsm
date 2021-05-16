@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.models.Complaints;
 import com.example.appitup.utility.Helper;
@@ -38,11 +37,48 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         this.mListener = mListener;
     }
 
-
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new viewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_complaints, parent, false));
+    }
+
+    private final Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Complaints> filteredList = new ArrayList<>();
+            if (charSequence == null || getItemCount() == 0) {
+                filteredList.addAll(filteredList1);
+            } else {
+                list.size();
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for (Complaints complaint : filteredList1) {
+                    if (complaint.getStatus().toLowerCase().contains(filterPattern))
+                        filteredList.add(complaint);
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            list.clear();
+            if (filterResults.values != null)
+                list.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    @Override
+    public int getItemCount() {
+        return (list != null) ? list.size() : 0;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
     }
 
     @Override
@@ -52,7 +88,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         holder.textViewTitle.setText(complaints.getSubject());
         holder.textViewBody.setText(complaints.getBody());
         holder.textViewDateTime.setText(complaints.getTimeStampStr());
-        //holder.textViewDateTime.setText(complaints.getDateTime());
+
         holder.chipStatus.setText(complaints.getStatus());
         if (complaints.getStatus().equals(Helper.PENDING)) {
             holder.chipStatus.setChipBackgroundColor(ColorStateList.valueOf(context.getResources().getColor(R.color.pending_color)));
@@ -64,48 +100,34 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         holder.chipCategory.setText(complaints.getCategory());
         holder.chipSubcategory.setText(complaints.getSubcategory());
 
-        if (complaints.getListOfUpVoter() == null)
-            complaints.setListOfUpVoter(new ArrayList<>());
-        if (complaints.getListOfDownVoter() == null)
-            complaints.setListOfDownVoter(new ArrayList<>());
-        if (complaints.getListOfCommenter() == null)
-            complaints.setListOfCommenter(new ArrayList<>());
-
-        int upVoters = (complaints.getListOfUpVoter() != null) ? complaints.getListOfUpVoter().size() : 0;
-        int downVoters = (complaints.getListOfDownVoter() != null) ? complaints.getListOfDownVoter().size() : 0;
+        final long[] upVoters = {complaints.getUpvotes()};
+        final long[] downVoters = {complaints.getDownvotes()};
         int commenter = (complaints.getListOfCommenter() != null) ? complaints.getListOfCommenter().size() : 0;
 
-        holder.upVoteNumber.setText(upVoters + " upvotes");
-        holder.downVoteNumber.setText(downVoters + " downvotes");
+        holder.upVoteNumber.setText(upVoters[0] + " upvotes");
+        holder.downVoteNumber.setText(downVoters[0] + " downvotes");
         holder.commentNumber.setText(commenter + " comments");
 
-        int status = 0;
-        if (complaints.getListOfUpVoter() != null && complaints.getListOfUpVoter().contains(Prefs.getUser(context).getUsername())) {
+        if (complaints.getVoteStatus() == Helper.UPVOTED) {
             holder.upVote.setImageResource(R.drawable.ic_upvote_filled);
             holder.downVote.setImageResource(R.drawable.ic_downvote_outlined);
-            status = 1;
-        }
-
-        if (complaints.getListOfDownVoter() != null && complaints.getListOfDownVoter().contains(Prefs.getUser(context).getUsername())) {
+        } else if (complaints.getVoteStatus() == Helper.DOWNVOTED) {
             holder.downVote.setImageResource(R.drawable.ic_downvote_filled);
             holder.upVote.setImageResource(R.drawable.ic_upvote_outlined);
-            status = -1;
         }
-
-        int finalStatus = status;
 
         holder.upVote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (finalStatus == -1) {
-                    holder.upVoteNumber.setText(upVoters + 1 + " upvotes");
-                    holder.downVoteNumber.setText(downVoters - 1 + " downvotes");
-                } else if (finalStatus == 0) {
-                    holder.upVoteNumber.setText(upVoters + 1 + " upvotes");
-                    holder.downVoteNumber.setText(downVoters + " downvotes");
-                } else if (finalStatus == 1) {
-                    holder.upVoteNumber.setText(upVoters + " upvotes");
-                    holder.downVoteNumber.setText(downVoters + " downvotes");
+                if (complaints.getVoteStatus() == Helper.DOWNVOTED) {
+                    holder.upVoteNumber.setText(upVoters[0] + 1 + " upvotes");
+                    holder.downVoteNumber.setText(downVoters[0] - 1 + " downvotes");
+                } else if (complaints.getVoteStatus() == Helper.NOT_VOTED) {
+                    holder.upVoteNumber.setText(upVoters[0] + 1 + " upvotes");
+                    holder.downVoteNumber.setText(downVoters[0] + " downvotes");
+                } else if (complaints.getVoteStatus() == Helper.UPVOTED) {
+                    holder.upVoteNumber.setText(upVoters[0] + " upvotes");
+                    holder.downVoteNumber.setText(downVoters[0] + " downvotes");
                 }
 
                 holder.upVote.setImageResource(R.drawable.ic_upvote_filled);
@@ -118,15 +140,15 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
         holder.downVote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (finalStatus == 1) {
-                    holder.upVoteNumber.setText(upVoters - 1 + " upvotes");
-                    holder.downVoteNumber.setText(downVoters + 1 + " downvotes");
-                } else if (finalStatus == 0) {
-                    holder.upVoteNumber.setText(upVoters + " upvotes");
-                    holder.downVoteNumber.setText(downVoters + 1 + " downvotes");
-                } else if (finalStatus == -1) {
-                    holder.upVoteNumber.setText(upVoters + " upvotes");
-                    holder.downVoteNumber.setText(downVoters + " downvotes");
+                if (complaints.getVoteStatus() == Helper.UPVOTED) {
+                    holder.upVoteNumber.setText(upVoters[0] - 1 + " upvotes");
+                    holder.downVoteNumber.setText(downVoters[0] + 1 + " downvotes");
+                } else if (complaints.getVoteStatus() == Helper.NOT_VOTED) {
+                    holder.upVoteNumber.setText(upVoters[0] + " upvotes");
+                    holder.downVoteNumber.setText(downVoters[0] + 1 + " downvotes");
+                } else if (complaints.getVoteStatus() == Helper.DOWNVOTED) {
+                    holder.upVoteNumber.setText(upVoters[0] + " upvotes");
+                    holder.downVoteNumber.setText(downVoters[0] + " downvotes");
                 }
 
                 holder.downVote.setImageResource(R.drawable.ic_downvote_filled);
@@ -161,53 +183,6 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
             }
         });
     }
-
-    private int getStatus(Complaints complaints) {
-        int status = 0;
-        if (complaints.getListOfUpVoter() != null && complaints.getListOfUpVoter().contains(Prefs.getUser(context).getUsername()))
-            status = 1;
-        if (complaints.getListOfDownVoter() != null && complaints.getListOfDownVoter().contains(Prefs.getUser(context).getUsername()))
-            status = -1;
-        return status;
-    }
-
-    @Override
-    public int getItemCount() {
-        return (list != null) ? list.size() : 0;
-    }
-
-    @Override
-    public Filter getFilter() {
-        return exampleFilter;
-    }
-
-    private Filter exampleFilter=new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            List<Complaints> filteredList=new ArrayList<>();
-            if(charSequence == null || getItemCount()==0){
-                filteredList.addAll(filteredList1);
-            }
-            else{
-                list.size();
-                String filterPattern=charSequence.toString().toLowerCase().trim();
-                for(Complaints complaint:filteredList1){
-                    if(complaint.getStatus().toLowerCase().contains(filterPattern))
-                        filteredList.add(complaint);
-                }
-            }
-            FilterResults filterResults=new FilterResults();
-            filterResults.values=filteredList;
-            return filterResults;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            list.clear();
-            list.addAll((List) filterResults.values);
-            notifyDataSetChanged();
-        }
-    };
 
     public interface ComplaintsListener {
         void upVoteClicked(Complaints complaint);

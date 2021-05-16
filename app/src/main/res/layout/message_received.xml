@@ -6,39 +6,60 @@
     android:layout_margin="10dp"
     android:padding="5dp">
 
-    <TextView
-        android:id="@+id/text_message_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="John Doe"
-        android:textSize="12sp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewPhoto"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/purple_200"
+        app:cardCornerRadius="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/text_message_body"
+        <TextView
+            android:id="@+id/cardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="U"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:background="@drawable/background_message_received"
-        android:maxWidth="240dp"
-        android:padding="8dp"
-        android:text="hi man, how are you?"
-        android:textColor="#363131"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/text_message_name"
-        app:layout_constraintTop_toBottomOf="@+id/text_message_name" />
+        android:backgroundTint="#E2E0E0"
+        android:orientation="vertical"
+        android:padding="5dp"
+        app:layout_constraintStart_toEndOf="@+id/cardViewPhoto"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/text_message_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="25-6-21, 11:40"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toRightOf="@+id/text_message_body"
-        app:layout_constraintStart_toEndOf="@+id/text_message_body" />
+        <TextView
+            android:id="@+id/text_message_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="John Doe"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_message_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:text="hi man, how are you?"
+            android:textColor="#363131" />
+
+        <TextView
+            android:id="@+id/text_message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="25-6-21, 11:40"
+            android:textSize="10sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
