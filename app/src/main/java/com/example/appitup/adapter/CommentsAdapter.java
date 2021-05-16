@@ -38,8 +38,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.viewHo
         Comment chatMessages = list.get(position);
         holder.messageBody.setText(chatMessages.getComment());
         holder.name.setText(chatMessages.getUsername());
-        // TODO : Add Date Time in Comment
-        //holder.time.setText(chatMessages.getTime());
+        holder.time.setText(chatMessages.getTimeStampStr());
+
         if (chatMessages.getUsername().equals(Prefs.getUser(context).getUsername())) {
             holder.cardViewPhoto.setCardBackgroundColor(context.getResources().getColor(R.color.student_color));
             holder.cardText.setText("S");

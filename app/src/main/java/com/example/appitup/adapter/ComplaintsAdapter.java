@@ -84,7 +84,8 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.vi
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         Complaints complaints = list.get(position);
-        holder.textUserName.setText("@" + complaints.getUsername());
+        if(complaints.getAnonymous().equals("true")) holder.textUserName.setText("@Anonymous");
+        else holder.textUserName.setText("@" + complaints.getUsername());
         holder.textViewTitle.setText(complaints.getSubject());
         holder.textViewBody.setText(complaints.getBody());
         holder.textViewDateTime.setText(complaints.getTimeStampStr());

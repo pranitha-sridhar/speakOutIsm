@@ -135,27 +135,18 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
     }
 
     private void loadData() {
+        //showProgressDialogue();
+        if(Prefs.getUser(getContext()).getUserType()==Helper.USER_ADMINISTRATOR){
+            loadAllDataAdmin();
+            return;
+        }
+        // after getting data from firebase add this to list and cal ' adapter.notifyDataSetChanged(); '
         Query query= FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("visibility").equalTo("public");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list.clear();
-                /*
-                String complaintId = (String) ds.child("complaintId").getValue();
-                    String username = (String) ds.child("username").getValue();
-                    String uid = (String) ds.child("uid").getValue();
-                    String subject = (String) ds.child("subject").getValue();
-                    String body = (String) ds.child("body").getValue();
-                    String category = (String) ds.child("category").getValue();
-                    String subcategory = (String) ds.child("subcategory").getValue();
-                    String visibility = (String) ds.child("visibility").getValue();
-                    String status = (String) ds.child("status").getValue();
-                    String anonymous = (String) ds.child("anonymous").getValue();
-                    String downvotes = (String) ds.child("downvotes").getValue();
-                    String upvotes = (String) ds.child("upvotes").getValue();
-                    String time=null;
-                 */
-                for (DataSnapshot ds : snapshot.getChildren()) {
+                for (DataSnapshot ds:snapshot.getChildren()){
                     String complaintId = ds.child("complaintId").getValue().toString();
                     String username = ds.child("username").getValue().toString();
                     String uid = ds.child("uid").getValue().toString();
@@ -428,8 +419,9 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                list.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
+                for(DataSnapshot ds:snapshot.getChildren()){
+                    String status = ds.child("status").getValue().toString();
+                    if (Prefs.getUser(getContext()).getUserType()==Helper.USER_STUDENT && status.equals("private"))continue;
                     String complaintId = ds.child("complaintId").getValue().toString();
                     String username = ds.child("username").getValue().toString();
                     String uid = ds.child("uid").getValue().toString();
@@ -438,7 +430,6 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     String category = ds.child("category").getValue().toString();
                     String subcategory = ds.child("subcategory").getValue().toString();
                     String visibility = ds.child("visibility").getValue().toString();
-                    String status = ds.child("status").getValue().toString();
                     String anonymous = ds.child("anonymous").getValue().toString();
 
                     // Get Upvotes and Downvotes
@@ -499,6 +490,90 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     list.add(new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status,
                             anonymous, upvotes, downvotes, commenters, upvoters, downvoters, map, time, voteStatus));
                 }
+                if (list.isEmpty()) {
+                    //alertDialogProgress.dismiss();
+                    Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
+                    adapter.notifyDataSetChanged();
+                    return;
+                }
+                if(chipGroup.getCheckedChipId()==R.id.pending){
+                    adapter.getFilter().filter(PENDING);
+                }
+                if(chipGroup.getCheckedChipId()==R.id.inprogress){
+                    adapter.getFilter().filter(IN_PROGRESS);
+                }
+                if(chipGroup.getCheckedChipId()==R.id.resolved){
+                    adapter.getFilter().filter(RESOLVED);
+                }
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void loadAllDataAdmin(){
+        DatabaseReference reference=FirebaseDatabase.getInstance().getReference("Complaints");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                list.clear();
+                for (DataSnapshot ds:snapshot.getChildren()){
+                    String complaintId = ds.child("complaintId").getValue().toString();
+                    String username = ds.child("username").getValue().toString();
+                    String uid = ds.child("uid").getValue().toString();
+                    String subject = ds.child("subject").getValue().toString();
+                    String body = ds.child("body").getValue().toString();
+                    String category = ds.child("category").getValue().toString();
+                    String subcategory = ds.child("subcategory").getValue().toString();
+                    String visibility = ds.child("visibility").getValue().toString();
+                    String status = ds.child("status").getValue().toString();
+                    String anonymous = ds.child("anonymous").getValue().toString();
+                    String time=null;
+                    long timeStamp= 0;
+                    Map<String, Long> map=new HashMap();
+
+                    if(ds.child("timeStampmap").child("timeStamp").exists())
+                    {
+                        timeStamp= (long) ds.child("timeStampmap").child("timeStamp").getValue();
+                        DateFormat dateFormat = getDateTimeInstance();
+                        Date netDate = (new Date(timeStamp));
+                        time= dateFormat.format(netDate);
+                        map.put("timeStamp",timeStamp);
+                    }
+                    ArrayList<String> upvoters = new ArrayList<>();
+                    for (DataSnapshot s : ds.child("listOfUpVoter").getChildren())
+                        upvoters.add(s.getValue().toString());
+                    ArrayList<String> downvoters = new ArrayList<>();
+                    for (DataSnapshot s : ds.child("listOfDownVoter").getChildren())
+                        downvoters.add(s.getValue().toString());
+                    ArrayList<Comment> commenters = new ArrayList<>();
+                    for (DataSnapshot s : ds.child("listOfCommenter").getChildren())
+                        commenters.add(new Comment(s.child("username").getValue().toString(), s.child("comment").getValue().toString()));
+
+                    //if (anonymous.equals("true")) username = "Anonymous";
+                    list.add(new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status, anonymous, upvoters, downvoters, commenters,map,time));
+
+                }
+                if (list.isEmpty()) {
+                    Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(chipGroup.getCheckedChipId()==R.id.pending){
+                    adapter.getFilter().filter(PENDING);
+                }
+                if(chipGroup.getCheckedChipId()==R.id.inprogress){
+                    adapter.getFilter().filter(IN_PROGRESS);
+                }
+                if(chipGroup.getCheckedChipId()==R.id.resolved){
+                    adapter.getFilter().filter(RESOLVED);
+                }
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
 
             @Override

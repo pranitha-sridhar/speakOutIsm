@@ -42,12 +42,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static java.text.DateFormat.getDateTimeInstance;
 
 public class ConversationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int DELETING_THE_COMPLAINT = 101;
@@ -183,8 +190,18 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                 String sent_from = ds.child("sent_from").getValue().toString();
                 String conversation_id = ds.child("conversation_id").getValue().toString();
                 String message = ds.child("message").getValue().toString();
-
-                list.add(new Reply(replyId, sent_from, conversation_id, message));
+                String time=null;
+                long timeStamp= 0;
+                Map<String, Long> map=new HashMap();
+                if(ds.child("timeStampMap").child("timeStamp").exists())
+                {
+                    timeStamp= (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                    DateFormat dateFormat = getDateTimeInstance();
+                    Date netDate = (new Date(timeStamp));
+                    time= dateFormat.format(netDate);
+                    map.put("timeStamp",timeStamp);
+                }
+                list.add(new Reply(replyId, sent_from, conversation_id, message,map,time));
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(list.size());
                 progressLoader.setVisibility(View.GONE);
@@ -217,7 +234,9 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Reply").child(complaint.getComplaintId());
         String replyId = reference.push().getKey();
-        Reply reply = new Reply(replyId, Prefs.getUser(this).getUsername(), complaint.getComplaintId(), message);
+        Map map=new HashMap();
+        map.put("timeStamp", ServerValue.TIMESTAMP);
+        Reply reply = new Reply(replyId, Prefs.getUser(this).getUsername(), complaint.getComplaintId(), message,map);
 
         reference.child(replyId).setValue(reply).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -276,7 +295,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-    private void showProgressDialogueDeleteBlock() {
+    public void showProgressDialogueDeleteBlock() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View v = inflater.inflate(R.layout.dialogue_delete, null);
