@@ -13,6 +13,8 @@ public class User implements Serializable {
 
     String uid;
 
+    String fcm_token;
+
     int userType;
 
     boolean isBlocked = false;
@@ -32,6 +34,14 @@ public class User implements Serializable {
         this.profileUri = profileUri;
         this.uid = uid;
         this.userType = userType;
+    }
+
+    public String getFcm_token() {
+        return fcm_token;
+    }
+
+    public void setFcm_token(String fcm_token) {
+        this.fcm_token = fcm_token;
     }
 
     public void setUsername(String username) {
