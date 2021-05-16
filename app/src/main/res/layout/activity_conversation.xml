@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/browser_actions_bg_grey"
     tools:context=".activities.ConversationActivity">
 
     <include
@@ -43,7 +44,7 @@
             android:gravity="start"
             android:maxHeight="100dp"
             android:hint="Enter your Message here."
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textCapSentences"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/send"

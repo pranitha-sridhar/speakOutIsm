@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -249,7 +250,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                         time = dateFormat.format(netDate);
                         map.put("timeStamp", timeStamp);
                     }
-                    list.add(new Reply(replyId, sent_from, conversation_id, message, map, time));
+                    list.add(new Reply(replyId, sent_from, conversation_id, message, map));
                 }
                 if (list.isEmpty()) {
                     Helper.toast(ConversationActivity.this, "No Conversation Found for this complaint");
@@ -317,12 +318,9 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                 if(ds.child("timeStampMap").child("timeStamp").exists())
                 {
                     timeStamp= (long) ds.child("timeStampMap").child("timeStamp").getValue();
-                    DateFormat dateFormat = getDateTimeInstance();
-                    Date netDate = (new Date(timeStamp));
-                    time= dateFormat.format(netDate);
                     map.put("timeStamp",timeStamp);
                 }
-                list.add(new Reply(replyId, sent_from, conversation_id, message,map,time));
+                list.add(new Reply(replyId, sent_from, conversation_id, message,map));
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(list.size());
                 progressLoader.setVisibility(View.GONE);

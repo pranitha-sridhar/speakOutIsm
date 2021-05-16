@@ -41,7 +41,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder> 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         User user=list.get(position);
-        holder.username.setText(user.getUsername());
+        holder.username.setText("@"+user.getUsername());
         holder.mail.setText(user.getEmail());
         holder.displayname.setText(user.getDisplayName());
         if(user.getProfileUri()!=null) Glide.with(context).load(user.getProfileUri()).into(holder.circularImageView);

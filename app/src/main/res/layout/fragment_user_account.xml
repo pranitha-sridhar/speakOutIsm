@@ -140,15 +140,6 @@
                    android:text="xyz@ee.iitism.ac.in"/>
            </LinearLayout>
 
-           <Button
-               android:layout_marginTop="50dp"
-               android:layout_weight="0.5"
-               android:layout_gravity="center_horizontal"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="SAVE"
-               android:id="@+id/save"/>
-
        </LinearLayout>
 
    </androidx.constraintlayout.widget.ConstraintLayout>

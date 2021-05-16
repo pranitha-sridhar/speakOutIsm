@@ -51,8 +51,6 @@ public class UserAccountFragment extends Fragment {
     ImageView edit_icon;
     @BindView(R.id.mailid)
     TextView mailid;
-    @BindView(R.id.save)
-    Button save;
     @BindView(R.id.display_name_edittext)
     EditText editText;
     @BindView(R.id.checked_icon)
@@ -131,6 +129,8 @@ public class UserAccountFragment extends Fragment {
                 display_name.setText(display);
                 edit_icon.setVisibility(View.VISIBLE);
                 name_changed=true;
+                change_in_DB();
+                change_in_PREF();
             }
         });
 
@@ -143,20 +143,6 @@ public class UserAccountFragment extends Fragment {
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"),IMAGE_REQUEST);
             }
         });
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (filepath != null) {
-                    upload_picture_in_cloud();
-                }
-                else if(name_changed){
-                    change_in_DB();
-                    change_in_PREF();
-                }
-                //Helper.toast(getContext(),""+usernameString);
-            }
-        });
         return view;
 
     }
@@ -165,7 +151,7 @@ public class UserAccountFragment extends Fragment {
         if(Prefs.getUser(getContext()).getUserType()==Helper.USER_STUDENT)
             reference = FirebaseDatabase.getInstance().getReference("StudentUsers").child(mAuth.getCurrentUser().getUid());
         if(Prefs.getUser(getContext()).getUserType()==Helper.USER_ADMINISTRATOR)
-            reference = FirebaseDatabase.getInstance().getReference("AdministratorUsers").child(mAuth.getCurrentUser().getUid());
+            reference = FirebaseDatabase.getInstance().getReference("AdminUsers").child(mAuth.getCurrentUser().getUid());
         reference.child("displayName").setValue(display).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -229,6 +215,7 @@ public class UserAccountFragment extends Fragment {
             filepath = data.getData();
             Glide.with(this).load(filepath).into(circularImageView);
             uri_changed=true;
+            upload_picture_in_cloud();
         }
     }
 }

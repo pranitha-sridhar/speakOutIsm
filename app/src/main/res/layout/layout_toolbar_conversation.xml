@@ -48,6 +48,7 @@
             android:id="@+id/toolbarTitle"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="0dp"
+            android:fontFamily="@font/rubik_light"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Conversations"
@@ -74,8 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:maxHeight="60dp"
-            android:text="Subject : Cource is Missing"
-            android:textColor="@android:color/holo_red_light"
+            android:text="Subject : Course is Missing"
+            android:textColor="#FD3333"
             app:layout_constraintEnd_toEndOf="@+id/textView6"
             app:layout_constraintStart_toStartOf="@+id/toolbarTitle"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />

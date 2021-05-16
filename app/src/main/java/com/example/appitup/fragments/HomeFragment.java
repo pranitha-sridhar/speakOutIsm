@@ -102,6 +102,7 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         Prefs.setFilter_selectedChip(getContext(),-1);
         loadData();
 
+
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {

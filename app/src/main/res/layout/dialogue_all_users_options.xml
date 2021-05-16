@@ -14,9 +14,10 @@
         android:fontFamily="@font/rubik_light"
         android:textSize="20sp"
         android:textColor="@color/black"
-        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="   Block the User"
+        android:text=" Block the User"
         android:id="@+id/block"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

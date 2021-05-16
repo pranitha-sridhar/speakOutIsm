@@ -33,10 +33,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ResetPassword extends AppCompatActivity {
-    @BindView(R.id.editTextTextEmailAddress)
+    @BindView(R.id.textInputEmail2)
     EditText mail;
-    @BindView(R.id.button2)
-    Button reset;
+    @BindView(R.id.button_reset)
+    TextView reset;
     FirebaseAuth mAuth;
     TextView progressDialogueTitle;
     PullInLoader progressDialogueLoader;

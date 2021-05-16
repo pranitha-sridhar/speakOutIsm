@@ -51,7 +51,7 @@ public class SignIn extends AppCompatActivity {
     @BindView(R.id.textInputPassword2)
     TextInputLayout password;
     @BindView(R.id.button)
-    Button signInButton;
+    TextView signInButton;
     String userNameStr;
     @BindView(R.id.textView2)
     TextView forgot_password;
@@ -136,7 +136,7 @@ public class SignIn extends AppCompatActivity {
         unbinder.unbind();
     }
 
-    @Override
+   @Override
     protected void onStart() {
         if (!Helper.isInternetAvailable(this))
             showNoInternetUI();

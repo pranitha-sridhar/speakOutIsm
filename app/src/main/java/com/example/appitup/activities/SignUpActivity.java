@@ -46,12 +46,12 @@ public class SignUpActivity extends AppCompatActivity {
     TextInputLayout textInputEmail;
     @BindView(R.id.textInputDisplayName)
     TextInputLayout textInputDisplayName;
-    @BindView(R.id.buttonSignUp)
-    Button buttonSignUp;
+    @BindView(R.id.button_signup)
+    TextView buttonSignUp;
     @BindView(R.id.textInputPassword)
     TextInputLayout textInputPassword;
-    @BindView(R.id.rGroupUserType)
-    RadioGroup rGroupUserType;
+  //  @BindView(R.id.rGroupUserType)
+  //  RadioGroup rGroupUserType;
     TextView term_conditions;
     TextView progressDialogueTitle;
     PullInLoader progressDialogueLoader;
@@ -151,20 +151,20 @@ public class SignUpActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
 
-        rGroupUserType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+       /* rGroupUserType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 if (checkedId == R.id.student) {
-                    userType = 0;
+                    userType = 1;
                     textInputUsername.setHelperText("Admission number");
                 } else if (checkedId == R.id.administrator) {
-                    userType = 1;
+                    userType = 2;
                     textInputUsername.setHelperText("Employee ID");
                 }
 
             }
-        });
+        });*/
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,11 +181,11 @@ public class SignUpActivity extends AppCompatActivity {
                     textInputUsername.setError("User Name is Not Valid");
                     textInputUsername.requestFocus();
                     return;
-                } else if (userType == 2 && !isEmployeeId(userName)) {
+                } /*else if (userType == 2 && !isEmployeeId(userName)) {
                     textInputUsername.setError("User Name is Not Valid");
                     textInputUsername.requestFocus();
                     return;
-                } else textInputUsername.setError(null);
+                } else textInputUsername.setError(null);*/
 
                 if (email.isEmpty()) {
                     textInputEmail.setError("Email is Required");
@@ -216,6 +216,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }else textInputEmail.setError(null);
 
                 signUp(userName, email, name, password);
+
             }
         });
     }
@@ -260,17 +261,20 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 }
             });
-        } else {
-            DatabaseReference db = FirebaseDatabase.getInstance().getReference("AdministratorUsers");
+        } /*else {
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("AdminUsers");
             db.child(uid).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         // User Data saved in DB
+                        Log.i("TAG", "onComplete: Data Added");
+                    } else {
+                        Log.i("TAG", "onComplete: Error - " + task.getException().getMessage());
                     }
                 }
             });
-        }
+        }*/
     }
 
     private boolean isEmployeeId(String userName) {

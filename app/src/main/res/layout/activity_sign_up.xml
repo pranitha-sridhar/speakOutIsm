@@ -4,25 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="30dp"
+    android:padding="20dp"
+    android:background="#C848BBED"
     tools:context=".activities.SignUpActivity">
 
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:weightSum="4">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="170dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <View
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_width="30dp"
+            android:layout_height="3dp"
+            android:background="#FFFFFF"/>
         <TextView
-            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Please Sign Up"
-            android:textSize="25dp" />
+            android:text="SPEAK OUT"
+            android:textSize="15sp"
+            android:fontFamily="@font/montserrat_alternates"/>
+    </LinearLayout>
 
-        <LinearLayout
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="45sp"
+        android:layout_marginTop="180dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:fontFamily="@font/montserrat_alternates"
+        android:text="Sign Up"
+        android:id="@+id/logintitle"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        app:layout_constraintTop_toBottomOf="@id/logintitle"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="40dp"
+        android:layout_width="120dp"
+        android:layout_height="3dp"
+        android:background="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/linear2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logintitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+       <!-- <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -63,19 +107,14 @@
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:visibility="gone" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"
+                android:hint="  Username"
+                android:layout_marginHorizontal="10dp"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeErrorColor="@android:color/holo_red_light"
                 app:errorTextAppearance="@android:color/holo_red_light"
@@ -84,15 +123,18 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/black"
+                    android:drawableLeft="@drawable/ic_account"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="20dp"
-                android:hint="Email"
+                android:layout_marginHorizontal="10dp"
+                android:hint="  Email"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeErrorColor="@android:color/holo_red_light"
                 app:errorTextAppearance="@android:color/holo_red_light"
@@ -101,14 +143,18 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/black"
+                    android:drawableLeft="@drawable/ic_contact_mail"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputDisplayName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Display Name"
+                android:hint="  Display Name"
+                android:layout_marginHorizontal="10dp"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeErrorColor="@android:color/holo_red_light"
                 app:errorTextAppearance="@android:color/holo_red_light"
@@ -117,14 +163,17 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/black"
+                    android:drawableLeft="@drawable/ic_screen"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:hint="Password"
                 app:passwordToggleEnabled="true"
                 app:boxBackgroundColor="@color/white"
@@ -134,18 +183,30 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/buttonSignUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="SIGN UP" />
-
     </LinearLayout>
+
+        <TextView
+            android:elevation="10dp"
+            android:id="@+id/button_signup"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:text="Sign Up"
+            android:textSize="25sp"
+            android:paddingTop="5dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_alternates"
+            android:textAlignment="center"
+            android:background="@drawable/button_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear2"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
