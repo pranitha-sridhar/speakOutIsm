@@ -1,8 +1,15 @@
 package com.example.appitup.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +18,7 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.models.User;
 import com.example.appitup.utility.Helper;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,16 +27,91 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SplashActivity extends AppCompatActivity {
 
+    boolean isConnected = true;
+    boolean monitoringConnectivity = false;
+    View parentLayout;
+    private final ConnectivityManager.NetworkCallback connectivityCallback
+            = new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(Network network) {
+            showBackOnlineUI();
+            isConnected = true;
+            takeAction();
+        }
+
+        @Override
+        public void onLost(Network network) {
+            showNoInternetUI();
+            isConnected = false;
+        }
+    };
+
+    private void showBackOnlineUI() {
+        Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
+                .setTextColor(getResources().getColor(android.R.color.white));
+        snackbar.show();
+    }
+
+    private void showNoInternetUI() {
+        Snackbar snackbar = Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getResources().getColor(android.R.color.black))
+                .setTextColor(getResources().getColor(android.R.color.white));
+        snackbar.show();
+    }
+
+    @Override
+    protected void onPause() {
+        if (monitoringConnectivity) {
+            final ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.unregisterNetworkCallback(connectivityCallback);
+            monitoringConnectivity = false;
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConnectivity();
+    }
+
+    private void checkConnectivity() {
+        final ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
+                CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        isConnected = activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+
+        if (!isConnected) {
+            connectivityManager.registerNetworkCallback(
+                    new NetworkRequest.Builder()
+                            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                            .build(), connectivityCallback);
+            monitoringConnectivity = true;
+        } else {
+            takeAction();
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_ativity);
+        parentLayout = findViewById(android.R.id.content);
+
+        if (!Helper.isInternetAvailable(this)) {
+            showNoInternetUI();
+        } else {
+            takeAction();
+        }
     }
 
-    @Override
-    protected void onStart() {
+    private void takeAction() {
         if (Prefs.isUserLoggedIn(SplashActivity.this)) {
-            takeAction();
+            checkIsBlocked();
         } else {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -37,10 +120,9 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }, 2000);
         }
-        super.onStart();
     }
 
-    private void takeAction() {
+    private void checkIsBlocked() {
         User user = Prefs.getUser(SplashActivity.this);
         Query query;
         if (user.getUserType() == Helper.USER_STUDENT)

@@ -2,6 +2,11 @@ package com.example.appitup.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -10,11 +15,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.appitup.Database.Prefs;
@@ -25,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -59,9 +63,83 @@ public class Register_Complaint extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     Unbinder unbinder;
-    String category, subcategory=null;
-    int k=3;
+    String category, subcategory = null;
+    int k = 3;
     String[] subcatTitle = {"null", "null", "null", "null", "null", "null"};
+
+    boolean isConnected = true;
+    boolean monitoringConnectivity = false;
+    View parentLayout;
+    private final ConnectivityManager.NetworkCallback connectivityCallback
+            = new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(Network network) {
+            showBackOnlineUI();
+            isConnected = true;
+        }
+
+        @Override
+        public void onLost(Network network) {
+            showNoInternetUI();
+            isConnected = false;
+        }
+    };
+
+    private void showBackOnlineUI() {
+        Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
+                .setTextColor(getResources().getColor(android.R.color.white));
+        snackbar.show();
+    }
+
+    private void showNoInternetUI() {
+        Snackbar snackbar = Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getResources().getColor(android.R.color.black))
+                .setTextColor(getResources().getColor(android.R.color.white));
+        snackbar.show();
+    }
+
+    @Override
+    protected void onPause() {
+        if (monitoringConnectivity) {
+            final ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.unregisterNetworkCallback(connectivityCallback);
+            monitoringConnectivity = false;
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConnectivity();
+    }
+
+    private void checkConnectivity() {
+        final ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
+                CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        isConnected = activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+
+        if (!isConnected) {
+            connectivityManager.registerNetworkCallback(
+                    new NetworkRequest.Builder()
+                            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                            .build(), connectivityCallback);
+            monitoringConnectivity = true;
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        if (!Helper.isInternetAvailable(this)) {
+            showNoInternetUI();
+        }
+        super.onStart();
+    }
 
     @Override
     protected void onDestroy() {
@@ -70,24 +148,32 @@ public class Register_Complaint extends AppCompatActivity {
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register__complaint);
+        parentLayout = findViewById(android.R.id.content);
         unbinder = ButterKnife.bind(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Create a complaint");
-        actionBar.show();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Create a complaint");
 
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         //final ChipGroup[] chipGroup2 = {new ChipGroup(this)};
         //chipGroup1.isSingleSelection();
 
-        Context context=this;
-        subcatTitle[0]=("Pre-Registration");subcatTitle[1]=("Fees Issue");subcatTitle[2]=("Others");
-        category ="Registration";
+        Context context = this;
+        subcatTitle[0] = ("Pre-Registration");
+        subcatTitle[1] = ("Fees Issue");
+        subcatTitle[2] = ("Others");
+        category = "Registration";
         //subcategory ="Pre-Registration";
         fun(context);
 

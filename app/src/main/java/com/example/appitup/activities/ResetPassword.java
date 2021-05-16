@@ -1,5 +1,11 @@
 package com.example.appitup.activities;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,9 +21,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.agrawalsuneet.dotsloader.loaders.PullInLoader;
 import com.example.appitup.R;
+import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
@@ -35,7 +43,81 @@ public class ResetPassword extends AppCompatActivity {
     MaterialButton progressDialogueDismissButton;
     AlertDialog alertDialogProgress;
 
-Unbinder unbinder;
+    Unbinder unbinder;
+
+    boolean isConnected = true;
+    boolean monitoringConnectivity = false;
+    View parentLayout;
+    private final ConnectivityManager.NetworkCallback connectivityCallback
+            = new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(Network network) {
+            showBackOnlineUI();
+            isConnected = true;
+        }
+
+        @Override
+        public void onLost(Network network) {
+            showNoInternetUI();
+            isConnected = false;
+        }
+    };
+
+    private void showBackOnlineUI() {
+        Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
+                .setTextColor(getResources().getColor(android.R.color.white));
+        snackbar.show();
+    }
+
+    private void showNoInternetUI() {
+        Snackbar snackbar = Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getResources().getColor(android.R.color.black))
+                .setTextColor(getResources().getColor(android.R.color.white));
+        snackbar.show();
+    }
+
+    @Override
+    protected void onPause() {
+        if (monitoringConnectivity) {
+            final ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.unregisterNetworkCallback(connectivityCallback);
+            monitoringConnectivity = false;
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConnectivity();
+    }
+
+    private void checkConnectivity() {
+        final ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
+                CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        isConnected = activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+
+        if (!isConnected) {
+            connectivityManager.registerNetworkCallback(
+                    new NetworkRequest.Builder()
+                            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                            .build(), connectivityCallback);
+            monitoringConnectivity = true;
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        if (!Helper.isInternetAvailable(this)) {
+            showNoInternetUI();
+        }
+        super.onStart();
+    }
 
     @Override
     protected void onDestroy() {
@@ -47,6 +129,7 @@ Unbinder unbinder;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
+        parentLayout = findViewById(android.R.id.content);
         unbinder = ButterKnife.bind(this);
 
         mAuth=FirebaseAuth.getInstance();
