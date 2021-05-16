@@ -407,32 +407,27 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void deleteUserComplaint() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setResultsDelUI("Complaint Deleted Successfully.");
-            }
-        }, 2000);
-       /* DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Complaints").child(complaint.getComplaintId());
-
-        reference.setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Complaints").child(complaint.getComplaintId());
+        reference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     setResultsDelUI("Complaint Deleted Successfully.");
-                } else setResultsDelUI("Error In Deleting Complaint : "+task.getException().getMessage());
+                } else
+                    setResultsDelUI("Error In Deleting Complaint : " + task.getException().getMessage());
             }
         });
 
         reference = FirebaseDatabase.getInstance().getReference().child("Reply").child(complaint.getComplaintId());
-        reference.setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+        reference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.i("Convo Activity", "onComplete: replies deleted");
-                } else Log.i("Convo Activity", "replies deleted Error : " + task.getException().getMessage());
+                } else
+                    Log.i("Convo Activity", "replies deleted Error : " + task.getException().getMessage());
             }
-        });*/
+        });
     }
 
     private void setResultsDelUI(String message) {
