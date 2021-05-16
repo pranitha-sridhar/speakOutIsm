@@ -23,6 +23,7 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.adapter.CommentsAdapter;
 import com.example.appitup.models.Comment;
+import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -149,6 +150,9 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
                         map.put("timeStamp", timeStamp);
                     }
                     list.add(new Comment(username, commentId, comment, map, time));
+                }
+                if (list.isEmpty()) {
+                    Helper.toast(getContext(), "No Comments Found for this complaint");
                 }
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(list.size());

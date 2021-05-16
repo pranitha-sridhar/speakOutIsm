@@ -2,7 +2,6 @@ package com.example.appitup.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,6 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -146,6 +146,45 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         */
     }
 
+    private void loadReplies() {
+        Query query = FirebaseDatabase.getInstance().getReference("Reply").child(complaint.getComplaintId());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String replyId = ds.child("reply_id").getValue().toString();
+                    String sent_from = ds.child("sent_from").getValue().toString();
+                    String conversation_id = ds.child("conversation_id").getValue().toString();
+                    String message = ds.child("message").getValue().toString();
+                    String time = null;
+                    long timeStamp = 0;
+                    Map<String, Long> map = new HashMap();
+                    if (ds.child("timeStampMap").child("timeStamp").exists()) {
+                        timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                        DateFormat dateFormat = getDateTimeInstance();
+                        Date netDate = (new Date(timeStamp));
+                        time = dateFormat.format(netDate);
+                        map.put("timeStamp", timeStamp);
+                    }
+                    list.add(new Reply(replyId, sent_from, conversation_id, message, map, time));
+                }
+                if (list.isEmpty()) {
+                    Helper.toast(ConversationActivity.this, "No Conversation Found for this complaint");
+                }
+                adapter.notifyDataSetChanged();
+                recyclerView.smoothScrollToPosition(list.size());
+                progressLoader.setVisibility(View.GONE);
+                checkUpdatesForReplies();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void initRecyclerView() {
         adapter = new ReplyAdapter(list, ConversationActivity.this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ConversationActivity.this, RecyclerView.VERTICAL, false);
@@ -180,7 +219,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void loadReplies() {
+    private void checkUpdatesForReplies() {
         Query query = FirebaseDatabase.getInstance().getReference("Reply").child(complaint.getComplaintId());
 
         query.addChildEventListener(new ChildEventListener() {
@@ -190,7 +229,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                 String sent_from = ds.child("sent_from").getValue().toString();
                 String conversation_id = ds.child("conversation_id").getValue().toString();
                 String message = ds.child("message").getValue().toString();
-                String time=null;
+                String time = null;
                 long timeStamp= 0;
                 Map<String, Long> map=new HashMap();
                 if(ds.child("timeStampMap").child("timeStamp").exists())
@@ -398,12 +437,19 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void blockUser() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setResultsDelUI("Blocked the User Successfully.");
-            }
-        }, 2000);
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("StudentUsers").child(complaint.getUid());
+
+        reference.child("isBlocked").setValue(true)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            setResultsDelUI("User has been blocked Successfully.");
+                        } else
+                            setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
+                    }
+                });
     }
 
     private void deleteUserComplaint() {

@@ -1,9 +1,7 @@
 package com.example.appitup.fragments;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.agrawalsuneet.dotsloader.loaders.TashieLoader;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
-import com.example.appitup.activities.ConversationActivity;
 import com.example.appitup.activities.MainActivity;
-import com.example.appitup.adapter.ComplaintsAdapter;
 import com.example.appitup.adapter.UsersAdapter;
-import com.example.appitup.models.Complaints;
 import com.example.appitup.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,11 +32,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,7 +112,7 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
         block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgressDialogueDeleteBlock();
+                showProgressDialogueDeleteBlock(user);
             }
         });
     }
@@ -151,7 +144,7 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
     }
 
 
-    public void showProgressDialogueDeleteBlock() {
+    public void showProgressDialogueDeleteBlock(User user) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View v = inflater.inflate(R.layout.dialogue_delete, null);
@@ -207,7 +200,7 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                         pdDeleteComplaintLoader.setVisibility(View.VISIBLE);
                         textInputLayoutPassword.setVisibility(View.GONE);
                         pdDialogDeleteBlockSubmitButton.setVisibility(View.GONE);
-                        authenticate(pass, email);
+                        authenticate(pass, email, user);
                         break;
                     case 3:
                         Intent intent = new Intent(getContext(), MainActivity.class);
@@ -219,7 +212,7 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
         });
     }
 
-    private void authenticate(String pass, String email) {
+    private void authenticate(String pass, String email, User user) {
         AuthCredential credentials = EmailAuthProvider.getCredential(email, pass);
         FirebaseAuth.getInstance().getCurrentUser().reauthenticate(credentials).addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
             @Override
@@ -227,25 +220,32 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                 if (task.isSuccessful()) {
                     alertDialogDeleteBlock.setCancelable(false);
 
-                        pdDialogDeleteBlockTitle.setText("User Blocking Process");
-                        pdDialogDeleteBlockMessage.setText("Authentication Success!!\nBlocking the user...");
+                    pdDialogDeleteBlockTitle.setText("User Blocking Process");
+                    pdDialogDeleteBlockMessage.setText("Authentication Success!!\nBlocking the user...");
 
                     textInputLayoutPassword.setVisibility(View.GONE);
                     pdDialogDeleteBlockSubmitButton.setVisibility(View.GONE);
                     deleteBlockState = 3;
-                        blockUser();
+                    blockUser(user);
                 } else setResultsDelUI(task.getException().getMessage());
             }
         });
     }
 
-    private void blockUser() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setResultsDelUI("Blocked the User Successfully.");
-            }
-        }, 2000);
+    private void blockUser(User user) {
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("StudentUsers").child(user.getUid());
+
+        reference.child("isBlocked").setValue(true)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            setResultsDelUI("User has been blocked Successfully.");
+                        } else
+                            setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
+                    }
+                });
     }
 
     private void setResultsDelUI(String message) {
