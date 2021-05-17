@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#C848BBED"
+    android:padding="10dp"
     tools:context=".activities.SignIn">
 
     <LinearLayout
@@ -60,11 +61,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/logintitle">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputUsernameLogin"
@@ -82,6 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginHorizontal="10dp"
                 android:textColor="@color/black"
+                android:paddingBottom="20dp"
                 android:drawableLeft="@drawable/ic_account"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -104,7 +106,8 @@
                 android:layout_width="match_parent"
                 android:layout_marginHorizontal="10dp"
                 android:textColor="@color/black"
-                android:drawableLeft="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_password"
+                android:paddingBottom="20dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>

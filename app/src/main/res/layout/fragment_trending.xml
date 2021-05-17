@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="60dp"
     tools:context=".fragments.TrendingFragment">
-    
 
-    <!--    <com.facebook.shimmer.ShimmerFrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/top10"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="TOP 10 Complaints"/>
+
+
+
+       <com.facebook.shimmer.ShimmerFrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:foregroundGravity="center"
             android:orientation="vertical"
-            app:shimmer_duration="400"
+            app:shimmer_duration="600"
             android:id="@+id/shimmer2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/top10">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,25 +45,33 @@
                 <include layout="@layout/placeholder" />
             </LinearLayout>
 
-        </com.facebook.shimmer.ShimmerFrameLayout>-->
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
-
-
-
-        <androidx.recyclerview.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/complaints_recycler2"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="750dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/top10" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/complaints_recycler2"
+            android:id="@+id/status_title"
+            android:textSize="20sp"
+            android:layout_margin="20dp"
+            android:textColor="@color/black"
+            android:text="Status of Complaints"/>
 
         <androidx.cardview.widget.CardView
             android:layout_margin="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@id/complaints_recycler2"
+            app:layout_constraintTop_toBottomOf="@id/status_title"
             app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
@@ -55,15 +80,23 @@
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:orientation="horizontal"
-                    android:weightSum="2"
+                    android:weightSum="3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_light"
+                        android:layout_weight="2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Total Complaints:"/>
                     <TextView
+                        android:padding="5dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_light"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -73,16 +106,26 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="3dp"
                     android:orientation="horizontal"
-                    android:weightSum="2"
+                    android:weightSum="3"
+                    android:background="#8ED6AC"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_light"
+                        android:layout_weight="2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Resolved Complaints:"/>
                     <TextView
+                        android:padding="5dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_light"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:id="@+id/resolved"
@@ -91,16 +134,26 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="3dp"
                     android:orientation="horizontal"
-                    android:weightSum="2"
+                    android:weightSum="3"
+                    android:background="#FAE889"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_light"
+                        android:layout_weight="2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="In-Progress Complaints:"/>
                     <TextView
+                        android:padding="5dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_light"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -109,16 +162,26 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="3dp"
+                    android:background="@color/background"
                     android:orientation="horizontal"
-                    android:weightSum="2"
+                    android:weightSum="3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_light"
+                        android:layout_weight="2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Pending Complaints:"/>
                     <TextView
+                        android:padding="5dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_light"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -131,5 +194,28 @@
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_margin="20dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView"
+            android:id="@+id/pie_title"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="Complaints Distribution"/>
+
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_margin="10dp"
+            android:id="@+id/chart"
+            app:layout_constraintTop_toBottomOf="@id/pie_title"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
         
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

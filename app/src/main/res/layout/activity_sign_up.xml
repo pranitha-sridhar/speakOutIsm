@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:padding="10dp"
     android:background="#C848BBED"
     tools:context=".activities.SignUpActivity">
 
@@ -59,6 +59,7 @@
         android:id="@+id/linear2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="15dp"
         app:layout_constraintTop_toBottomOf="@id/logintitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -125,6 +126,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
+                    android:paddingBottom="20dp"
                     android:textColor="@color/black"
                     android:drawableLeft="@drawable/ic_account"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -146,6 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:textColor="@color/black"
+                    android:paddingBottom="20dp"
                     android:drawableLeft="@drawable/ic_contact_mail"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,6 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:textColor="@color/black"
+                    android:paddingBottom="20dp"
                     android:drawableLeft="@drawable/ic_screen"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -174,7 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:hint="Password"
+                android:hint="  Password"
                 app:passwordToggleEnabled="true"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeErrorColor="@android:color/holo_red_light"
@@ -185,6 +189,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
+                    android:paddingBottom="20dp"
+                    android:drawableStart="@drawable/ic_password"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 

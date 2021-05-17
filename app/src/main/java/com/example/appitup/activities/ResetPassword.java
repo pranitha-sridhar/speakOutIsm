@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
@@ -33,8 +34,8 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ResetPassword extends AppCompatActivity {
-    @BindView(R.id.textInputEmail2)
-    EditText mail;
+    @BindView(R.id.textInputEmailReset)
+    TextInputLayout mail;
     @BindView(R.id.button_reset)
     TextView reset;
     FirebaseAuth mAuth;
@@ -140,7 +141,7 @@ public class ResetPassword extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                // Toast.makeText(ResetPassword.this, "button clicked", Toast.LENGTH_SHORT).show();
-                String emailid = mail.getText().toString();
+                String emailid = mail.getEditText().getText().toString();
                 if (emailid.isEmpty()) {
                     mail.setError("Field required");
                     mail.requestFocus();

@@ -4,19 +4,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FBE6DF"
     tools:context=".fragments.TrendingFragment">
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:layout_margin="10dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ism"
+        android:id="@+id/icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <ImageView
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/ism_campus"
+        android:id="@+id/icon_campus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/icon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IIT (ISM) DHANBAD"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/icon_campus"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/title"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="About Us Frag"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/intro"
+        android:padding="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Standing tall since early decades of 20th century, the institute is steadily sailing through the millennium change and has emerged into one of the most prominent institution- Indian Institute of Technology IIT(ISM) with full bloom functioning of 18 branches of Engineering, Applied Sciences, Management Studies and Humanities. IIT (ISM) has had a centenary long credentials of outperforming achievements/contributions in academia and the industry."
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/intro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/intro_app"
+        android:padding="20dp"
+        android:layout_marginTop="20dp"
+        android:text="This app focuses on letting the students of IIT (ISM) Dhanbad SPEAK OUT their problems, complaints and greivances that they face but are not able to say it aloud."  android:textColor="@color/black"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/intro_app"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="20dp"
+        android:text="Links"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/intro_app"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/intro_link"
+        android:padding="20dp"
+        android:text="Links"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

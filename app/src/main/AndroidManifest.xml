@@ -6,9 +6,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_megaphone_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_megaphone_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppItUp">
 
@@ -26,7 +26,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name=".activities.SplashActivity"
+            android:theme="@style/Theme.AppItUp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
