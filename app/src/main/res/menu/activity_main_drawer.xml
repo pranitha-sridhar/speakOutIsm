@@ -4,49 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group
+    <item
         android:checkableBehavior="single"
-        android:title="TODO">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home"
-            android:title="@string/home"
-            app:tint="@android:color/darker_gray" />
-        <item
-            android:id="@+id/nav_trending"
-            android:icon="@drawable/ic_trending"
-            android:title="@string/trending" />
-        <item
-            android:id="@+id/nav_status"
-            android:icon="@drawable/ic_status"
-            android:title="@string/status" />
-    </group>
+        android:title="Dashboard">
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/ic_home"
+                android:title="@string/home"
+                app:tint="@android:color/darker_gray" />
+            <item
+                android:id="@+id/nav_trending"
+                android:icon="@drawable/ic_trending"
+                android:title="@string/trending" />
+        </menu>
+    </item>
 
-    <group
+    <item
         android:checkableBehavior="single"
-        android:title="Accounts">
-        <item
-            android:id="@+id/nav_user_account"
-            android:icon="@drawable/ic_account"
-            android:title="@string/user_account" />
+        android:title="Account Section">
+        <menu>
+            <item
+                android:id="@+id/nav_user_account"
+                android:icon="@drawable/ic_account"
+                android:title="@string/user_account" />
 
-        <item
-            android:id="@+id/nav_all_user"
-            android:icon="@drawable/ic_people"
-            android:title="@string/all_users" />
-    </group>
+            <item
+                android:id="@+id/nav_all_user"
+                android:icon="@drawable/ic_people"
+                android:title="@string/all_users" />
 
-    <group
+            <item
+                android:id="@+id/nav_your_complaints"
+                android:icon="@drawable/ic_status"
+                android:title="@string/your_complaints" />
+        </menu>
+    </item>
+
+    <item
         android:checkableBehavior="single"
         android:title="Contact Us">
-        <item
-            android:id="@+id/nav_about_us"
-            android:icon="@drawable/ic_about_us"
-            android:title="@string/about_us" />
+        <menu>
+            <item
+                android:id="@+id/nav_about_us"
+                android:icon="@drawable/ic_about_us"
+                android:title="@string/about_us" />
 
-        <item
-            android:id="@+id/nav_faq_help"
-            android:icon="@drawable/ic_faq_help"
-            android:title="@string/faq_help" />
-    </group>
+            <item
+                android:id="@+id/nav_faq_help"
+                android:icon="@drawable/ic_faq_help"
+                android:title="@string/faq_help" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_sign_out"
+        android:icon="@drawable/ic_sign_out"
+        android:title="@string/sign_out" />
 </menu>

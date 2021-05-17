@@ -2,32 +2,54 @@ package com.example.appitup.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.appitup.R;
+import com.example.appitup.fragments.AboutUsFragment;
+import com.example.appitup.fragments.AllUsersFragment;
+import com.example.appitup.fragments.FAQorHelpFragment;
+import com.example.appitup.fragments.HomeFragment;
+import com.example.appitup.fragments.StatusFragment;
+import com.example.appitup.fragments.TrendingFragment;
+import com.example.appitup.fragments.UserAccountFragment;
 import com.example.appitup.utility.Helper;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Timer;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    FragmentTransaction transaction;
+    ImageView drawerOpener, notifications, app_icon;
+    TextView title;
+    AppBarLayout appBarLayout;
+    DrawerLayout drawerLayout;
+    NavigationView navigationDrawer;
+    Toolbar toolbar;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -108,48 +130,73 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentLayout = findViewById(android.R.id.content);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        parentLayout = findViewById(android.R.id.content);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        appBarLayout = findViewById(R.id.app_bar_layout);
+        navigationDrawer = findViewById(R.id.nav_view);
+        notifications = findViewById(R.id.notifications);
+        drawerOpener = findViewById(R.id.drawerOpener);
+        title = findViewById(R.id.title);
+        app_icon = findViewById(R.id.app_icon);
+
+        setToolbarUI(1);
+
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, Register_Complaint.class));
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_trending, R.id.nav_status, R.id.nav_user_account, R.id.nav_all_user, R.id.nav_about_us, R.id.nav_faq_help)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+
+        drawerOpener.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+        navigationDrawer.setNavigationItemSelectedListener(this);
+        transaction = getSupportFragmentManager().beginTransaction();
+        if (savedInstanceState == null)
+            openFragment(new HomeFragment());
+
+        notifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, NotificationsActivity.class));
+            }
+        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
-        return true;
+    private void setToolbarUI(int i) {
+        Typeface faceDashboard = Typeface.createFromAsset(getAssets(),
+                "font/lobster_two.ttf");
+        Typeface faceOthers = Typeface.createFromAsset(getAssets(),
+                "font/rubik_light.ttf");
+        if (i == 1) {
+            title.setTypeface(faceDashboard);
+            title.setTextSize(30f);
+            app_icon.setVisibility(View.VISIBLE);
+        } else {
+            title.setTypeface(faceOthers);
+            app_icon.setVisibility(View.GONE);
+            title.setTextSize(25f);
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_notification) {
-            startActivity(new Intent(this, NotificationsActivity.class));
-        } else if (item.getItemId() == R.id.action_sign_out) {
-            Helper.signOutUser(MainActivity.this, true);
-            finish();
-        }/*else if(item.getItemId()==R.id.action_filter){
-            HomeFragment.filter_icon(this);
-        }*/
-        return super.onOptionsItemSelected(item);
+    public void openFragment(Fragment fragment) {
+        new Timer().cancel();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, fragment);
+        transaction.commit();
+
+    }
+
+    private void closeDrawer() {
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override
@@ -157,5 +204,58 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                openFragment(new HomeFragment());
+                title.setText(getString(R.string.app_name));
+                setToolbarUI(1);
+                closeDrawer();
+                break;
+            case R.id.nav_trending:
+                openFragment(new TrendingFragment());
+                title.setText(getString(R.string.trending));
+                setToolbarUI(2);
+                closeDrawer();
+                break;
+            case R.id.nav_user_account:
+                openFragment(new UserAccountFragment());
+                title.setText(getString(R.string.user_account));
+                setToolbarUI(2);
+                closeDrawer();
+                break;
+            case R.id.nav_all_user:
+                openFragment(new AllUsersFragment());
+                title.setText(getString(R.string.all_users));
+                setToolbarUI(2);
+                closeDrawer();
+                break;
+            case R.id.nav_your_complaints:
+                openFragment(new StatusFragment());
+                title.setText(getString(R.string.your_complaints));
+                setToolbarUI(2);
+                closeDrawer();
+                break;
+            case R.id.nav_about_us:
+                openFragment(new AboutUsFragment());
+                title.setText(getString(R.string.about_us));
+                setToolbarUI(2);
+                closeDrawer();
+                break;
+            case R.id.nav_faq_help:
+                openFragment(new FAQorHelpFragment());
+                title.setText(getString(R.string.faq_help));
+                setToolbarUI(2);
+                closeDrawer();
+                break;
+            case R.id.action_sign_out:
+                Helper.signOutUser(MainActivity.this, true);
+                finish();
+                break;
+        }
+        return true;
     }
 }

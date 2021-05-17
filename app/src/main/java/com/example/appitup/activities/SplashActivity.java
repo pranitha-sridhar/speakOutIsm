@@ -105,20 +105,21 @@ public class SplashActivity extends AppCompatActivity {
         if (!Helper.isInternetAvailable(this)) {
             showNoInternetUI();
         } else {
-            takeAction();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    takeAction();
+                }
+            }, 2000);
         }
     }
 
     private void takeAction() {
         if (Prefs.isUserLoggedIn(SplashActivity.this)) {
-            checkIsBlocked();
+            //checkIsBlocked();
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
         } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(SplashActivity.this, SignIn.class));
-                }
-            }, 2000);
+            startActivity(new Intent(SplashActivity.this, SignIn.class));
         }
     }
 
