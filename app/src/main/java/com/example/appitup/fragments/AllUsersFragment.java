@@ -20,7 +20,9 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.activities.MainActivity;
 import com.example.appitup.adapter.UsersAdapter;
+import com.example.appitup.models.Notification;
 import com.example.appitup.models.User;
+import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -242,6 +244,9 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             setResultsDelUI("User has been blocked Successfully.");
+                            Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
+                                    , null, null, null, true);
+                            Helper.sendNotificationToUser(user.getUsername(), notification);
                         } else
                             setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
                     }

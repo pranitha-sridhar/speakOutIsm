@@ -12,13 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppItUp">
 
-        <!-- FCM Service to Collect Refreshed Token -->
-        <service android:name=".utility.FCM.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-
         <!-- FCM Service to Collect Notification Messages -->
         <service android:name=".utility.FCM.NotificationMessagingService">
             <intent-filter>

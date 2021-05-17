@@ -13,18 +13,21 @@ import androidx.annotation.NonNull;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.activities.SignIn;
 import com.example.appitup.models.Complaints;
+import com.example.appitup.models.Notification;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
@@ -86,10 +89,20 @@ public class Helper {
 
     private static final String LEGACY_SERVER_KEY = "AAAAxCUTpvA:APA91bHbHFwvexObt6OZghNuqZix9foVCp0fBxA2qon8K5rn7gxZndeligB-9qHuOWDXpVO-Wu7bgoS-S9U8BbZf7uE8npyiHkPnWphOTjwkzqau4vbzUhom-xQGcHOUXEhAuNsd9dss";
 
-    public static void sendNotificationToUser(final String username, final JSONObject dataJson) {
+    public static void sendNotificationToUser(final String username, final Notification notification) {
         Query queryStudent = FirebaseDatabase.getInstance().getReference("StudentUsers");
         Query queryAdmin = FirebaseDatabase.getInstance().getReference("AdminUsers");
 
+        JSONObject dataJson = new JSONObject();
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(notification);
+        try {
+            dataJson = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject finalDataJson = dataJson;
         queryStudent.orderByChild("username").equalTo(username)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -100,7 +113,7 @@ public class Helper {
                                 if (ds.hasChild("fcm_token"))
                                     token = ds.child("fcm_token").getValue().toString();
                             }
-                            sendNotification(token, dataJson);
+                            sendNotification(token, finalDataJson);
                         } else {
                             queryAdmin.orderByChild("username").equalTo(username)
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -112,7 +125,7 @@ public class Helper {
                                                     if (ds.hasChild("fcm_token"))
                                                         token = ds.child("fcm_token").getValue().toString();
                                                 }
-                                                sendNotification(token, dataJson);
+                                                sendNotification(token, finalDataJson);
                                             }
                                         }
 

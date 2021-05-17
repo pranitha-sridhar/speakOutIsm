@@ -322,8 +322,7 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
     public void commentsClicked(Complaints complaint) {
         CommentsDialogFragment commentsDialogFragment = new CommentsDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("complaint_id", complaint.getComplaintId());
-        bundle.putString("complaint_title", complaint.getSubject());
+        bundle.putSerializable("complaint", complaint);
         commentsDialogFragment.setArguments(bundle);
         commentsDialogFragment.show(getChildFragmentManager(), "TAG");
     }

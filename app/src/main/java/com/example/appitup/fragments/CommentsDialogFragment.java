@@ -23,6 +23,9 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.adapter.CommentsAdapter;
 import com.example.appitup.models.Comment;
+import com.example.appitup.models.Complaints;
+import com.example.appitup.models.Notification;
+import com.example.appitup.models.User;
 import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -70,7 +73,8 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
         }
     };
-    String complaintId;
+
+    Complaints complaint;
     ArrayList<Comment> list = new ArrayList<>();
     TextView no_data_found, textViewComplaintTitle;
 
@@ -100,12 +104,14 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         textViewComplaintTitle = view.findViewById(R.id.textViewComplaintTitle);
 
         Bundle mArgs = getArguments();
-        complaintId = mArgs.getString("complaint_id");
-        textViewComplaintTitle.setText(mArgs.getString("complaint_title"));
+        complaint = (Complaints) mArgs.getSerializable("complaint");
+
+        textViewComplaintTitle.setText(complaint.getSubject());
         list.clear();
+        list.addAll(complaint.getListOfCommenter());
 
         initRecyclerView();
-        loadComments();
+        takeUpdatesOfComments();
 
         editTextMessage.addTextChangedListener(textWatcher);
         send.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +136,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void loadComments() {
-        Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaintId).child("listOfCommenter");
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaint.getComplaintId()).child("listOfCommenter");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -168,7 +174,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void takeUpdatesOfComments() {
-        Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaintId).child("listOfCommenter");
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaint.getComplaintId()).child("listOfCommenter");
 
         query.addChildEventListener(new ChildEventListener() {
             @Override
@@ -216,7 +222,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
     private void addComment(Comment comment) {
         editTextMessage.setText(null);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Complaints").child(complaintId).child("listOfCommenter");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Complaints").child(complaint.getComplaintId()).child("listOfCommenter");
         String commentId = reference.push().getKey();
         comment.setCommentId(commentId);
 
@@ -225,6 +231,12 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.i("Comment Frag", "onComplete: Commented");
+                    User user = Prefs.getUser(getContext());
+                    if (!complaint.getUsername().equals(user.getUsername())) {
+                        Notification notification = new Notification("Complaint : " + complaint.getSubject(), "@" + user.getUsername() + " commented : " + comment.getComment()
+                                , complaint.getComplaintId(), comment.getCommentId(), user.getProfileUri(), false);
+                        Helper.sendNotificationToUser(complaint.getUsername(), notification);
+                    }
                 } else Log.i("Comment Frag", "Comment Error : " + task.getException().getMessage());
             }
         });

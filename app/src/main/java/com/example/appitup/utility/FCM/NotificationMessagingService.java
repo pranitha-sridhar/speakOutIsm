@@ -14,8 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.activities.SplashActivity;
+import com.example.appitup.models.User;
+import com.example.appitup.utility.Helper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -36,6 +43,9 @@ public class NotificationMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         String title = null;
         String message = null;
+        String profile_uri = null;
+        boolean isBlocked = false;
+
         Map<String, String> data = remoteMessage.getData();
         Log.d(TAG, "remoteMessage.getData() : " + remoteMessage.getData());
 
@@ -52,12 +62,28 @@ public class NotificationMessagingService extends FirebaseMessagingService {
             e.printStackTrace();
         }
 
+        try {
+            profile_uri = jsnObject.getString("profile_uri");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            isBlocked = jsnObject.getBoolean("isBlocked");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (isBlocked) {
+            Helper.signOutUser(this, true);
+        }
+
         if (title == null || title.isEmpty()) title = "You have New Notifications";
         if (message == null || message.isEmpty()) message = "Tap to open the app";
-        sendNotification(title, message);
+        sendNotification(title, message, profile_uri);
     }
 
-    public void sendNotification(String messageTitle, String messageBody) {
+    public void sendNotification(String messageTitle, String messageBody, String profile_uri) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
@@ -74,9 +100,9 @@ public class NotificationMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setSmallIcon(R.drawable.app_logo)
                         .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                                R.mipmap.ic_launcher_round))
+                                R.drawable.app_logo))
                         .setContentTitle(messageTitle)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
@@ -92,5 +118,32 @@ public class NotificationMessagingService extends FirebaseMessagingService {
         int unique_id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
         notificationManagerCompat.notify(unique_id, notificationBuilder.build());
         Log.d(TAG, "sendNotification = run");
+    }
+
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        Log.e("NEW_TOKEN", s);
+        saveTokenToServer(s);
+    }
+
+    private void saveTokenToServer(String token) {
+        User user = Prefs.getUser(this);
+        DatabaseReference databaseReference;
+        if (user.getUserType() == Helper.USER_STUDENT)
+            databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");
+        else databaseReference = FirebaseDatabase.getInstance().getReference("AdminUsers");
+
+        databaseReference.child(user.getUid()).child("fcm_token").setValue(token).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // successfully saved
+                    Prefs.getUser(getApplicationContext()).setFcm_token(token);
+                } else {
+                    // error
+                }
+            }
+        });
     }
 }

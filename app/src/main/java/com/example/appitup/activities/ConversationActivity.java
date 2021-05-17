@@ -2,13 +2,13 @@ package com.example.appitup.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,7 +33,9 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.adapter.ReplyAdapter;
 import com.example.appitup.models.Complaints;
+import com.example.appitup.models.Notification;
 import com.example.appitup.models.Reply;
+import com.example.appitup.models.User;
 import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -217,16 +219,13 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         initRecyclerView();
         editTextMessage.addTextChangedListener(textWatcher);
         loadReplies();
-        
-        /*
-        TODO : Remove this comment so that right thig can work after testing completed
+
         if(Prefs.getUser(this).getUserType()!=Helper.USER_ADMINISTRATOR
                 && !Prefs.getUser(this).getUsername().equals(complaint.getUsername())){
             editTextMessage.setEnabled(false);
             editTextMessage.setText("Only Admin or the owner of the complaint can participate to this conversation");
             editTextMessage.setTextColor(Color.BLACK);
         }
-        */
     }
 
     private void loadReplies() {
@@ -362,6 +361,12 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.i("Convo Activity", "onComplete: replied");
+                    User user = Prefs.getUser(ConversationActivity.this);
+                    if (!complaint.getUsername().equals(user.getUsername()) && user.getUserType() == Helper.USER_ADMINISTRATOR) {
+                        Notification notification = new Notification("Complaint : " + complaint.getSubject(), "@" + user.getUsername() + " replied : " + message
+                                , complaint.getComplaintId(), null, user.getProfileUri(), false);
+                        Helper.sendNotificationToUser(complaint.getUsername(), notification);
+                    }
                 } else
                     Log.i("Convo Activity", "Comment Error : " + task.getException().getMessage());
             }
@@ -526,6 +531,9 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             setResultsDelUI("User has been blocked Successfully.");
+                            Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
+                                    , null, null, null, true);
+                            Helper.sendNotificationToUser(complaint.getUsername(), notification);
                         } else
                             setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
                     }
@@ -539,6 +547,9 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     setResultsDelUI("Complaint Deleted Successfully.");
+                    Notification notification = new Notification("Complaint Deleted by Admin", "Your Complaint ‘" + complaint.getSubject() + "’ has been deleted. \n Please contact to your college"
+                            , complaint.getComplaintId(), null, null, false);
+                    Helper.sendNotificationToUser(complaint.getUsername(), notification);
                 } else
                     setResultsDelUI("Error In Deleting Complaint : " + task.getException().getMessage());
             }
@@ -580,6 +591,9 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     setResultsUI("Complaint Status Changed Successfully");
+                    Notification notification = new Notification("Complaint Status Updated", "Your Complaint ‘" + complaint.getSubject() + "’ is now " + status
+                            , complaint.getComplaintId(), null, null, false);
+                    Helper.sendNotificationToUser(complaint.getUsername(), notification);
                 } else
                     setResultsUI("Faile to change status \n Error : " + task.getException().getMessage());
             }

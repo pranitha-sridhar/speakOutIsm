@@ -5,20 +5,56 @@ import java.util.Map;
 public class Notification {
     String title;
     String message;
-    Map<String,String> data;
+    String complaint_id;
+    String comment_id;
+    String profile_uri;
+    boolean isBlocked = false;
     Map timeStampMap;
 
-    public Notification(String title, String message, Map<String, String> data) {
+    public Notification(String title, String message) {
         this.title = title;
         this.message = message;
-        this.data = data;
     }
 
-    public Notification(String title, String message, Map<String, String> data, Map timeStampMap) {
+    public Notification(String title, String message, String complaint_id, String comment_id, String profile_uri, boolean isBlocked) {
         this.title = title;
         this.message = message;
-        this.data = data;
-        this.timeStampMap=timeStampMap;
+        this.complaint_id = complaint_id;
+        this.comment_id = comment_id;
+        this.profile_uri = profile_uri;
+        this.isBlocked = isBlocked;
+    }
+
+    public String getComplaint_id() {
+        return complaint_id;
+    }
+
+    public void setComplaint_id(String complaint_id) {
+        this.complaint_id = complaint_id;
+    }
+
+    public String getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(String comment_id) {
+        this.comment_id = comment_id;
+    }
+
+    public String getProfile_uri() {
+        return profile_uri;
+    }
+
+    public void setProfile_uri(String profile_uri) {
+        this.profile_uri = profile_uri;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
     public Map getTimeStampMap() {
@@ -37,19 +73,11 @@ public class Notification {
         return message;
     }
 
-    public Map<String, String> getData() {
-        return data;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public void setData(Map<String, String> data) {
-        this.data = data;
     }
 }
