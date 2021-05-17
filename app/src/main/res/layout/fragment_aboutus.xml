@@ -4,78 +4,259 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FBE6DF"
+    android:background="#A5D7ED"
     tools:context=".fragments.TrendingFragment">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:layout_margin="10dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ism"
-        android:id="@+id/icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+
+
     <ImageView
-        android:layout_margin="10dp"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:src="@drawable/ism_campus"
+        android:src="@drawable/ism"
         android:id="@+id/icon_campus"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/icon"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/adamina"
         android:text="IIT (ISM) DHANBAD"
-        android:textSize="25sp"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/icon_campus"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/title"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/icon_campus" />
 
-    <TextView
+
+
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="40dp"
+        android:id="@+id/card1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/intro"
-        android:padding="20dp"
-        android:layout_marginTop="20dp"
-        android:text="Standing tall since early decades of 20th century, the institute is steadily sailing through the millennium change and has emerged into one of the most prominent institution- Indian Institute of Technology IIT(ISM) with full bloom functioning of 18 branches of Engineering, Applied Sciences, Management Studies and Humanities. IIT (ISM) has had a centenary long credentials of outperforming achievements/contributions in academia and the industry."
-        android:textColor="@color/black"
-        />
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_home"
+                    app:tint="@color/resolved_color" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ABOUT COLLEGE"
+                    android:fontFamily="@font/montserrat_alternates"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="About Standing tall since early decades of 20th century, the institute has emerged into one of the most prominent institution with full bloom functioning of 18 branches of Engineering, Applied Sciences, Management Studies and Humanities."
+                    />
+            </LinearLayout>
 
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        app:cardCornerRadius="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/card1"
+        android:id="@+id/card2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_app_settings"
+            app:tint="@color/resolved_color" />
+    </LinearLayout>
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/intro"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/intro_app"
-        android:padding="20dp"
-        android:layout_marginTop="20dp"
-        android:text="This app focuses on letting the students of IIT (ISM) Dhanbad SPEAK OUT their problems, complaints and greivances that they face but are not able to say it aloud."  android:textColor="@color/black"
+        android:text="ABOUT APP"
+        android:fontFamily="@font/montserrat_alternates"
+        android:textColor="@color/black"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="This app focuses on letting the students of IIT (ISM) Dhanbad SPEAK OUT their problems, and grievances that they face which they won't able to say it aloud. They would be able to send grievances publicly, privately or anonymously, and will get a response from the associated admin. "
         />
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:id="@+id/card3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/intro_app"
+        app:layout_constraintTop_toBottomOf="@id/card2"
         app:layout_constraintStart_toStartOf="parent"
-        android:padding="20dp"
-        android:text="Links"/>
-    <TextView
-        android:layout_width="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_account"
+                    app:tint="@color/resolved_color" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ABOUT US"
+                    android:fontFamily="@font/montserrat_alternates"
+                    android:textColor="@color/black"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:id="@+id/bhavesh"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content">
+                        <com.mikhaellopez.circularimageview.CircularImageView
+                            android:layout_width="match_parent"
+                            android:id="@+id/bhavesh_pic"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/bhavesh"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/bhavesh_pic"
+                            android:textSize="12sp"
+                            android:textAlignment="center"
+                            android:text="Bhavesh Sharma\n 19JE0235"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_toStartOf="@id/pranitha"
+                        android:layout_width="0dp"
+                        android:layout_toEndOf="@id/bhavesh"
+                        android:layout_height="wrap_content"
+                       android:layout_alignParentTop="true">
+
+                        <TextView
+                            android:padding="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textAlignment="center"
+                            android:text="We the students of ISM have created SHOUT OUT to make our fellow mates lives easier, to convey their problems and receive a solution. We have brain stormed and brought out several features to this app."/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/pranitha"
+                        android:layout_width="100dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_height="wrap_content">
+                        <com.mikhaellopez.circularimageview.CircularImageView
+                            android:layout_width="match_parent"
+                            android:id="@+id/pranitha_pic"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/pranitha"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/pranitha_pic"
+                            android:textSize="12sp"
+                            android:textAlignment="center"
+                            android:text="S Pranitha\n 19JE0725"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+
+    <RelativeLayout
+        android:padding="10dp"
+        android:id="@+id/mail"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/intro_app"
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/intro_link"
-        android:padding="20dp"
-        android:text="Links"/>
+        app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:layout_alignParentStart="true"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/black"
+            android:drawableLeft="@drawable/ic_contact_mail"
+            android:longClickable="true"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/intro_link1"
+            android:text="dean_acad@iitism.ac.in"/>
+
+        <TextView
+            android:layout_alignParentEnd="true"
+            android:drawableStart="@drawable/ic_phone"
+            android:drawableTint="@color/black"
+            android:drawablePadding="5dp"
+            android:longClickable="true"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/intro_phone1"
+            android:text="+91-326-223-5213"/>
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
