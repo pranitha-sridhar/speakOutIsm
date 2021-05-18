@@ -35,14 +35,17 @@
         <activity android:name=".activities.NotificationsActivity" />
         <activity
             android:name=".activities.SignIn"
-            android:theme="@style/Theme.AppItUp.NoActionBar">
-        </activity>
-        <activity android:name=".activities.ResetPassword"  android:theme="@style/Theme.AppItUp.NoActionBar" />
+            android:theme="@style/Theme.AppItUp.NoActionBar"></activity>
+        <activity
+            android:name=".activities.ResetPassword"
+            android:theme="@style/Theme.AppItUp.NoActionBar" />
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar" />
-        <activity android:name=".activities.SignUpActivity" android:theme="@style/Theme.AppItUp.NoActionBar" />
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:theme="@style/Theme.AppItUp.NoActionBar" />
     </application>
 
 </manifest>

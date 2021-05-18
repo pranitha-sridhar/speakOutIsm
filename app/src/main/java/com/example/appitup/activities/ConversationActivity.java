@@ -3,7 +3,6 @@ package com.example.appitup.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -19,7 +18,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -230,15 +228,13 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         send.setOnClickListener(this);
 
         initRecyclerView();
-        editTextMessage.addTextChangedListener(textWatcher);
         loadReplies();
 
-        if(Prefs.getUser(this).getUserType()!=Helper.USER_ADMINISTRATOR
-                && !Prefs.getUser(this).getUsername().equals(complaint.getUsername())){
-            editTextMessage.setEnabled(false);
+        if (Prefs.getUser(this).getUserType() != Helper.USER_ADMINISTRATOR
+                && !Prefs.getUser(this).getUsername().equals(complaint.getUsername())) {
             editTextMessage.setText("Only Admin or the owner of the complaint can participate to this conversation");
-            editTextMessage.setTextColor(Color.BLACK);
-        }
+            editTextMessage.setEnabled(false);
+        } else editTextMessage.addTextChangedListener(textWatcher);
     }
 
     private void loadReplies() {
@@ -281,7 +277,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initRecyclerView() {
-        adapter = new ReplyAdapter(list, ConversationActivity.this);
+        adapter = new ReplyAdapter(list, ConversationActivity.this, complaint);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ConversationActivity.this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);

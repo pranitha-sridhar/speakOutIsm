@@ -10,15 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
+import com.example.appitup.models.Complaints;
 import com.example.appitup.models.Reply;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.text.DateFormat.getDateTimeInstance;
 
@@ -26,10 +24,12 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.viewHolder> 
 
     ArrayList<Reply> list;
     Context context;
+    Complaints complaint;
 
-    public ReplyAdapter(ArrayList<Reply> list, Context context) {
+    public ReplyAdapter(ArrayList<Reply> list, Context context, Complaints complaint) {
         this.list = list;
         this.context = context;
+        this.complaint = complaint;
     }
 
     @NonNull
@@ -42,7 +42,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.viewHolder> 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         Reply chatMessages = list.get(position);
-        if (isMyMessage(chatMessages.getSent_from())) {
+        if (isStudentMessage(chatMessages.getSent_from(), complaint.getUsername())) {
             holder.cardText.setText("S");
             holder.cardViewPhoto.setCardBackgroundColor(context.getResources().getColor(R.color.student_color));
             holder.textViewUsername.setText("@" + chatMessages.getSent_from() + "\nStudent");
@@ -55,18 +55,17 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.viewHolder> 
         //TODO: Add Date Time in Reply
         String time=null;
         long timeStamp= 0;
-        if(chatMessages.getTimeStampMap()!=null)
-        {
-            timeStamp= (long) chatMessages.getTimeStampMap().get("timeStamp");
+        if (chatMessages.getTimeStampMap() != null) {
+            timeStamp = (long) chatMessages.getTimeStampMap().get("timeStamp");
             DateFormat dateFormat = getDateTimeInstance();
             Date netDate = (new Date(timeStamp));
-            time= dateFormat.format(netDate);
+            time = dateFormat.format(netDate);
         }
         holder.textViewDateTime.setText(time);
     }
 
-    private boolean isMyMessage(String username) {
-        return username.equals(Prefs.getUser(context).getUsername());
+    private boolean isStudentMessage(String reply_by, String complaint_owner) {
+        return reply_by.equals(complaint_owner);
 
     }
 

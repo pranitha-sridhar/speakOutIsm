@@ -14,7 +14,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -140,16 +139,6 @@ public class SignIn extends AppCompatActivity {
         unbinder.unbind();
     }
 
-   @Override
-    protected void onStart() {
-        if (!Helper.isInternetAvailable(this))
-            showNoInternetUI();
-        if (mAuth.getCurrentUser() != null && Prefs.isUserLoggedIn(this) && Prefs.getUser(this).getUsername() != null) {
-            startActivity(new Intent(SignIn.this, MainActivity.class));
-        }
-        super.onStart();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,7 +146,6 @@ public class SignIn extends AppCompatActivity {
         parentLayout = findViewById(android.R.id.content);
         unbinder = ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
-
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +174,6 @@ public class SignIn extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SignIn.this, SignUpActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -195,7 +182,6 @@ public class SignIn extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SignIn.this, ResetPassword.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
@@ -232,6 +218,7 @@ public class SignIn extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.i("TAG", "onDataChange: check_student");
                 if(snapshot.exists()){
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         User user = getUserModelFromDS(ds);
@@ -247,7 +234,7 @@ public class SignIn extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                setResultsUI(error.getMessage());
             }
         });
     }
@@ -265,6 +252,7 @@ public class SignIn extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.i("TAG", "onDataChange: check_admin");
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         User user = getUserModelFromDS(ds);
@@ -280,7 +268,7 @@ public class SignIn extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                setResultsUI(error.getMessage());
             }
         });
     }
