@@ -5,8 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:background="#C848BBED"
+    android:background="#F6F5F5"
     tools:context=".activities.SignUpActivity">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/app_logo"
+        app:layout_constraintStart_toEndOf="@id/logintitle"
+        app:layout_constraintBottom_toBottomOf="@id/line"
+        app:tint="@color/purple_500" />
 
 
     <LinearLayout
@@ -22,8 +30,9 @@
             android:layout_marginStart="10dp"
             android:layout_width="30dp"
             android:layout_height="3dp"
-            android:background="#FFFFFF"/>
+            android:background="@color/purple_500"/>
         <TextView
+            android:padding="5dp"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,20 +56,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/line"
         app:layout_constraintTop_toBottomOf="@id/logintitle"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="40dp"
         android:layout_width="120dp"
         android:layout_height="3dp"
-        android:background="@color/white"/>
+        android:background="@color/purple_500"/>
 
     <LinearLayout
         android:id="@+id/linear2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="15dp"
-        app:layout_constraintTop_toBottomOf="@id/logintitle"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -123,6 +133,8 @@
                 app:helperText="Admission number">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/purple_500"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
@@ -144,6 +156,8 @@
                 app:helperText="Institute Email Id only">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/purple_500"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
@@ -165,6 +179,8 @@
                 app:helperText="It will be visible to all">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/purple_500"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
@@ -174,11 +190,13 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+
                 android:id="@+id/textInputPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:hint="  Password"
+                app:passwordToggleTint="@color/purple_500"
                 app:passwordToggleEnabled="true"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeErrorColor="@android:color/holo_red_light"
@@ -186,6 +204,8 @@
                 app:errorTextColor="@android:color/holo_red_light">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/purple_500"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"

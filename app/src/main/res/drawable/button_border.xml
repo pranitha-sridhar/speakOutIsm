@@ -13,10 +13,10 @@
         android:top="1dp" />
 
     <stroke
-        android:width="3dp"
-        android:color="#FFFFFF" />
+        android:width="2dp"
+        android:color="@color/purple_500" />
 
     <solid
-        android:color="#C848BBED"/>
+        android:color="@color/white"/>
 
 </shape>
