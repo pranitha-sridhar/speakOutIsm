@@ -61,6 +61,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             time= dateFormat.format(netDate);
         }
         holder.date.setText(time);
+        holder.chip.setVisibility(View.GONE);
     }
 
     @Override

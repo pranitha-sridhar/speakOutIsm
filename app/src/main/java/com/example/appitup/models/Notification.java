@@ -25,6 +25,19 @@ public class Notification {
         this.isBlocked = isBlocked;
     }
 
+    public Notification(String title, String message, String complaint_id, Map timeStampMap) {
+        this.title = title;
+        this.message = message;
+        this.complaint_id = complaint_id;
+        this.timeStampMap=timeStampMap;
+    }
+
+    public Notification(String title, String message, String complaint_id) {
+        this.title = title;
+        this.message = message;
+        this.complaint_id = complaint_id;
+    }
+
     public String getComplaint_id() {
         return complaint_id;
     }
