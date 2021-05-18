@@ -49,7 +49,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder> 
             @Override
             public void onClick(View view) {
                 if (mListener != null)
-                    mListener.optionsClicked(user);
+                    mListener.optionsClicked(user,position);
             }
         });
     }
@@ -60,7 +60,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder> 
     }
 
     public interface UsersListener {
-        void optionsClicked(User user);
+        void optionsClicked(User user,int position);
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {

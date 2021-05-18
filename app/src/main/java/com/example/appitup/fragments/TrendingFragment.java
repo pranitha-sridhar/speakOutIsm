@@ -22,6 +22,7 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.activities.ConversationActivity;
 import com.example.appitup.adapter.ComplaintsAdapter;
+import com.example.appitup.adapter.TrendingAdapter;
 import com.example.appitup.models.Comment;
 import com.example.appitup.models.Complaints;
 import com.example.appitup.models.Vote;
@@ -62,7 +63,7 @@ import butterknife.Unbinder;
 
 import static java.text.DateFormat.getDateTimeInstance;
 
-public class TrendingFragment extends Fragment implements ComplaintsAdapter.ComplaintsListener,OnChartValueSelectedListener {
+public class TrendingFragment extends Fragment implements OnChartValueSelectedListener {
     @BindView(R.id.complaints_recycler2)
     RecyclerView recyclerView;
     @BindView(R.id.shimmer2)
@@ -80,7 +81,7 @@ public class TrendingFragment extends Fragment implements ComplaintsAdapter.Comp
 
     Unbinder unbinder;
     ArrayList<Complaints> list = new ArrayList<>();
-    ComplaintsAdapter adapter;
+    TrendingAdapter adapter;
     FirebaseAuth mAuth;
     String[] xData={"Registration","Academics","DSW","Vendors of ISM","MIS/Parents Portal","Hostel","Health Centre","Library","Personal"};
     float res=0f;
@@ -112,7 +113,7 @@ public class TrendingFragment extends Fragment implements ComplaintsAdapter.Comp
 
         unbinder = ButterKnife.bind(this, view);
 
-        adapter = new ComplaintsAdapter(getContext(), list, 2);
+        adapter = new TrendingAdapter(getContext(), list);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
@@ -126,7 +127,7 @@ public class TrendingFragment extends Fragment implements ComplaintsAdapter.Comp
 
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        adapter.setUpOnComplaintListener(this);
+        //adapter.setUpOnComplaintListener(this);
         chart.setOnChartValueSelectedListener(this);
 
 
@@ -349,16 +350,6 @@ public class TrendingFragment extends Fragment implements ComplaintsAdapter.Comp
 
     }
 
-    private void setData() {
-        //loadYData();
-        /*List<PieEntry> entries = new ArrayList<>();
-        for (int i=0;i<9;i++){
-            //yData[i]=loadYiData(i);
-            if(yData[i]==0f)continue;
-            else entries.add(new PieEntry(yData[i],xData[i]));}*/
-
-
-    }
 
     public void loadTop10Data(){
         Query query=FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("upvotes").limitToFirst(10);
@@ -454,132 +445,6 @@ public class TrendingFragment extends Fragment implements ComplaintsAdapter.Comp
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-    }
-
-    @Override
-    public void upVoteClicked(Complaints complaint) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference upVotesRef = databaseReference.child("Complaints").child(complaint.getComplaintId()).child("listOfUpvoters");
-        DatabaseReference downVotesRef = databaseReference.child("Complaints").child(complaint.getComplaintId()).child("listOfDownvoters");
-        DatabaseReference complaintRef = databaseReference.child("Complaints").child(complaint.getComplaintId());
-
-        downVotesRef.child(Prefs.getUser(getContext()).getUsername()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Vote upvote = new Vote(complaint.getComplaintId(), Prefs.getUser(getContext()).getUsername());
-                    upVotesRef.child(Prefs.getUser(getContext()).getUsername()).setValue(upvote).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            complaintRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    HashMap<String, Object> data = new HashMap<>();
-                                    if (task.getResult().hasChild("listOfDownvoters"))
-                                        data.put("downvotes", task.getResult().child("listOfDownvoters").getChildrenCount());
-                                    else data.put("downvotes", 0);
-                                    if (task.getResult().hasChild("listOfUpvoters"))
-                                        data.put("upvotes", task.getResult().child("listOfUpvoters").getChildrenCount());
-                                    else data.put("upvotes", 0);
-                                    complaintRef.updateChildren(data);
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    @Override
-    public void downVoteClicked(Complaints complaint) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference upVotesRef = databaseReference.child("Complaints").child(complaint.getComplaintId()).child("listOfUpvoters");
-        DatabaseReference downVotesRef = databaseReference.child("Complaints").child(complaint.getComplaintId()).child("listOfDownvoters");
-        DatabaseReference complaintRef = databaseReference.child("Complaints").child(complaint.getComplaintId());
-
-        upVotesRef.child(Prefs.getUser(getContext()).getUsername()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Vote downvote = new Vote(complaint.getComplaintId(), Prefs.getUser(getContext()).getUsername());
-                    downVotesRef.child(Prefs.getUser(getContext()).getUsername()).setValue(downvote).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            complaintRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    HashMap<String, Object> data = new HashMap<>();
-                                    if (task.getResult().hasChild("listOfDownvoters"))
-                                        data.put("downvotes", task.getResult().child("listOfDownvoters").getChildrenCount());
-                                    else data.put("downvotes", 0);
-                                    if (task.getResult().hasChild("listOfUpvoters"))
-                                        data.put("upvotes", task.getResult().child("listOfUpvoters").getChildrenCount());
-                                    else data.put("upvotes", 0);
-                                    complaintRef.updateChildren(data);
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    @Override
-    public void commentsClicked(Complaints complaint) {
-        CommentsDialogFragment commentsDialogFragment = new CommentsDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("complaint_id", complaint.getComplaintId());
-        bundle.putString("complaint_title", complaint.getSubject());
-        commentsDialogFragment.setArguments(bundle);
-        commentsDialogFragment.show(getChildFragmentManager(), "TAG");
-    }
-
-    @Override
-    public void onCardClicked(Complaints complaints) {
-        Intent intent = new Intent(getContext(), ConversationActivity.class);
-        intent.putExtra("complaint", complaints);
-        startActivity(intent);
-    }
-
-    @Override
-    public void usernameClicked(Complaints complaint) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_profile,null));
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        CircularImageView imageView=alertDialog.findViewById(R.id.profile_picture1);
-        TextView username=alertDialog.findViewById(R.id.username1);
-        TextView displayName=alertDialog.findViewById(R.id.display_name1);
-        TextView mail=alertDialog.findViewById(R.id.mailid1);
-        Button close=alertDialog.findViewById(R.id.closeButton);
-
-        String uid=complaint.getUid();
-        DatabaseReference reference=FirebaseDatabase.getInstance().getReference("StudentUsers").child(uid);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                username.setText(snapshot.child("username").getValue().toString());
-                displayName.setText(snapshot.child("displayName").getValue().toString());
-                mail.setText(snapshot.child("email").getValue().toString());
-                Glide.with(getContext()).load(snapshot.child("profileUri").getValue().toString()).into(imageView);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
             }
         });
     }

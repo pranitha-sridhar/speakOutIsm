@@ -36,6 +36,16 @@ public class User implements Serializable {
         this.userType = userType;
     }
 
+    public User(String username, String email, String displayName, String profileUri, String uid, int userType,boolean isBlocked) {
+        this.username = username;
+        this.email = email;
+        this.displayName = displayName;
+        this.profileUri = profileUri;
+        this.uid = uid;
+        this.userType = userType;
+        this.isBlocked=isBlocked;
+    }
+
     public String getFcm_token() {
         return fcm_token;
     }

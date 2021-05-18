@@ -32,8 +32,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
     AlertDialog alertDialogProgress;
     private FirebaseAuth mAuth;
 
-    boolean isConnected = true;
+    boolean isConnected = true,unique=true;
     boolean monitoringConnectivity = false;
     View parentLayout;
     private final ConnectivityManager.NetworkCallback connectivityCallback
@@ -177,11 +181,7 @@ public class SignUpActivity extends AppCompatActivity {
                     textInputUsername.setError("User Name is Required");
                     textInputUsername.requestFocus();
                     return;
-                } else if (userType == 1 && !isAdmNo(userName)) {
-                    textInputUsername.setError("User Name is Not Valid");
-                    textInputUsername.requestFocus();
-                    return;
-                } /*else if (userType == 2 && !isEmployeeId(userName)) {
+                }  /*else if (userType == 2 && !isEmployeeId(userName)) {
                     textInputUsername.setError("User Name is Not Valid");
                     textInputUsername.requestFocus();
                     return;
@@ -215,7 +215,17 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }else textInputEmail.setError(null);
 
-                signUp(userName, email, name, password);
+                if(!email.toLowerCase().contains(userName.toLowerCase())){
+                    textInputEmail.setError("Admission Number should be set as User Name");
+                    textInputEmail.requestFocus();
+                    return;
+                }else textInputEmail.setError(null);
+
+                if (!isAdmNo(userName,email,name,password)) {
+                    textInputUsername.setError("User Name is Not Valid");
+                    textInputUsername.requestFocus();
+                    return;
+                }
 
             }
         });
@@ -277,12 +287,27 @@ public class SignUpActivity extends AppCompatActivity {
         }*/
     }
 
-    private boolean isEmployeeId(String userName) {
+    /*private boolean isEmployeeId(String userName) {
         return true;
-    }
+    }*/
 
-    private boolean isAdmNo(String userName) {
-        return true;
+    private boolean isAdmNo(String userName,String email, String name, String password) {
+        Query query=FirebaseDatabase.getInstance().getReference("StudentUsers").orderByChild("username").equalTo(userName);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    unique=false;
+                    signUp(userName, email, name, password);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return unique;
     }
 
     public void setResultsUI(String message) {

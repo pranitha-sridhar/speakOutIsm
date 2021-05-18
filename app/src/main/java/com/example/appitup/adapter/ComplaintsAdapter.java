@@ -50,14 +50,17 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if (viewType == 1) {
+        viewHolderComplaintCard holderComplaintCard;
+        viewHolderTrendingCard holderTrendingCard;
+        //if (viewType == 1)
+        {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_complaints, parent, false);
             return new viewHolderComplaintCard(view);
-        } else if (viewType == 2) {
+        } /*else if (viewType == 2) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trending_complaint_card, parent, false);
             return new viewHolderTrendingCard(view);
         }
-        return null;
+        return null;*/
     }
 
     private final Filter exampleFilter = new Filter() {

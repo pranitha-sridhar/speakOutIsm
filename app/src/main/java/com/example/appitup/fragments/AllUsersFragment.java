@@ -20,6 +20,7 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.activities.MainActivity;
 import com.example.appitup.adapter.UsersAdapter;
+import com.example.appitup.models.Complaints;
 import com.example.appitup.models.Notification;
 import com.example.appitup.models.User;
 import com.example.appitup.utility.Helper;
@@ -51,11 +52,12 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
     UsersAdapter adapter;
     FirebaseAuth mAuth;
     AlertDialog alertDialog,alertDialogDeleteBlock;
-    TextView pdChangeStatusTitle, pdDialogDeleteBlockTitle, pdDialogDeleteBlockMessage;
-    MaterialButton pdChangeStatusSubmitButton, pdDialogDeleteBlockSubmitButton;
+    TextView pdChangeStatusTitle, pdDialogDeleteBlockTitle, pdDialogDeleteBlockMessage,username,title;
+    MaterialButton pdChangeStatusSubmitButton, pdDialogDeleteBlockSubmitButton,block;
     TashieLoader pdChangeStatusLoader, pdDeleteComplaintLoader;
     TextInputLayout textInputLayoutPassword;
     int deleteBlockState = 0;
+    boolean blocked=false,user_blocked;
 
 
     public AllUsersFragment() {
@@ -98,15 +100,25 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
     }
 
     @Override
-    public void optionsClicked(User user) {
+    public void optionsClicked(User user,int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View v = inflater.inflate(R.layout.dialogue_all_users_options, null);
         builder.setView(v);
+        user_blocked=user.isBlocked();
 
-        TextView block=v.findViewById(R.id.block);
+        block=v.findViewById(R.id.submitButton);
+        username=v.findViewById(R.id.username);
+        title=v.findViewById(R.id.textViewTitle);
         alertDialog=builder.create();
         alertDialog.show();
+
+        if(user_blocked){
+            title.setText("Do you want to unblock the following user?");
+            block.setText("Unblock");
+        }
+
+        username.setText("@"+user.getUsername());
 
         alertDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         alertDialog.getWindow().setGravity(Gravity.BOTTOM);
@@ -114,9 +126,34 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
         block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgressDialogueDeleteBlock(user);
+
+                if(!user_blocked)showProgressDialogueDeleteBlock(user,position);
+                else unblock(user,position);
             }
         });
+    }
+
+    public void unblock(User user,int position){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("StudentUsers").child(user.getUid());
+
+        reference.child("isBlocked").setValue(false)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            //setResultsDelUI("User has been unblocked Successfully.");
+                            deleteBlockState=4;
+                            /*list.get(position).setBlocked(false);
+                            adapter.notifyItemChanged(position)*/;
+                            loadData();
+                            Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been unblocked by the Admin"
+                                    , null, null, null, false);
+                            Helper.sendNotificationToUser(user.getUsername(), notification);
+                        } else
+                            setResultsDelUI("Error In unblocking the User : " + task.getException().getMessage());
+                        alertDialog.dismiss();
+                    }
+                });
     }
 
     public  void loadData(){
@@ -131,9 +168,10 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                     String display=ds.child("displayName").getValue().toString();
                     String uid=ds.child("uid").getValue().toString();
                     String profileUri=null;
+                    if(ds.hasChild("isBlocked") && ds.child("isBlocked").getValue().equals(true))blocked=true;
                     if(ds.child("profileUri").getValue()!=null)profileUri=ds.child("profileUri").getValue().toString();
                     int userType= Integer.parseInt( ds.child("userType").getValue().toString());
-                    list.add(new User(username,mail,display,profileUri,uid,userType));
+                    list.add(new User(username,mail,display,profileUri,uid,userType,blocked));
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -146,7 +184,7 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
     }
 
 
-    public void showProgressDialogueDeleteBlock(User user) {
+    public void showProgressDialogueDeleteBlock(User user,int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View v = inflater.inflate(R.layout.dialogue_delete, null);
@@ -202,19 +240,20 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                         pdDeleteComplaintLoader.setVisibility(View.VISIBLE);
                         textInputLayoutPassword.setVisibility(View.GONE);
                         pdDialogDeleteBlockSubmitButton.setVisibility(View.GONE);
-                        authenticate(pass, email, user);
+                        authenticate(pass, email, user,position);
                         break;
                     case 3:
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                        loadData();
+                        alertDialog.dismiss();
+                        alertDialogDeleteBlock.dismiss();
+
                 }
 
             }
         });
     }
 
-    private void authenticate(String pass, String email, User user) {
+    private void authenticate(String pass, String email, User user,int position) {
         AuthCredential credentials = EmailAuthProvider.getCredential(email, pass);
         FirebaseAuth.getInstance().getCurrentUser().reauthenticate(credentials).addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
             @Override
@@ -228,13 +267,13 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                     textInputLayoutPassword.setVisibility(View.GONE);
                     pdDialogDeleteBlockSubmitButton.setVisibility(View.GONE);
                     deleteBlockState = 3;
-                    blockUser(user);
+                    blockUser(user,position);
                 } else setResultsDelUI(task.getException().getMessage());
             }
         });
     }
 
-    private void blockUser(User user) {
+    private void blockUser(User user,int position) {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("StudentUsers").child(user.getUid());
 
@@ -247,6 +286,8 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                             Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
                                     , null, null, null, true);
                             Helper.sendNotificationToUser(user.getUsername(), notification);
+                            list.get(position).setBlocked(true);
+                            adapter.notifyItemChanged(position);
                         } else
                             setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
                     }
@@ -266,6 +307,11 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
             pdDialogDeleteBlockMessage.setText(message);
             pdDialogDeleteBlockSubmitButton.setText("Dismiss");
             pdDialogDeleteBlockSubmitButton.setVisibility(View.VISIBLE);
+        }else if(deleteBlockState==4){
+            title.setText(message);
+            block.setText("Dismiss");
+            username.setVisibility(View.GONE);
+            alertDialog.dismiss();
         }
     }
 }
