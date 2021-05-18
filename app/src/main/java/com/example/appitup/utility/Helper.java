@@ -14,9 +14,12 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.activities.SignIn;
 import com.example.appitup.models.Complaints;
 import com.example.appitup.models.Notification;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -90,6 +93,7 @@ public class Helper {
     private static final String LEGACY_SERVER_KEY = "AAAAxCUTpvA:APA91bHbHFwvexObt6OZghNuqZix9foVCp0fBxA2qon8K5rn7gxZndeligB-9qHuOWDXpVO-Wu7bgoS-S9U8BbZf7uE8npyiHkPnWphOTjwkzqau4vbzUhom-xQGcHOUXEhAuNsd9dss";
 
     public static void sendNotificationToUser(final String username, final Notification notification) {
+        addNotificationToDb(username, notification);
         Query queryStudent = FirebaseDatabase.getInstance().getReference("StudentUsers");
         Query queryAdmin = FirebaseDatabase.getInstance().getReference("AdminUsers");
 
@@ -142,6 +146,21 @@ public class Helper {
 
                     }
                 });
+    }
+
+    private static void addNotificationToDb(String username, Notification notification) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(username);
+        String notificationId = reference.push().getKey();
+
+        reference.child(notificationId).setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.i("addNotificationToDb", "onComplete: success");
+                } else
+                    Log.i("addNotificationToDb", "Comment Error : " + task.getException().getMessage());
+            }
+        });
     }
 
     public static void sendNotification(final String regToken, final JSONObject dataJson) {
