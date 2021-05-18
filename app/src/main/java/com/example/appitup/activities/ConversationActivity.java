@@ -2,6 +2,7 @@ package com.example.appitup.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -19,12 +20,15 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -92,6 +96,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     TashieLoader progressLoader;
     Unbinder unbinder;
     Complaints complaint;
+    String status,new_status;
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -114,9 +119,10 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     TashieLoader pdChangeStatusLoader, pdDeleteComplaintLoader;
     ArrayList<Reply> list = new ArrayList<>();
     AlertDialog alertDialogChangeStatus, alertDialogDeleteBlock;
-    RadioGroup pdChangeStatusRadioGroup;
+   // RadioGroup pdChangeStatusRadioGroup;
     TextInputLayout textInputLayoutPassword;
-    MaterialButton pdChangeStatusSubmitButton, pdDialogDeleteBlockSubmitButton;
+    MaterialButton pdChangeStatusSubmitButton;
+    MaterialButton pdDialogDeleteBlockSubmitButton;
     int changeStatusState = 0, deleteBlockState = 0;
     TextView pdChangeStatusTitle, pdDialogDeleteBlockTitle, pdDialogDeleteBlockMessage;
     int flag = -1;
@@ -209,10 +215,17 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         unbinder = ButterKnife.bind(this);
         complaint = (Complaints) getIntent().getSerializableExtra("complaint");
         textViewComplaintTitle.setText(complaint.getSubject());
+        status=complaint.getStatus();
 
         imageViewArrowBack.setOnClickListener(this);
         imageViewBlockUser.setOnClickListener(this);
         imageViewDeleteConvo.setOnClickListener(this);
+        if(status.equals(Helper.PENDING)){imageViewStatus.setBackgroundResource(R.drawable.ic_pending);}
+        else if(status.equals(Helper.IN_PROGRESS)){
+            imageViewStatus.setBackgroundResource(R.drawable.ic_pause_circle);}
+        else {imageViewStatus.setBackgroundResource(R.drawable.ic_check_circle);
+            ImageViewCompat.setImageTintList(imageViewStatus, ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(),R.color.resolved_color)));
+        }
         imageViewStatus.setOnClickListener(this);
         send.setOnClickListener(this);
 
@@ -380,13 +393,34 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         builder.setView(v);
         pdChangeStatusSubmitButton = v.findViewById(R.id.submitButton);
         pdChangeStatusLoader = v.findViewById(R.id.progressLoader);
-        pdChangeStatusRadioGroup = v.findViewById(R.id.radioGroup);
+       // pdChangeStatusRadioGroup = v.findViewById(R.id.radioGroup);
         pdChangeStatusTitle = v.findViewById(R.id.textViewTitle);
+        RelativeLayout relativeLayout=v.findViewById(R.id.relative);
+        ImageView icon1=v.findViewById(R.id.icon1);
+        ImageView icon2=v.findViewById(R.id.icon2);
+        TextView textView1=v.findViewById(R.id.text1);
+        TextView textView2=v.findViewById(R.id.text2);
 
-        if (complaint.getStatus().equals(Helper.IN_PROGRESS))
+        if(status.equals(Helper.PENDING)){
+            icon1.setBackgroundResource(R.drawable.ic_pause_circle);
+            icon2.setBackgroundResource(R.drawable.ic_check_circle);
+        }
+        else if(status.equals(Helper.IN_PROGRESS)){
+            icon1.setBackgroundResource(R.drawable.ic_pending);
+            icon2.setBackgroundResource(R.drawable.ic_check_circle);
+            textView1.setText(Helper.PENDING);
+        }
+        else{
+            icon1.setBackgroundResource(R.drawable.ic_pending);
+            icon2.setBackgroundResource(R.drawable.ic_pause_circle);
+            textView1.setText(Helper.PENDING);
+            textView2.setText(Helper.IN_PROGRESS);
+        }
+
+       /* if (complaint.getStatus().equals(Helper.IN_PROGRESS))
             pdChangeStatusRadioGroup.check(R.id.radio_in_progress);
         else if (complaint.getStatus().equals(Helper.RESOLVED))
-            pdChangeStatusRadioGroup.check(R.id.radio_resolved);
+            pdChangeStatusRadioGroup.check(R.id.radio_resolved);*/
 
         alertDialogChangeStatus = builder.create();
         alertDialogChangeStatus.show();
@@ -395,26 +429,42 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         alertDialogChangeStatus.getWindow().setBackgroundDrawable(null);
         alertDialogChangeStatus.getWindow().setGravity(Gravity.BOTTOM);
 
+        icon1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pdChangeStatusTitle.setText("Please wait we are changing the complaint status...");
+                pdChangeStatusLoader.setVisibility(View.VISIBLE);
+                pdChangeStatusSubmitButton.setVisibility(View.GONE);
+                //pdChangeStatusRadioGroup.setVisibility(View.GONE);
+                relativeLayout.setVisibility(View.GONE);
+                changeStatusState = 1;
+                alertDialogChangeStatus.setCancelable(false);
+                if(status.equals(Helper.PENDING))new_status=Helper.IN_PROGRESS;
+                else new_status=Helper.PENDING;
+                changeStatus(new_status);
+            }
+        });
+
+        icon2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pdChangeStatusTitle.setText("Please wait we are changing the complaint status...");
+                pdChangeStatusLoader.setVisibility(View.VISIBLE);
+                pdChangeStatusSubmitButton.setVisibility(View.GONE);
+                //pdChangeStatusRadioGroup.setVisibility(View.GONE);
+                relativeLayout.setVisibility(View.GONE);
+                changeStatusState = 1;
+                alertDialogChangeStatus.setCancelable(false);
+                if(status.equals(Helper.RESOLVED))new_status=Helper.IN_PROGRESS;
+                else new_status=Helper.RESOLVED;
+                changeStatus(new_status);
+            }
+        });
+
         pdChangeStatusSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (changeStatusState) {
-                    case 0:
-                        String status = Helper.IN_PROGRESS;
-                        if (pdChangeStatusRadioGroup.getCheckedRadioButtonId() == R.id.radio_resolved)
-                            status = Helper.RESOLVED;
-                        pdChangeStatusTitle.setText("Please wait we are changing the complaint status...");
-                        pdChangeStatusLoader.setVisibility(View.VISIBLE);
-                        pdChangeStatusSubmitButton.setVisibility(View.GONE);
-                        pdChangeStatusRadioGroup.setVisibility(View.GONE);
-                        changeStatusState = 1;
-                        alertDialogChangeStatus.setCancelable(false);
-                        changeStatus(status);
-                        break;
-                    case 2:
-                        alertDialogChangeStatus.dismiss();
-                        break;
-                }
+                alertDialogChangeStatus.dismiss();
             }
         });
     }
@@ -595,7 +645,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                             , complaint.getComplaintId(), null, null, false);
                     Helper.sendNotificationToUser(complaint.getUsername(), notification);
                 } else
-                    setResultsUI("Faile to change status \n Error : " + task.getException().getMessage());
+                    setResultsUI("Failed to change status \n Error : " + task.getException().getMessage());
             }
         });
     }

@@ -17,5 +17,7 @@
     <color name="users_color">#FFBB86FC</color>
     <color name="admin_color">@android:color/holo_green_light</color>
     <color name="theme_color">#DDDADA</color>
+    <color name="faq_color">#EAE7E7</color>
+
 
 </resources>
