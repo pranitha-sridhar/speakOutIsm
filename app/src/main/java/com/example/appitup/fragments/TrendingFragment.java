@@ -68,15 +68,15 @@ public class TrendingFragment extends Fragment implements ComplaintsAdapter.Comp
     @BindView(R.id.shimmer2)
     ShimmerFrameLayout shimmerFrameLayout;
     @BindView(R.id.total)
-            TextView total;
+    TextView total;
     @BindView(R.id.resolved)
-            TextView resolved;
+    TextView resolved;
     @BindView(R.id.inprogress)
-            TextView inprogress;
+    TextView inprogress;
     @BindView(R.id.pending)
-            TextView pending;
+    TextView pending;
     @BindView(R.id.chart)
-            PieChart chart;
+    PieChart chart;
 
     Unbinder unbinder;
     ArrayList<Complaints> list = new ArrayList<>();
@@ -112,7 +112,7 @@ public class TrendingFragment extends Fragment implements ComplaintsAdapter.Comp
 
         unbinder = ButterKnife.bind(this, view);
 
-        adapter = new ComplaintsAdapter(getContext(), list);
+        adapter = new ComplaintsAdapter(getContext(), list, 2);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
