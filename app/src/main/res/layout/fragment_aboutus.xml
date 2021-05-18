@@ -4,20 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A5D7ED"
+    android:background="#F6F3F3"
     tools:context=".fragments.TrendingFragment">
 
-
-
-    <ImageView
-        android:layout_marginTop="15dp"
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:src="@drawable/ism"
+        android:layout_height="190dp"
         android:id="@+id/icon_campus"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ism"
+        />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/title"
@@ -37,7 +44,7 @@
         app:cardCornerRadius="20dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/card1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,12 +60,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
                 <ImageView
+                    android:padding="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_home"
                     app:tint="@color/resolved_color" />
             </LinearLayout>
             <LinearLayout
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -66,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="ABOUT COLLEGE"
-                    android:fontFamily="@font/montserrat_alternates"
+                    android:fontFamily="@font/adamina"
                     android:textColor="@color/black"/>
                 <TextView
                     android:layout_width="match_parent"
@@ -101,12 +110,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
         <ImageView
+            android:padding="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_app_settings"
             app:tint="@color/resolved_color" />
     </LinearLayout>
         <LinearLayout
+            android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -114,7 +125,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ABOUT APP"
-        android:fontFamily="@font/montserrat_alternates"
+        android:fontFamily="@font/adamina"
         android:textColor="@color/black"/>
     <TextView
         android:layout_width="match_parent"
@@ -147,20 +158,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
                 <ImageView
+                    android:padding="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_account"
                     app:tint="@color/resolved_color" />
             </LinearLayout>
             <LinearLayout
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ABOUT US"
-                    android:fontFamily="@font/montserrat_alternates"
+                    android:text="ABOUT THE DEVELOPERS"
+                    android:fontFamily="@font/adamina"
                     android:textColor="@color/black"/>
                 <RelativeLayout
                     android:layout_width="match_parent"

@@ -10,7 +10,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/theme_color">
+        android:background="#64B1E1">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -32,7 +32,8 @@
                     android:src="@drawable/app_logo"
                     android:textColor="@android:color/secondary_text_light"
                     android:textSize="30sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:tint="@color/white" />
 
                 <TextView
                     android:id="@+id/title"
@@ -83,6 +84,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:text="@string/file_a_complaint"
         android:textColor="@color/white"
+        android:backgroundTint="#64B1E1"
         app:icon="@android:drawable/ic_input_add"
         app:iconTint="@color/white" />
 

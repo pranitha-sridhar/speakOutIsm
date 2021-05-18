@@ -163,7 +163,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
 
     public void add(){
         {
-            Toast.makeText(getContext(), ""+entries1.size(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), ""+entries1.size(), Toast.LENGTH_SHORT).show();
             dataSet = new PieDataSet(entries1, "Category Wise Complaints");
 
             dataSet.setDrawIcons(false);

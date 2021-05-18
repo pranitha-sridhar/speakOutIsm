@@ -58,7 +58,7 @@
             android:layout_marginEnd="4dp"
             android:text="Registration"
             android:textColor="@color/white"
-            app:chipBackgroundColor="@android:color/holo_green_light"
+            app:chipBackgroundColor="#94CAED"
             app:layout_constraintStart_toStartOf="@+id/textViewBody"
             app:layout_constraintTop_toBottomOf="@+id/textViewBody" />
 
@@ -69,7 +69,7 @@
             android:layout_marginHorizontal="4dp"
             android:text="Pre-Registration"
             android:textColor="@color/white"
-            app:chipBackgroundColor="@color/purple_200"
+            app:chipBackgroundColor="@android:color/holo_green_light"
             app:layout_constraintStart_toEndOf="@+id/chipCategory"
             app:layout_constraintTop_toBottomOf="@+id/textViewBody" />
 

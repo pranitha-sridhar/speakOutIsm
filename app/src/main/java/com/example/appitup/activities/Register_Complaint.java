@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,7 +54,7 @@ public class Register_Complaint extends AppCompatActivity {
     @BindView(R.id.box)
     CheckBox checkBox;
     @BindView(R.id.submit)
-    Button submit;
+    TextView submit;
     @BindView(R.id.textInputTitle)
     TextInputLayout title;
     @BindView(R.id.textInputBody)

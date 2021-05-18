@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="20dp"
         android:id="@+id/line"
-        android:background="@color/teal_200"/>
+        android:background="#64B1E1"/>
     <ListView
         android:paddingHorizontal="20dp"
         android:paddingTop="30dp"
