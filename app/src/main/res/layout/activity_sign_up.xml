@@ -217,6 +217,7 @@
     </LinearLayout>
 
         <TextView
+            android:clickable="true"
             android:elevation="10dp"
             android:id="@+id/button_signup"
             android:layout_width="200dp"

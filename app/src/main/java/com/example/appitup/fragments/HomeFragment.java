@@ -238,6 +238,8 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                 }
 
                 if (list.isEmpty()) {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
                     return;
                 }

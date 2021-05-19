@@ -216,10 +216,10 @@ public class SignUpActivity extends AppCompatActivity {
                 }else textInputEmail.setError(null);
 
                 if(!email.toLowerCase().contains(userName.toLowerCase())){
-                    textInputEmail.setError("Admission Number should be set as User Name");
-                    textInputEmail.requestFocus();
+                    textInputUsername.setError("Admission Number should be set as User Name");
+                    textInputUsername.requestFocus();
                     return;
-                }else textInputEmail.setError(null);
+                }else textInputUsername.setError(null);
 
                 if (!isAdmNo(userName,email,name,password)) {
                     textInputUsername.setError("User Name is Not Valid");
@@ -298,8 +298,10 @@ public class SignUpActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     unique=false;
-                    signUp(userName, email, name, password);
+
                 }
+                else
+                    signUp(userName, email, name, password);
             }
 
             @Override
