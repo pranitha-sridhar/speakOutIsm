@@ -129,6 +129,9 @@ public class NotificationMessagingService extends FirebaseMessagingService {
 
     private void saveTokenToServer(String token) {
         User user = Prefs.getUser(this);
+        if (user == null || user.getUsername() == null)
+            return;
+
         DatabaseReference databaseReference;
         if (user.getUserType() == Helper.USER_STUDENT)
             databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");

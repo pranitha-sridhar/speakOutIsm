@@ -20,6 +20,7 @@
         android:paddingBottom="5dp"
         android:text="Hey @username, how can we help you?"
         android:id="@+id/title"/>
+
     <View
         android:layout_width="250dp"
         android:layout_height="4dp"
@@ -27,17 +28,16 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="20dp"
         android:id="@+id/line"
-        android:background="#64B1E1"/>
+        android:background="#673AB7" />
+
     <ListView
-        android:paddingHorizontal="20dp"
-        android:paddingTop="30dp"
-        android:paddingBottom="80dp"
         android:id="@+id/listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line"/>
+        app:layout_constraintTop_toBottomOf="@id/line" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@ public class Prefs {
 
     public static boolean isUserLoggedIn(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(Helper.MY_PREFS_NAME, Context.MODE_PRIVATE);
-        return (sharedPreferences.getBoolean("isUserLoggedIn", false)
+        return (sharedPreferences != null && sharedPreferences.getBoolean("isUserLoggedIn", false)
                 && Prefs.getUser(context) != null && Prefs.getUser(context).getUsername() != null
                 && FirebaseAuth.getInstance().getCurrentUser() != null);
     }

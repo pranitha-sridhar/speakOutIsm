@@ -1,10 +1,13 @@
 package com.example.appitup.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ import com.example.appitup.utility.Helper;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -109,15 +113,29 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                 if(Prefs.getFilter_selectedChip(getContext())==-1)
                 loadData();
                 else {
-                    int i=Prefs.getFilter_selectedChip(getContext());
-                    if(i==0)category="Registration";
-                    else if(i==1)category="Academics";else if(i==2)category="DSW";
-                    else if(i==3)category="Vendors Of ISM";else if(i==4)category="MIS/Parents Portal";
-                    else if(i==5)category="Hostel";else if(i==6)category="Health Centre";
-                    else if(i==7)category="Library";else if(i==8)category="Personal";
+                    int i = Prefs.getFilter_selectedChip(getContext());
+                    if (i == 0) category = "Registration";
+                    else if (i == 1) category = "Academics";
+                    else if (i == 2) category = "DSW";
+                    else if (i == 3) category = "Vendors Of ISM";
+                    else if (i == 4) category = "MIS/Parents Portal";
+                    else if (i == 5) category = "Hostel";
+                    else if (i == 6) category = "Health Centre";
+                    else if (i == 7) category = "Library";
+                    else if (i == 8) category = "Personal";
                     firebase_query(category);
                 }
                 adapter.notifyDataSetChanged();
+                ((Chip) chipGroup.getChildAt(0)).setTextColor(Color.BLACK);
+                ((Chip) chipGroup.getChildAt(1)).setTextColor(Color.BLACK);
+                ((Chip) chipGroup.getChildAt(2)).setTextColor(Color.BLACK);
+
+                if (checkedId == R.id.pending)
+                    ((Chip) chipGroup.getChildAt(0)).setTextColor(Color.WHITE);
+                else if (checkedId == R.id.inprogress)
+                    ((Chip) chipGroup.getChildAt(1)).setTextColor(Color.WHITE);
+                else if (checkedId == R.id.resolved)
+                    ((Chip) chipGroup.getChildAt(2)).setTextColor(Color.WHITE);
             }
         });
 
@@ -369,23 +387,28 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         });
     }
 
-    public void filter_icon(){
+    public void filter_icon() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         LayoutInflater inflater = this.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.layout_filter_dialog,null));
+        builder.setView(inflater.inflate(R.layout.layout_filter_dialog, null));
 
         AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        alertDialog.getWindow().setBackgroundDrawable(null);
+        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
         alertDialog.show();
 
         Button filterBtn = alertDialog.findViewById(R.id.sort);
-        ChipGroup chipGroup=alertDialog.findViewById(R.id.chip_group3);
-        category="Registration";
+        ChipGroup chipGroup = alertDialog.findViewById(R.id.chip_group3);
+        category = "Registration";
 
-        int i=Prefs.getFilter_selectedChip(getContext());
-        if(i==0)chipGroup.check(R.id.registration1);
-        else if(i==1)chipGroup.check(R.id.academics1);else if(i==2)chipGroup.check(R.id.dsw1);
-        else if(i==3)chipGroup.check(R.id.vendors1);else if(i==4)chipGroup.check(R.id.mis1);
+        int i = Prefs.getFilter_selectedChip(getContext());
+        if (i == 0) chipGroup.check(R.id.registration1);
+        else if (i == 1) chipGroup.check(R.id.academics1);
+        else if (i == 2) chipGroup.check(R.id.dsw1);
+        else if (i == 3) chipGroup.check(R.id.vendors1);
+        else if (i == 4) chipGroup.check(R.id.mis1);
         else if(i==5)chipGroup.check(R.id.hostel1);else if(i==6)chipGroup.check(R.id.health1);
         else if(i==7)chipGroup.check(R.id.library1);else if(i==8)chipGroup.check(R.id.personal1);
 

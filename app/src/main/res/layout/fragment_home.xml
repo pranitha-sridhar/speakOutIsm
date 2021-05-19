@@ -5,26 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E5E2E2"
-
     tools:context=".fragments.HomeFragment">
 
-
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="10dp"
+        android:background="#64B1E1"
+        android:gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:layout_margin="20dp">
+        android:paddingStart="20dp">
+
+        <TextView
+            android:id="@+id/textSort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sort By Categories"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.chip.ChipGroup
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textSort"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/filter"
             app:singleSelection="true"
             app:selectionRequired="true"
             android:id="@+id/chip_group">
@@ -36,11 +46,15 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:checked="true"
+                android:textColor="@color/white"
+                app:checkedIconTint="@color/white"
                 android:layout_height="wrap_content"
                 android:text="PENDING"
-                android:id="@+id/pending"/>
+                android:id="@+id/pending" />
+
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
+                app:checkedIconTint="@color/white"
                 android:checkable="true"
                 android:clickable="true"
                 android:focusable="true"
@@ -50,6 +64,7 @@
                 android:id="@+id/inprogress"/>
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
+                app:checkedIconTint="@color/white"
                 android:checkable="true"
                 android:clickable="true"
                 android:focusable="true"
@@ -61,15 +76,16 @@
         </com.google.android.material.chip.ChipGroup>
 
         <ImageView
-            android:padding="10dp"
             android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:padding="10dp"
             android:src="@drawable/ic_filter_list"
             android:id="@+id/filter"
-            app:tint="@color/black" />
+            app:tint="@color/white" />
 
-    </LinearLayout>
-
+    </RelativeLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="wrap_content"
