@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="20dp"
-    android:layout_marginVertical="30dp"
-    android:layout_gravity="center_vertical"
+    android:fillViewport="true"
     tools:context=".activities.Register_Complaint">
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"
-        android:id="@+id/progressBar2"/>
-
-
-    <TextView
-        android:fontFamily="@font/rubik_light"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:id="@+id/text"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Choose a category:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="30dp"
+        android:layout_gravity="center_vertical">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            android:id="@+id/progressBar2" />
+
+
+        <TextView
+            android:fontFamily="@font/rubik_light"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Choose a category:"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.chip.ChipGroup
             app:layout_constraintStart_toStartOf="parent"
@@ -42,8 +47,7 @@
             app:singleSelection="true"
             android:id="@+id/chip_group1"
             android:layout_height="wrap_content"
-            app:selectionRequired="true"
-            >
+            app:selectionRequired="true">
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
@@ -55,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="Registration"
                 android:id="@+id/registration"/>
+
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
                 android:checkable="true"
@@ -64,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="Academics"
                 android:id="@+id/academics"/>
+
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
                 android:checkable="true"
@@ -73,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:text="DSW"
                 android:id="@+id/dsw"/>
+
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
                 android:checkable="true"
@@ -92,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:text="MIS/Parent Portal"
                 android:id="@+id/mis"/>
+
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
                 android:checkable="true"
@@ -101,6 +109,7 @@
                 android:layout_height="wrap_content"
                 android:text="Hostel"
                 android:id="@+id/hostel"/>
+
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
                 android:checkable="true"
@@ -110,6 +119,7 @@
                 android:layout_height="wrap_content"
                 android:text="Health Centre"
                 android:id="@+id/health"/>
+
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
                 android:checkable="true"
@@ -119,6 +129,7 @@
                 android:layout_height="wrap_content"
                 android:text="Library"
                 android:id="@+id/library"/>
+
             <com.google.android.material.chip.Chip
                 app:chipBackgroundColor="@color/stroke_tint"
                 android:checkable="true"
@@ -142,6 +153,7 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             android:id="@+id/subcat" />
+
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -155,111 +167,107 @@
 
         </com.google.android.material.chip.ChipGroup>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chip_group2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Title"
-        app:boxBackgroundColor="@color/white"
-        app:errorIconTint="@android:color/holo_red_light"
-        app:boxStrokeErrorColor="@android:color/holo_red_light"
-        app:errorTextAppearance="@android:color/holo_red_light"
-        app:errorTextColor="@android:color/holo_red_light"
-        android:fontFamily="@font/rubik_light"
-        app:helperText="Subject of the grievance">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chip_group2"
             android:layout_width="match_parent"
-            android:fontFamily="@font/rubik_light"
-            android:textColor="@color/black"
             android:layout_height="wrap_content"
-            android:maxLines="2"
-            android:inputType="textCapSentences"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="Title"
+            app:boxBackgroundColor="@color/white"
+            app:errorIconTint="@android:color/holo_red_light"
+            app:boxStrokeErrorColor="@android:color/holo_red_light"
+            app:errorTextAppearance="@android:color/holo_red_light"
+            app:errorTextColor="@android:color/holo_red_light"
+            android:fontFamily="@font/rubik_light"
+            app:helperText="Subject of the grievance">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="10dp"
-        android:id="@+id/textInputBody"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Message"
-        app:boxBackgroundColor="@color/white"
-        app:errorIconTint="@android:color/holo_red_light"
-        app:boxStrokeErrorColor="@android:color/holo_red_light"
-        app:errorTextAppearance="@android:color/holo_red_light"
-        app:errorTextColor="@android:color/holo_red_light"
-        android:fontFamily="@font/rubik_light"
-        app:helperText="Mention your grievance elaborately">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:fontFamily="@font/rubik_light"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:maxHeight="100dp"
+                android:inputType="textCapSentences"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="10dp"
+            android:id="@+id/textInputBody"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textInputTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:lines="8"
-            android:minLines="6"
+            android:layout_height="wrap_content"
+            android:hint="Message"
+            app:boxBackgroundColor="@color/white"
+            app:errorIconTint="@android:color/holo_red_light"
+            app:boxStrokeErrorColor="@android:color/holo_red_light"
+            app:errorTextAppearance="@android:color/holo_red_light"
+            app:errorTextColor="@android:color/holo_red_light"
             android:fontFamily="@font/rubik_light"
-            android:maxLines="15"
+            app:helperText="Mention your grievance elaborately">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik_light"
+                android:maxHeight="400dp"
+                android:textColor="@color/black"
+                android:scrollbars="vertical"
+                android:inputType="textMultiLine|textCapSentences"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/relative"
+            app:layout_constraintTop_toBottomOf="@id/textInputBody">
+
+            <Switch
+                android:id="@+id/switchmat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:checked="true"
+                android:fontFamily="@font/rubik_light"
+                android:switchMinWidth="50dp"
+                android:text="Visible to Public" />
+
+            <CheckBox
+                android:fontFamily="@font/rubik_light"
+                android:id="@+id/box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Post Anonymously" />
+
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:elevation="10dp"
+            android:layout_width="200dp"
+            android:layout_margin="40dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="76dp"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
             android:textColor="@color/black"
-            android:scrollbars="vertical"
-            android:inputType="textMultiLine|textCapSentences"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/relative"
-        app:layout_constraintTop_toBottomOf="@id/textInputBody">
-
-        <Switch
-            android:id="@+id/switchmat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:checked="true"
             android:fontFamily="@font/rubik_light"
-            android:switchMinWidth="50dp"
-            android:text="Visible to Public" />
-
-        <CheckBox
-            android:fontFamily="@font/rubik_light"
-            android:id="@+id/box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="Post Anonymously" />
+            android:gravity="center"
+            android:background="@drawable/button_border"
+            android:text="Submit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relative"
+            android:id="@+id/submit" />
 
 
-    </RelativeLayout>
-
-
-    <TextView
-        android:elevation="10dp"
-        android:layout_width="200dp"
-        android:layout_margin="40dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="76dp"
-        android:textSize="20sp"
-        android:paddingTop="5dp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/rubik_light"
-        android:gravity="center"
-        android:background="@drawable/button_border"
-        android:text="Submit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relative"
-        android:id="@+id/submit"/>
-
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

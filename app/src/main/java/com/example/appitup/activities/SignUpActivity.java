@@ -13,8 +13,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -66,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
     AlertDialog alertDialogProgress;
     private FirebaseAuth mAuth;
 
-    boolean isConnected = true,unique=true;
+    boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
     private final ConnectivityManager.NetworkCallback connectivityCallback
@@ -213,26 +211,22 @@ public class SignUpActivity extends AppCompatActivity {
                     textInputEmail.setError("Only ISM mail ids are allowed");
                     textInputEmail.requestFocus();
                     return;
-                }else textInputEmail.setError(null);
+                } else textInputEmail.setError(null);
 
-                if(!email.toLowerCase().contains(userName.toLowerCase())){
+                if (!email.toLowerCase().contains(userName.toLowerCase())) {
                     textInputUsername.setError("Admission Number should be set as User Name");
                     textInputUsername.requestFocus();
                     return;
-                }else textInputUsername.setError(null);
+                } else textInputUsername.setError(null);
 
-                if (!isAdmNo(userName,email,name,password)) {
-                    textInputUsername.setError("User Name is Not Valid");
-                    textInputUsername.requestFocus();
-                    return;
-                }
+                showProgressDialogue();
+                checkIsAlreadyExist(userName, email, name, password);
 
             }
         });
     }
 
     private void signUp(String userName, String email, String name, String password) {
-        showProgressDialogue();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -291,25 +285,22 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }*/
 
-    private boolean isAdmNo(String userName,String email, String name, String password) {
-        Query query=FirebaseDatabase.getInstance().getReference("StudentUsers").orderByChild("username").equalTo(userName);
+    private void checkIsAlreadyExist(String userName, String email, String name, String password) {
+        Query query = FirebaseDatabase.getInstance().getReference("StudentUsers").orderByChild("username").equalTo(userName);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    unique=false;
-
-                }
+                if (snapshot.exists())
+                    setResultsUI("This username already exist.");
                 else
                     signUp(userName, email, name, password);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                setResultsUI(error.getMessage());
             }
         });
-        return unique;
     }
 
     public void setResultsUI(String message) {
