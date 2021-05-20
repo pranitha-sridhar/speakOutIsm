@@ -83,7 +83,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
     ArrayList<Complaints> list = new ArrayList<>();
     TrendingAdapter adapter;
     FirebaseAuth mAuth;
-    String[] xData={"Registration","Academics","DSW","Vendors of ISM","MIS/Parents Portal","Hostel","Health Centre","Library","Personal"};
+    String[] xData={"Registration","Academics","DSW","Vendors of ISM","MIS/Parent Portal","Hostel","Health Centre","Library","Personal"};
     float res=0f;
     int i=0;
     List<PieEntry> entries1 = new ArrayList<>();
@@ -270,7 +270,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
 
             }
         });
-             ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("MIS/Parents Portal");
+             ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("MIS/Parent Portal");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -454,7 +454,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                total.setText(Long.toString(snapshot.getChildrenCount()));
+                if (snapshot!=null)total.setText(Long.toString(snapshot.getChildrenCount()));
             }
 
             @Override

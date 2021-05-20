@@ -9,6 +9,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.fragments.AboutUsFragment;
 import com.example.appitup.fragments.AllUsersFragment;
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         parentLayout = findViewById(android.R.id.content);
+        hideMenu();
 
         drawerLayout = findViewById(R.id.drawer_layout);
         appBarLayout = findViewById(R.id.app_bar_layout);
@@ -169,6 +172,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, NotificationsActivity.class));
             }
         });
+    }
+
+    public void hideMenu(){
+        navigationDrawer=findViewById(R.id.nav_view);
+        Menu nav_menu=navigationDrawer.getMenu();
+        if(Prefs.getUser(MainActivity.this).getUserType()==Helper.USER_STUDENT)nav_menu.findItem(R.id.nav_all_user).setVisible(false);
+        if(Prefs.getUser(MainActivity.this).getUserType()==Helper.USER_ADMINISTRATOR)nav_menu.findItem(R.id.nav_your_complaints).setVisible(false);
     }
 
     private void setToolbarUI(int i) {

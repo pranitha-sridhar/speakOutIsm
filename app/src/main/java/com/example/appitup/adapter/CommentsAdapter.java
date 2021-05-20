@@ -14,7 +14,13 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.models.Comment;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.text.DateFormat.getDateTimeInstance;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.viewHolderReceivedMsgs> {
 
@@ -38,7 +44,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.viewHo
         Comment chatMessages = list.get(position);
         holder.messageBody.setText(chatMessages.getComment());
         holder.name.setText(chatMessages.getUsername());
-        holder.time.setText(chatMessages.getTimeStampStr());
+
+        String time = null;
+        long timeStamp = 0;
+        if (chatMessages.getTimeStampMap() != null)
+        {
+            timeStamp = (long) chatMessages.getTimeStampMap().get("timeStamp");
+            DateFormat dateFormat = getDateTimeInstance();
+            Date netDate = (new Date(timeStamp));
+            time = dateFormat.format(netDate);
+        }
+        holder.time.setText(time);
 
         if (chatMessages.getUsername().equals(Prefs.getUser(context).getUsername())) {
             holder.cardViewPhoto.setCardBackgroundColor(context.getResources().getColor(R.color.student_color));

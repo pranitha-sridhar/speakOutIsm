@@ -66,6 +66,7 @@ public class SignIn extends AppCompatActivity {
     AlertDialog alertDialogProgress;
 
     Unbinder unbinder;
+    int userType=1000;
     boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
@@ -256,6 +257,7 @@ public class SignIn extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         User user = getUserModelFromDS(ds);
+                        userType=2000;
                         user.setUserType(Helper.USER_ADMINISTRATOR);
                         signIn(user, passwords);
                         break;
@@ -292,7 +294,7 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    if (Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified()) {
+                    if ((Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified() && userType==Helper.USER_STUDENT)||(userType==Helper.USER_ADMINISTRATOR)) {
                         if (!user.isBlocked()) {
                             alertDialogProgress.dismiss();
                             Prefs.setUserData(SignIn.this, user);

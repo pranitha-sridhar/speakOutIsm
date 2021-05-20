@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:fontFamily="@font/montserrat_alternates"
-            android:text="Sign Up"
+            android:text="Sign In"
             android:textSize="45sp"
             android:id="@+id/logintitle"
             android:textColor="@color/black"

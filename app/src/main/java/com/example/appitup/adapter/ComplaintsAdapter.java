@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.models.Complaints;
 import com.example.appitup.utility.Helper;
@@ -142,42 +143,46 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
             holder.upVote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (complaints.getVoteStatus() == Helper.DOWNVOTED) {
-                        holder.upVoteNumber.setText(upVoters[0] + 1 + " upvotes");
-                        holder.downVoteNumber.setText(downVoters[0] - 1 + " downvotes");
-                    } else if (complaints.getVoteStatus() == Helper.NOT_VOTED) {
-                        holder.upVoteNumber.setText(upVoters[0] + 1 + " upvotes");
-                        holder.downVoteNumber.setText(downVoters[0] + " downvotes");
-                    } else if (complaints.getVoteStatus() == Helper.UPVOTED) {
-                        holder.upVoteNumber.setText(upVoters[0] + " upvotes");
-                        holder.downVoteNumber.setText(downVoters[0] + " downvotes");
-                    }
+                    if (Prefs.getUser(context).getUserType() == Helper.USER_STUDENT) {
+                        if (complaints.getVoteStatus() == Helper.DOWNVOTED) {
+                            holder.upVoteNumber.setText(upVoters[0] + 1 + " upvotes");
+                            holder.downVoteNumber.setText(downVoters[0] - 1 + " downvotes");
+                        } else if (complaints.getVoteStatus() == Helper.NOT_VOTED) {
+                            holder.upVoteNumber.setText(upVoters[0] + 1 + " upvotes");
+                            holder.downVoteNumber.setText(downVoters[0] + " downvotes");
+                        } else if (complaints.getVoteStatus() == Helper.UPVOTED) {
+                            holder.upVoteNumber.setText(upVoters[0] + " upvotes");
+                            holder.downVoteNumber.setText(downVoters[0] + " downvotes");
+                        }
 
-                    holder.upVote.setImageResource(R.drawable.ic_upvote_filled);
-                    holder.downVote.setImageResource(R.drawable.ic_downvote_outlined);
-                    if (mListener != null)
-                        mListener.upVoteClicked(complaints);
+                        holder.upVote.setImageResource(R.drawable.ic_upvote_filled);
+                        holder.downVote.setImageResource(R.drawable.ic_downvote_outlined);
+                        if (mListener != null)
+                            mListener.upVoteClicked(complaints);
+                    }
                 }
             });
 
             holder.downVote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (complaints.getVoteStatus() == Helper.UPVOTED) {
-                        holder.upVoteNumber.setText(upVoters[0] - 1 + " upvotes");
-                        holder.downVoteNumber.setText(downVoters[0] + 1 + " downvotes");
-                    } else if (complaints.getVoteStatus() == Helper.NOT_VOTED) {
-                        holder.upVoteNumber.setText(upVoters[0] + " upvotes");
-                        holder.downVoteNumber.setText(downVoters[0] + 1 + " downvotes");
-                    } else if (complaints.getVoteStatus() == Helper.DOWNVOTED) {
-                        holder.upVoteNumber.setText(upVoters[0] + " upvotes");
-                        holder.downVoteNumber.setText(downVoters[0] + " downvotes");
-                    }
+                    if (Prefs.getUser(context).getUserType() == Helper.USER_STUDENT) {
+                        if (complaints.getVoteStatus() == Helper.UPVOTED) {
+                            holder.upVoteNumber.setText(upVoters[0] - 1 + " upvotes");
+                            holder.downVoteNumber.setText(downVoters[0] + 1 + " downvotes");
+                        } else if (complaints.getVoteStatus() == Helper.NOT_VOTED) {
+                            holder.upVoteNumber.setText(upVoters[0] + " upvotes");
+                            holder.downVoteNumber.setText(downVoters[0] + 1 + " downvotes");
+                        } else if (complaints.getVoteStatus() == Helper.DOWNVOTED) {
+                            holder.upVoteNumber.setText(upVoters[0] + " upvotes");
+                            holder.downVoteNumber.setText(downVoters[0] + " downvotes");
+                        }
 
-                    holder.downVote.setImageResource(R.drawable.ic_downvote_filled);
-                    holder.upVote.setImageResource(R.drawable.ic_upvote_outlined);
-                    if (mListener != null)
-                        mListener.downVoteClicked(complaints);
+                        holder.downVote.setImageResource(R.drawable.ic_downvote_filled);
+                        holder.upVote.setImageResource(R.drawable.ic_upvote_outlined);
+                        if (mListener != null)
+                            mListener.downVoteClicked(complaints);
+                    }
                 }
             });
 

@@ -65,7 +65,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             String msg = editTextMessage.getText().toString().trim();
             if (msg.isEmpty()) send.setVisibility(View.GONE);
-            else send.setVisibility(View.VISIBLE);
+            else if(Prefs.getUser(getContext()).getUserType()==Helper.USER_STUDENT)send.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -108,10 +108,15 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
         textViewComplaintTitle.setText(complaint.getSubject());
         list.clear();
-        list.addAll(complaint.getListOfCommenter());
+        //list.addAll(complaint.getListOfCommenter());
 
         initRecyclerView();
         takeUpdatesOfComments();
+
+        if (Prefs.getUser(getContext()).getUserType() == Helper.USER_ADMINISTRATOR) {
+            editTextMessage.setText("Only students can participate in this comment");
+            editTextMessage.setEnabled(false);
+        } else editTextMessage.addTextChangedListener(textWatcher);
 
         editTextMessage.addTextChangedListener(textWatcher);
         send.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +133,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
                 Map map=new HashMap();
                 map.put("timeStamp", ServerValue.TIMESTAMP);
+
                 Comment comment = new Comment(Prefs.getUser(getContext()).getUsername(), commentMsg, map);
                 addComment(comment);
             }
@@ -155,7 +161,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
                         time = dateFormat.format(netDate);
                         map.put("timeStamp", timeStamp);
                     }
-                    list.add(new Comment(username, commentId, comment, map, time));
+                    list.add(new Comment(username, commentId, comment, map));
                 }
                 if (list.isEmpty()) {
                     Helper.toast(getContext(), "No Comments Found for this complaint");
@@ -174,6 +180,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void takeUpdatesOfComments() {
+        //list.clear();
         Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaint.getComplaintId()).child("listOfCommenter");
 
         query.addChildEventListener(new ChildEventListener() {
@@ -192,7 +199,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
                     time= dateFormat.format(netDate);
                     map.put("timeStamp",timeStamp);
                 }
-                list.add(new Comment(username, commentId, comment,map,time));
+                list.add(new Comment(username, commentId, comment,map));
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(list.size());
                 progressLoader.setVisibility(View.GONE);

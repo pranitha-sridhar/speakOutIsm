@@ -19,6 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/top10"
             android:textSize="20sp"
+            android:layout_margin="20dp"
             android:textColor="@color/black"
             android:text="TOP 10 Complaints"/>
 

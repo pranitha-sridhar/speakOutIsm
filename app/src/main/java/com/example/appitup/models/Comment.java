@@ -9,7 +9,9 @@ public class Comment implements Serializable {
     String commentId;
 
     String comment;
+
     Map timeStampMap;
+
     String timeStampStr;
 
     public Comment(String username, String commentId, String comment) {
@@ -35,6 +37,13 @@ public class Comment implements Serializable {
         this.comment = comment;
         this.timeStampMap=timeStampMap;
         this.timeStampStr=timeStampStr;
+    }
+
+    public Comment(String username, String commentId, String comment,Map timeStampMap) {
+        this.username = username;
+        this.commentId = commentId;
+        this.comment = comment;
+        this.timeStampMap=timeStampMap;
     }
 
     public void setTimeStampMap(Map timeStampMap) {

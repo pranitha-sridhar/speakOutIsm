@@ -227,6 +227,12 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         imageViewStatus.setOnClickListener(this);
         send.setOnClickListener(this);
 
+        if(Prefs.getUser(ConversationActivity.this).getUserType()==Helper.USER_STUDENT){
+            imageViewStatus.setVisibility(View.INVISIBLE);
+            imageViewDeleteConvo.setVisibility(View.INVISIBLE);
+            imageViewBlockUser.setVisibility(View.INVISIBLE);
+        }
+
         initRecyclerView();
         loadReplies();
 

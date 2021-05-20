@@ -217,10 +217,15 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     ArrayList<Comment> commenters = new ArrayList<>();
                     if (ds.hasChild("listOfCommenter"))
                         for (DataSnapshot s : ds.child("listOfCommenter").getChildren())
-                            commenters.add(new Comment(s.child("username").getValue().toString(), s.child("comment").getValue().toString()));
+                        {   long timeStamp2 = 0;
+                            Map<String, Long> map2 = new HashMap();
+                            timeStamp2 = (long) s.child("timeStampMap").child("timeStamp").getValue();
+                            map2.put("timeStamp", timeStamp2);
+                            commenters.add(new Comment(s.child("username").getValue().toString(),s.child("commentId").getValue().toString() ,s.child("comment").getValue().toString(), map2));}
+
 
                     // Check for anonymous users
-                    if (anonymous.equals("true")) username = "Anonymous";
+                    //if (anonymous.equals("true")) username = "Anonymous";
 
                     //check vote status of complaint
                     int voteStatus = Helper.NOT_VOTED;
@@ -352,6 +357,10 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
 
     @Override
     public void usernameClicked(Complaints complaint){
+        if(complaint.getAnonymous().equals("true") && Prefs.getUser(getContext()).getUserType()==Helper.USER_STUDENT){
+            Helper.toast(getContext(),"Anonymous User");
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_profile,null));
@@ -599,10 +608,14 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     ArrayList<Comment> commenters = new ArrayList<>();
                     if (ds.hasChild("listOfCommenter"))
                         for (DataSnapshot s : ds.child("listOfCommenter").getChildren())
-                            commenters.add(new Comment(s.child("username").getValue().toString(), s.child("comment").getValue().toString()));
+                        {   long timeStamp2 = 0;
+                            Map<String, Long> map2 = new HashMap();
+                            timeStamp2 = (long) s.child("timeStampMap").child("timeStamp").getValue();
+                            map2.put("timeStamp", timeStamp2);
+                            commenters.add(new Comment(s.child("username").getValue().toString(),s.child("commentId").getValue().toString() ,s.child("comment").getValue().toString(), map2));}
 
                     // Check for anonymous users
-                    if (anonymous.equals("true")) username = "Anonymous";
+                    //if (anonymous.equals("true")) username = "Anonymous";
 
                     //check vote status of complaint
                     int voteStatus = Helper.NOT_VOTED;
