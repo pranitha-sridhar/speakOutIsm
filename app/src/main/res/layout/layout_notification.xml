@@ -53,12 +53,12 @@
         <com.google.android.material.chip.Chip
             android:padding="5dp"
             android:id="@+id/action_chip"
-            android:focusable="true"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="GO TO COMPLAINT"
             android:clickable="true"
-            app:chipBackgroundColor="@color/stroke_tint"/>
+            android:checkable="false"
+            app:chipBackgroundColor="@android:color/holo_green_light"/>
 
 
     </LinearLayout>

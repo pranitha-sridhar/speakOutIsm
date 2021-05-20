@@ -61,7 +61,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             time= dateFormat.format(netDate);
         }
         holder.date.setText(time);
-        holder.chip.setVisibility(View.GONE);
+        if(notification.getComplaint_id()==null) holder.chip.setVisibility(View.GONE);
+        holder.chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mListener!=null)
+                    mListener.chipClicked(notification);
+            }
+        });
     }
 
     @Override

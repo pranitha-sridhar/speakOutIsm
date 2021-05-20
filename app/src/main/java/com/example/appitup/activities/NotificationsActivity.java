@@ -1,6 +1,7 @@
 package com.example.appitup.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -153,7 +154,7 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
 
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        //adapter.setUpOnNotificationListener(this);
+        adapter.setUpOnNotificationListener(this);
     }
 
     public void loadData(){
@@ -168,7 +169,8 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
                     String title=ds.child("title").getValue().toString();
                     //if(key!=null)string+=" "+key ;
                     String message=ds.child("message").getValue().toString();
-                    String complaint_id=ds.child("complaint_id").getValue().toString();
+                    String complaint_id=null;
+                    if(ds.child("complaint_id").exists()){complaint_id=ds.child("complaint_id").getValue().toString();}
                     long timeStamp = 0;
                     Map<String, Long> map = new HashMap();
                     if (ds.child("timeStampMap").child("timeStamp").exists()) {
@@ -190,6 +192,10 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
 
     @Override
     public void chipClicked(Notification notification) {
+        String complaintId=notification.getComplaint_id();
+        Intent intent=new Intent(NotificationsActivity.this,ComplaintActivity.class);
+        intent.putExtra("complaintId",complaintId);
+        startActivity(intent);
 
     }
 }
