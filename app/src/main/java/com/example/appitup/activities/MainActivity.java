@@ -9,6 +9,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -36,10 +38,15 @@ import com.example.appitup.fragments.HomeFragment;
 import com.example.appitup.fragments.StatusFragment;
 import com.example.appitup.fragments.TrendingFragment;
 import com.example.appitup.fragments.UserAccountFragment;
+import com.example.appitup.models.User;
 import com.example.appitup.utility.Helper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Timer;
 
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
+    AlertDialog alertDialogProgress;
     private final ConnectivityManager.NetworkCallback connectivityCallback
             = new ConnectivityManager.NetworkCallback() {
         @Override
@@ -262,10 +270,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 closeDrawer();
                 break;
             case R.id.action_sign_out:
-                Helper.signOutUser(MainActivity.this, true);
-                finish();
+                closeDrawer();
+                showProgressDialogue();
+                signOut();
                 break;
         }
         return true;
+    }
+
+    private void signOut() {
+        User user = Prefs.getUser(this);
+        DatabaseReference databaseReference;
+        if (user.getUserType() == Helper.USER_STUDENT)
+            databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");
+        else databaseReference = FirebaseDatabase.getInstance().getReference("AdminUsers");
+
+        databaseReference.child(user.getUid()).child("isLoggedIn").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                alertDialogProgress.dismiss();
+                if (task.isSuccessful()) {
+                    Helper.toast(MainActivity.this, "Sign Out Successful");
+                    Helper.signOutUser(MainActivity.this, true);
+                    finish();
+                } else {
+                    // "Failed to log out!!\n"+task.getException().getMessage()
+                    Helper.toast(MainActivity.this, task.getException().getMessage());
+                }
+            }
+        });
+    }
+
+    private void showProgressDialogue() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View v = inflater.inflate(R.layout.dialogue_loading, null);
+        builder.setView(v);
+        TextView title = v.findViewById(R.id.textViewTitle);
+        v.findViewById(R.id.progressLoader).setVisibility(View.VISIBLE);
+
+        title.setText("Please wait we are logging you out...");
+
+        alertDialogProgress = builder.create();
+        alertDialogProgress.setCancelable(false);
+        alertDialogProgress.show();
     }
 }

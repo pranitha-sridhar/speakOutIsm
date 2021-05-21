@@ -15,7 +15,7 @@
         <activity android:name=".activities.ComplaintActivity"
             android:theme="@style/Theme.AppItUp.NoActionBar"/>
         <!-- FCM Service to Collect Notification Messages -->
-        <service android:name=".utility.FCM.NotificationMessagingService">
+        <service android:name=".utility.NotificationMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

@@ -19,6 +19,8 @@ public class User implements Serializable {
 
     boolean isBlocked = false;
 
+    boolean isLoggedIn = false;
+
     public User(String username, String email, String displayName, String profileUri, String uid) {
         this.username = username;
         this.email = email;
@@ -44,6 +46,14 @@ public class User implements Serializable {
         this.uid = uid;
         this.userType = userType;
         this.isBlocked = isBlocked;
+    }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 
     public String getFcm_token() {

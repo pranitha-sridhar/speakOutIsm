@@ -14,6 +14,7 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.activities.SignIn;
 import com.example.appitup.models.Complaints;
 import com.example.appitup.models.Notification;
+import com.example.appitup.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
@@ -35,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +50,6 @@ public class Helper {
     public static final int DOWNVOTED = -1;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-    private static final String LEGACY_SERVER_KEY = "AAAAxCUTpvA:APA91bHbHFwvexObt6OZghNuqZix9foVCp0fBxA2qon8K5rn7gxZndeligB-9qHuOWDXpVO-Wu7bgoS-S9U8BbZf7uE8npyiHkPnWphOTjwkzqau4vbzUhom-xQGcHOUXEhAuNsd9dss";
     public static String PENDING = "PENDING";
     public static String IN_PROGRESS = "IN-PROGRESS";
     public static String RESOLVED = "RESOLVED";
@@ -76,6 +78,7 @@ public class Helper {
 
     public static void signOutUser(Context context, boolean sendToSignIn) {
         FirebaseAuth.getInstance().signOut();
+        User user = Prefs.getUser(context);
         Prefs.setUserLoggedIn(context, false);
         Prefs.setUserData(context, null);
         if (sendToSignIn) {
@@ -83,6 +86,24 @@ public class Helper {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
         }
+
+        // Just for safety signout again as there are many to get to this function other than main activity
+        DatabaseReference databaseReference;
+        if (user.getUserType() == Helper.USER_STUDENT)
+            databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");
+        else databaseReference = FirebaseDatabase.getInstance().getReference("AdminUsers");
+
+        databaseReference.child(user.getUid()).child("isLoggedIn").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // successfully saved
+                    // "Successfully Logged Out"
+                } else {
+                    // "Failed to log out!!\n"+task.getException().getMessage()
+                }
+            }
+        });
     }
 
     public static boolean isInternetAvailable(Context context) {
@@ -172,20 +193,20 @@ public class Helper {
             protected Void doInBackground(Void... params) {
                 try {
                     OkHttpClient client = new OkHttpClient();
+                    client.setProtocols(Arrays.asList(Protocol.HTTP_1_1));
                     JSONObject json = new JSONObject();
                     json.put("data", dataJson);
                     json.put("to", regToken);
                     RequestBody body = RequestBody.create(JSON, json.toString());
                     Request request = new Request.Builder()
-                            .header("Authorization", "key=" + Helper.LEGACY_SERVER_KEY)
-                            .url("https://fcm.googleapis.com/fcm/send")
+                            .url("https://webhooks.mongodb-realm.com/api/client/v2.0/app/mobile-application-0-cwllj/service/FCM/incoming_webhook/send_fcm_message")
                             .post(body)
                             .build();
                     Response response = client.newCall(request).execute();
                     String finalResponse = response.body().string();
                     Log.i("TAG", "doInBackground: " + finalResponse);
                 } catch (Exception e) {
-                    //Log.d(TAG,e+"");
+                    Log.d("TAG", e + "");
                 }
                 return null;
             }

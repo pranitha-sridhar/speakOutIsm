@@ -40,9 +40,10 @@
             android:id="@+id/text_message_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="John Doe"
             android:textColor="@color/black"
+            android:maxWidth="240dp"
             android:textSize="12sp"
+            android:padding="5dp"
             android:textStyle="bold" />
 
         <TextView
@@ -50,7 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
-            android:text="hi man, how are you?"
+            android:maxWidth="240dp"
+            android:padding="5dp"
             android:textColor="#363131" />
 
         <TextView
@@ -59,7 +61,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:paddingEnd="2dp"
-            android:text="25-6-21, 11:40"
             android:textSize="10sp" />
     </LinearLayout>
 

@@ -10,6 +10,7 @@ public class Notification {
     String profile_uri;
     boolean isBlocked = false;
     Map timeStampMap;
+    boolean setLoggedOut = false;
 
     public Notification(String title, String message) {
         this.title = title;
@@ -36,6 +37,20 @@ public class Notification {
         this.title = title;
         this.message = message;
         this.complaint_id = complaint_id;
+    }
+
+    public Notification(String title, String message, boolean setLoggedOut) {
+        this.title = title;
+        this.message = message;
+        this.setLoggedOut = setLoggedOut;
+    }
+
+    public boolean isSetLoggedOut() {
+        return setLoggedOut;
+    }
+
+    public void setSetLoggedOut(boolean setLoggedOut) {
+        this.setLoggedOut = setLoggedOut;
     }
 
     public String getComplaint_id() {

@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.agrawalsuneet.dotsloader.loaders.PullInLoader;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
+import com.example.appitup.models.Notification;
 import com.example.appitup.models.User;
 import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -70,6 +72,8 @@ public class SignIn extends AppCompatActivity {
     boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
+    boolean isLoggedIn = false;
+    User currentUser = null;
     private final ConnectivityManager.NetworkCallback connectivityCallback
             = new ConnectivityManager.NetworkCallback() {
         @Override
@@ -165,6 +169,7 @@ public class SignIn extends AppCompatActivity {
                     return;
                 }
 
+                isLoggedIn = false;
                 showProgressDialogue();
                 check_student(userNameStr, password_str);
             }
@@ -209,7 +214,37 @@ public class SignIn extends AppCompatActivity {
         progressDialogueDismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialogProgress.dismiss();
+                if (!isLoggedIn) {
+                    currentUser = null;
+                    alertDialogProgress.dismiss();
+                } else if (currentUser != null) {
+                    progressDialogueLoader.setVisibility(View.VISIBLE);
+                    progressDialogueDismissButton.setVisibility(View.GONE);
+                    progressDialogueTitle.setText("Please wait, we are logging you out from other devices...");
+                    signOutFromDB();
+                    Notification notification = new Notification("Account Security - New Sign In Detected",
+                            "Since single sign on is allowed you are logging out from this device.", false);
+                    Helper.sendNotificationToUser(currentUser.getUsername(), notification);
+                }
+            }
+        });
+    }
+
+    private void signOutFromDB() {
+        DatabaseReference databaseReference;
+        if (currentUser.getUserType() == Helper.USER_STUDENT)
+            databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");
+        else databaseReference = FirebaseDatabase.getInstance().getReference("AdminUsers");
+
+        databaseReference.child(currentUser.getUid()).child("isLoggedIn").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // successfully saved
+                    setResultsUI("Successfully Logged Out from other devices.\nTry to Login Now.");
+                } else {
+                    setResultsUI("Failed to log out!!\n" + task.getException().getMessage());
+                }
             }
         });
     }
@@ -244,6 +279,8 @@ public class SignIn extends AppCompatActivity {
                 (String) ds.child("displayName").getValue(), (String) ds.child("profileUri").getValue(), (String) ds.child("uid").getValue());
         if (ds.hasChild("isBlocked") && ds.child("isBlocked").getValue().equals(true))
             user.setBlocked(true);
+        if (ds.hasChild("isLoggedIn") && ds.child("isLoggedIn").getValue().equals(true))
+            user.setLoggedIn(true);
         return user;
     }
 
@@ -274,11 +311,23 @@ public class SignIn extends AppCompatActivity {
     }
 
     public void setResultsUI(String message) {
+        currentUser = null;
         progressDialogueTitle.setText(message);
         progressDialogueLoader.setVisibility(View.GONE);
         progressDialogueDismissButton.setVisibility(View.VISIBLE);
+        isLoggedIn = false;
+        progressDialogueDismissButton.setText("Dismiss");
     }
 
+    public void setResultsUI(String message, User user) {
+        currentUser = user;
+        progressDialogueTitle.setText(message);
+        progressDialogueLoader.setVisibility(View.GONE);
+        progressDialogueDismissButton.setVisibility(View.VISIBLE);
+        isLoggedIn = true;
+        progressDialogueDismissButton.setText("Sign Out");
+
+    }
 
     public void signIn(User user, String password_str) {
         String email_id = user.getEmail();
@@ -294,16 +343,22 @@ public class SignIn extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if ((Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified() && userType == Helper.USER_STUDENT) || (userType == Helper.USER_ADMINISTRATOR)) {
                         if (!user.isBlocked()) {
-                            alertDialogProgress.dismiss();
-                            Prefs.setUserData(SignIn.this, user);
-                            Prefs.setUserLoggedIn(SignIn.this, true);
+                            if (!user.isLoggedIn()) {
+                                alertDialogProgress.dismiss();
+                                Prefs.setUserData(SignIn.this, user);
+                                Prefs.setUserLoggedIn(SignIn.this, true);
 
-                            Intent intent = new Intent(SignIn.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-                            Helper.toast(SignIn.this, "Signed In Success!!");
-                            getFCMToken();
+                                Intent intent = new Intent(SignIn.this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                                Helper.toast(SignIn.this, "Signed In Success!!");
+                                getFCMToken();
+                            } else {
+                                isLoggedIn = true;
+                                currentUser = user;
+                                setResultsUI("You are already LoggedIn in other device. Only Single Sign On is allowed by this application.\n Please SignOut from other devices and try again. To sign-out from other devices click \"Sign Out\"", user);
+                            }
                         } else {
                             // user is blocked by the admin
                             Helper.signOutUser(SignIn.this, false);
@@ -340,7 +395,10 @@ public class SignIn extends AppCompatActivity {
             databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");
         else databaseReference = FirebaseDatabase.getInstance().getReference("AdminUsers");
 
-        databaseReference.child(user.getUid()).child("fcm_token").setValue(token).addOnCompleteListener(new OnCompleteListener<Void>() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("fcm_token", token);
+        data.put("isLoggedIn", true);
+        databaseReference.child(user.getUid()).updateChildren(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {

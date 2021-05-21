@@ -1,4 +1,4 @@
-package com.example.appitup.utility.FCM;
+package com.example.appitup.utility;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,7 +18,6 @@ import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.activities.SplashActivity;
 import com.example.appitup.models.User;
-import com.example.appitup.utility.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class NotificationMessagingService extends FirebaseMessagingService {
@@ -45,6 +45,7 @@ public class NotificationMessagingService extends FirebaseMessagingService {
         String message = null;
         String profile_uri = null;
         boolean isBlocked = false;
+        boolean setLoggedOut = false;
 
         Map<String, String> data = remoteMessage.getData();
         Log.d(TAG, "remoteMessage.getData() : " + remoteMessage.getData());
@@ -74,7 +75,13 @@ public class NotificationMessagingService extends FirebaseMessagingService {
             e.printStackTrace();
         }
 
-        if (isBlocked) {
+        try {
+            setLoggedOut = jsnObject.getBoolean("setLoggedOut");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (setLoggedOut || isBlocked) {
             Helper.signOutUser(this, true);
         }
 
@@ -107,8 +114,14 @@ public class NotificationMessagingService extends FirebaseMessagingService {
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
+                        .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setContentIntent(contentIntent);
+
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.setBigContentTitle(messageTitle);
+        bigTextStyle.bigText(messageBody);
+        notificationBuilder.setStyle(bigTextStyle);
 
         NotificationManagerCompat notificationManagerCompat =
                 NotificationManagerCompat.from(this);
@@ -137,7 +150,10 @@ public class NotificationMessagingService extends FirebaseMessagingService {
             databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");
         else databaseReference = FirebaseDatabase.getInstance().getReference("AdminUsers");
 
-        databaseReference.child(user.getUid()).child("fcm_token").setValue(token).addOnCompleteListener(new OnCompleteListener<Void>() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("fcm_token", token);
+        data.put("isLoggedIn", true);
+        databaseReference.child(user.getUid()).updateChildren(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {

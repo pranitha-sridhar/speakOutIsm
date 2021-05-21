@@ -91,8 +91,6 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         adapter.setUpOnUserListener(this);
-
-
         return view;
     }
 
@@ -194,7 +192,6 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
             }
         });
     }
-
 
     public void showProgressDialogueDeleteBlock(User user, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
