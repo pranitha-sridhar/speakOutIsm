@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.appitup"
+        applicationId "com.grievancesystem.speakout"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -57,8 +57,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:20.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-
-
 
     // dependency for converting from json to POJO and vice versa
     implementation 'com.google.code.gson:gson:2.8.6'

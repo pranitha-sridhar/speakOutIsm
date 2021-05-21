@@ -1,15 +1,16 @@
 {
   "project_info": {
     "project_number": "842435634928",
+    "firebase_url": "https://appitup-4ed23-default-rtdb.firebaseio.com",
     "project_id": "appitup-4ed23",
     "storage_bucket": "appitup-4ed23.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:842435634928:android:ce4809271023e12bdc8435",
+        "mobilesdk_app_id": "1:842435634928:android:ff3e884f680b9d83dc8435",
         "android_client_info": {
-          "package_name": "com.example.appitup"
+          "package_name": "com.grievancesystem.speakout"
         }
       },
       "oauth_client": [

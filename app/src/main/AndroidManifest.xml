@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.appitup">
+    package="com.grievancesystem.speakout">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -12,17 +12,18 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppItUp">
-        <activity android:name=".activities.ComplaintActivity"
-            android:theme="@style/Theme.AppItUp.NoActionBar"/>
+        <activity
+            android:name="com.grievancesystem.speakout.activities.ComplaintActivity"
+            android:theme="@style/Theme.AppItUp.NoActionBar" />
         <!-- FCM Service to Collect Notification Messages -->
-        <service android:name=".utility.NotificationMessagingService">
+        <service android:name="com.grievancesystem.speakout.utility.NotificationMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.grievancesystem.speakout.activities.SplashActivity"
             android:theme="@style/Theme.AppItUp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,29 +32,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ConversationActivity"
+            android:name="com.grievancesystem.speakout.activities.ConversationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar" />
         <activity
-            android:name=".activities.Register_Complaint"
+            android:name="com.grievancesystem.speakout.activities.Register_Complaint"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.NotificationsActivity"
+            android:name="com.grievancesystem.speakout.activities.NotificationsActivity"
             android:theme="@style/NotificationTheme" />
         <activity
-            android:name=".activities.SignIn"
+            android:name="com.grievancesystem.speakout.activities.SignIn"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar" />
         <activity
-            android:name=".activities.ResetPassword"
+            android:name="com.grievancesystem.speakout.activities.ResetPassword"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.grievancesystem.speakout.activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar" />
         <activity
-            android:name=".activities.SignUpActivity"
+            android:name="com.grievancesystem.speakout.activities.SignUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar" />
     </application>
