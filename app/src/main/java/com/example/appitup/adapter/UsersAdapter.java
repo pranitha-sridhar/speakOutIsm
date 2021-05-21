@@ -22,9 +22,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder> 
     Context context;
     UsersListener mListener;
 
-    public UsersAdapter(Context context, List<User> list){
-        this.context=context;
-        this.list=list;
+    public UsersAdapter(Context context, List<User> list) {
+        this.context = context;
+        this.list = list;
     }
 
     public void setUpOnUserListener(UsersAdapter.UsersListener mListener) {
@@ -40,16 +40,17 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        User user=list.get(position);
-        holder.username.setText("@"+user.getUsername());
+        User user = list.get(position);
+        holder.username.setText("@" + user.getUsername());
         holder.mail.setText(user.getEmail());
         holder.displayname.setText(user.getDisplayName());
-        if(user.getProfileUri()!=null) Glide.with(context).load(user.getProfileUri()).into(holder.circularImageView);
+        if (user.getProfileUri() != null)
+            Glide.with(context).load(user.getProfileUri()).into(holder.circularImageView);
         holder.options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mListener != null)
-                    mListener.optionsClicked(user,position);
+                    mListener.optionsClicked(user, position);
             }
         });
     }
@@ -60,22 +61,22 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder> 
     }
 
     public interface UsersListener {
-        void optionsClicked(User user,int position);
+        void optionsClicked(User user, int position);
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {
-        TextView username,mail,displayname;
+        TextView username, mail, displayname;
         ImageView options;
         CircularImageView circularImageView;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
 
-            username=itemView.findViewById(R.id.username3);
-            mail=itemView.findViewById(R.id.email);
-            displayname=itemView.findViewById(R.id.display_name2);
-            options=itemView.findViewById(R.id.more_hori);
-            circularImageView=itemView.findViewById(R.id.circular_image);
+            username = itemView.findViewById(R.id.username3);
+            mail = itemView.findViewById(R.id.email);
+            displayname = itemView.findViewById(R.id.display_name2);
+            options = itemView.findViewById(R.id.more_hori);
+            circularImageView = itemView.findViewById(R.id.circular_image);
         }
     }
 }

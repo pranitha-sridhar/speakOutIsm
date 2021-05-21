@@ -87,21 +87,20 @@ public class Complaints implements Serializable {
         this.listOfDownvoters = listOfDownvoters;
     }
 
-    public void setTimeStampmap(Map timeStampmap) {
-        this.timeStampmap = timeStampmap;
-    }
-
-    public void setTimeStampStr(String timeStampStr) {
-        this.timeStampStr = timeStampStr;
-    }
-
-
     public Map getTimeStampmap() {
         return timeStampmap;
     }
 
+    public void setTimeStampmap(Map timeStampmap) {
+        this.timeStampmap = timeStampmap;
+    }
+
     public String getTimeStampStr() {
         return timeStampStr;
+    }
+
+    public void setTimeStampStr(String timeStampStr) {
+        this.timeStampStr = timeStampStr;
     }
 
     public String getComplaintId() {
@@ -144,67 +143,67 @@ public class Complaints implements Serializable {
         this.anonymous = anonymous;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setSubcategory(String subcategory) {
-        this.subcategory = subcategory;
-    }
-
     public String getVisibility() {
         return visibility;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public String getSubcategory() {
-        return subcategory;
     }
 
     public void setVisibility(String visibility) {
         this.visibility = visibility;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
+    }
+
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

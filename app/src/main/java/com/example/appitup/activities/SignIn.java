@@ -66,7 +66,7 @@ public class SignIn extends AppCompatActivity {
     AlertDialog alertDialogProgress;
 
     Unbinder unbinder;
-    int userType=1000;
+    int userType = 1000;
     boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
@@ -214,22 +214,21 @@ public class SignIn extends AppCompatActivity {
         });
     }
 
-    public void check_student(String username,String passwords){
+    public void check_student(String username, String passwords) {
         Query query = FirebaseDatabase.getInstance().getReference("StudentUsers").orderByChild("username").equalTo(username);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.i("TAG", "onDataChange: check_student");
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         User user = getUserModelFromDS(ds);
                         user.setUserType(Helper.USER_STUDENT);
                         signIn(user, passwords);
                         break;
                     }
-                }
-                else{
-                    check_admin(username,passwords);
+                } else {
+                    check_admin(username, passwords);
                 }
             }
 
@@ -257,13 +256,12 @@ public class SignIn extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         User user = getUserModelFromDS(ds);
-                        userType=2000;
+                        userType = 2000;
                         user.setUserType(Helper.USER_ADMINISTRATOR);
                         signIn(user, passwords);
                         break;
                     }
-                }
-                else{
+                } else {
                     setResultsUI("User not Registered\nPlease Create account to signIn");
                 }
             }
@@ -294,7 +292,7 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    if ((Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified() && userType==Helper.USER_STUDENT)||(userType==Helper.USER_ADMINISTRATOR)) {
+                    if ((Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified() && userType == Helper.USER_STUDENT) || (userType == Helper.USER_ADMINISTRATOR)) {
                         if (!user.isBlocked()) {
                             alertDialogProgress.dismiss();
                             Prefs.setUserData(SignIn.this, user);

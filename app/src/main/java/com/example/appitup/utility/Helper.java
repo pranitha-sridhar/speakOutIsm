@@ -47,6 +47,7 @@ public class Helper {
     public static final int DOWNVOTED = -1;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
+    private static final String LEGACY_SERVER_KEY = "AAAAxCUTpvA:APA91bHbHFwvexObt6OZghNuqZix9foVCp0fBxA2qon8K5rn7gxZndeligB-9qHuOWDXpVO-Wu7bgoS-S9U8BbZf7uE8npyiHkPnWphOTjwkzqau4vbzUhom-xQGcHOUXEhAuNsd9dss";
     public static String PENDING = "PENDING";
     public static String IN_PROGRESS = "IN-PROGRESS";
     public static String RESOLVED = "RESOLVED";
@@ -90,8 +91,6 @@ public class Helper {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-
-    private static final String LEGACY_SERVER_KEY = "AAAAxCUTpvA:APA91bHbHFwvexObt6OZghNuqZix9foVCp0fBxA2qon8K5rn7gxZndeligB-9qHuOWDXpVO-Wu7bgoS-S9U8BbZf7uE8npyiHkPnWphOTjwkzqau4vbzUhom-xQGcHOUXEhAuNsd9dss";
 
     public static void sendNotificationToUser(final String username, final Notification notification) {
         addNotificationToDb(username, notification);
@@ -152,7 +151,7 @@ public class Helper {
     private static void addNotificationToDb(String username, Notification notification) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(username);
         String notificationId = reference.push().getKey();
-        Map map=new HashMap();
+        Map map = new HashMap();
         map.put("timeStamp", ServerValue.TIMESTAMP);
         notification.setTimeStampMap(map);
 

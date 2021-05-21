@@ -52,8 +52,8 @@ public class SignUpActivity extends AppCompatActivity {
     TextView buttonSignUp;
     @BindView(R.id.textInputPassword)
     TextInputLayout textInputPassword;
-  //  @BindView(R.id.rGroupUserType)
-  //  RadioGroup rGroupUserType;
+    //  @BindView(R.id.rGroupUserType)
+    //  RadioGroup rGroupUserType;
     TextView term_conditions;
     TextView progressDialogueTitle;
     PullInLoader progressDialogueLoader;
@@ -62,8 +62,6 @@ public class SignUpActivity extends AppCompatActivity {
     Unbinder unbinder;
     int userType = 1; // 1->student : 2->administrator
     AlertDialog alertDialogProgress;
-    private FirebaseAuth mAuth;
-
     boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
@@ -81,6 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
             isConnected = false;
         }
     };
+    private FirebaseAuth mAuth;
 
     private void showBackOnlineUI() {
         Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
@@ -207,7 +206,7 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 } else textInputPassword.setError(null);
 
-                if(!email.endsWith(".iitism.ac.in")){
+                if (!email.endsWith(".iitism.ac.in")) {
                     textInputEmail.setError("Only ISM mail ids are allowed");
                     textInputEmail.requestFocus();
                     return;

@@ -46,7 +46,6 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
     boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
-    String string=null;
     private final ConnectivityManager.NetworkCallback connectivityCallback
             = new ConnectivityManager.NetworkCallback() {
         @Override
@@ -61,6 +60,7 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
             isConnected = false;
         }
     };
+    String string = null;
 
     private void showBackOnlineUI() {
         Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
@@ -157,27 +157,29 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
         adapter.setUpOnNotificationListener(this);
     }
 
-    public void loadData(){
+    public void loadData() {
         list.clear();
-        DatabaseReference query= FirebaseDatabase.getInstance().getReference("Notifications").child(Prefs.getUser(getApplicationContext()).getUsername());
+        DatabaseReference query = FirebaseDatabase.getInstance().getReference("Notifications").child(Prefs.getUser(getApplicationContext()).getUsername());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds: snapshot.getChildren()){
-                    String key="blah";
-                    if(ds.getKey()!=null)key=ds.getKey();
-                    String title=ds.child("title").getValue().toString();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String key = "blah";
+                    if (ds.getKey() != null) key = ds.getKey();
+                    String title = ds.child("title").getValue().toString();
                     //if(key!=null)string+=" "+key ;
-                    String message=ds.child("message").getValue().toString();
-                    String complaint_id=null;
-                    if(ds.child("complaint_id").exists()){complaint_id=ds.child("complaint_id").getValue().toString();}
+                    String message = ds.child("message").getValue().toString();
+                    String complaint_id = null;
+                    if (ds.child("complaint_id").exists()) {
+                        complaint_id = ds.child("complaint_id").getValue().toString();
+                    }
                     long timeStamp = 0;
                     Map<String, Long> map = new HashMap();
                     if (ds.child("timeStampMap").child("timeStamp").exists()) {
                         timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
                         map.put("timeStamp", timeStamp);
                     }
-                    list.add(new Notification(title,message,complaint_id,map));
+                    list.add(new Notification(title, message, complaint_id, map));
                 }
                 //Helper.toast(getApplicationContext(),string);
                 adapter.notifyDataSetChanged();
@@ -192,9 +194,9 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
 
     @Override
     public void chipClicked(Notification notification) {
-        String complaintId=notification.getComplaint_id();
-        Intent intent=new Intent(NotificationsActivity.this,ComplaintActivity.class);
-        intent.putExtra("complaintId",complaintId);
+        String complaintId = notification.getComplaint_id();
+        Intent intent = new Intent(NotificationsActivity.this, ComplaintActivity.class);
+        intent.putExtra("complaintId", complaintId);
         startActivity(intent);
 
     }

@@ -52,9 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationDrawer;
     Toolbar toolbar;
-
-    private AppBarConfiguration mAppBarConfiguration;
-
     boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
@@ -72,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             isConnected = false;
         }
     };
+    private AppBarConfiguration mAppBarConfiguration;
 
     private void showBackOnlineUI() {
         Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
@@ -174,11 +172,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    public void hideMenu(){
-        navigationDrawer=findViewById(R.id.nav_view);
-        Menu nav_menu=navigationDrawer.getMenu();
-        if(Prefs.getUser(MainActivity.this).getUserType()==Helper.USER_STUDENT)nav_menu.findItem(R.id.nav_all_user).setVisible(false);
-        if(Prefs.getUser(MainActivity.this).getUserType()==Helper.USER_ADMINISTRATOR)nav_menu.findItem(R.id.nav_your_complaints).setVisible(false);
+    public void hideMenu() {
+        navigationDrawer = findViewById(R.id.nav_view);
+        Menu nav_menu = navigationDrawer.getMenu();
+        if (Prefs.getUser(MainActivity.this).getUserType() == Helper.USER_STUDENT)
+            nav_menu.findItem(R.id.nav_all_user).setVisible(false);
+        if (Prefs.getUser(MainActivity.this).getUserType() == Helper.USER_ADMINISTRATOR)
+            nav_menu.findItem(R.id.nav_your_complaints).setVisible(false);
     }
 
     private void setToolbarUI(int i) {

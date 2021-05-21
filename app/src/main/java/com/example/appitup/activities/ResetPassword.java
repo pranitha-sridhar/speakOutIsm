@@ -11,8 +11,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -133,14 +131,14 @@ public class ResetPassword extends AppCompatActivity {
         parentLayout = findViewById(android.R.id.content);
         unbinder = ButterKnife.bind(this);
 
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         //Toast.makeText(this, ""+mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
 
 
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Toast.makeText(ResetPassword.this, "button clicked", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(ResetPassword.this, "button clicked", Toast.LENGTH_SHORT).show();
                 String emailid = mail.getEditText().getText().toString();
                 if (emailid.isEmpty()) {
                     mail.setError("Field required");
@@ -155,7 +153,7 @@ public class ResetPassword extends AppCompatActivity {
                             alertDialogProgress.dismiss();
                             finish();
                             //Toast.makeText(getApplicationContext(), "Password link is sent to your mail id. Please check", Toast.LENGTH_SHORT).show();
-                        } else{
+                        } else {
                             //Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
@@ -165,6 +163,7 @@ public class ResetPassword extends AppCompatActivity {
         });
 
     }
+
     private void showProgressDialogue() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ResetPassword.this);
         LayoutInflater inflater = this.getLayoutInflater();

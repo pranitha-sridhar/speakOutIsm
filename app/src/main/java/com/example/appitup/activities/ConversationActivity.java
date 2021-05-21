@@ -90,11 +90,6 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     ImageView send;
     @BindView(R.id.editTextMessage)
     EditText editTextMessage;
-    @BindView(R.id.progressLoader)
-    TashieLoader progressLoader;
-    Unbinder unbinder;
-    Complaints complaint;
-    String status,new_status;
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -113,11 +108,16 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
 
         }
     };
+    @BindView(R.id.progressLoader)
+    TashieLoader progressLoader;
+    Unbinder unbinder;
+    Complaints complaint;
+    String status, new_status;
     ReplyAdapter adapter;
     TashieLoader pdChangeStatusLoader, pdDeleteComplaintLoader;
     ArrayList<Reply> list = new ArrayList<>();
     AlertDialog alertDialogChangeStatus, alertDialogDeleteBlock;
-   // RadioGroup pdChangeStatusRadioGroup;
+    // RadioGroup pdChangeStatusRadioGroup;
     TextInputLayout textInputLayoutPassword;
     MaterialButton pdChangeStatusSubmitButton;
     MaterialButton pdDialogDeleteBlockSubmitButton;
@@ -213,21 +213,23 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         unbinder = ButterKnife.bind(this);
         complaint = (Complaints) getIntent().getSerializableExtra("complaint");
         textViewComplaintTitle.setText(complaint.getSubject());
-        status=complaint.getStatus();
+        status = complaint.getStatus();
 
         imageViewArrowBack.setOnClickListener(this);
         imageViewBlockUser.setOnClickListener(this);
         imageViewDeleteConvo.setOnClickListener(this);
-        if(status.equals(Helper.PENDING)){imageViewStatus.setBackgroundResource(R.drawable.ic_pending);}
-        else if(status.equals(Helper.IN_PROGRESS)){
-            imageViewStatus.setBackgroundResource(R.drawable.ic_pause_circle);}
-        else {imageViewStatus.setBackgroundResource(R.drawable.ic_check_circle);
-            ImageViewCompat.setImageTintList(imageViewStatus, ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(),R.color.resolved_color)));
+        if (status.equals(Helper.PENDING)) {
+            imageViewStatus.setBackgroundResource(R.drawable.ic_pending);
+        } else if (status.equals(Helper.IN_PROGRESS)) {
+            imageViewStatus.setBackgroundResource(R.drawable.ic_pause_circle);
+        } else {
+            imageViewStatus.setBackgroundResource(R.drawable.ic_check_circle);
+            ImageViewCompat.setImageTintList(imageViewStatus, ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.resolved_color)));
         }
         imageViewStatus.setOnClickListener(this);
         send.setOnClickListener(this);
 
-        if(Prefs.getUser(ConversationActivity.this).getUserType()==Helper.USER_STUDENT){
+        if (Prefs.getUser(ConversationActivity.this).getUserType() == Helper.USER_STUDENT) {
             imageViewStatus.setVisibility(View.INVISIBLE);
             imageViewDeleteConvo.setVisibility(View.INVISIBLE);
             imageViewBlockUser.setVisibility(View.INVISIBLE);
@@ -327,14 +329,13 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                 String conversation_id = ds.child("conversation_id").getValue().toString();
                 String message = ds.child("message").getValue().toString();
                 String time = null;
-                long timeStamp= 0;
-                Map<String, Long> map=new HashMap();
-                if(ds.child("timeStampMap").child("timeStamp").exists())
-                {
-                    timeStamp= (long) ds.child("timeStampMap").child("timeStamp").getValue();
-                    map.put("timeStamp",timeStamp);
+                long timeStamp = 0;
+                Map<String, Long> map = new HashMap();
+                if (ds.child("timeStampMap").child("timeStamp").exists()) {
+                    timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                    map.put("timeStamp", timeStamp);
                 }
-                list.add(new Reply(replyId, sent_from, conversation_id, message,map));
+                list.add(new Reply(replyId, sent_from, conversation_id, message, map));
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(list.size());
                 progressLoader.setVisibility(View.GONE);
@@ -367,9 +368,9 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Reply").child(complaint.getComplaintId());
         String replyId = reference.push().getKey();
-        Map map=new HashMap();
+        Map map = new HashMap();
         map.put("timeStamp", ServerValue.TIMESTAMP);
-        Reply reply = new Reply(replyId, Prefs.getUser(this).getUsername(), complaint.getComplaintId(), message,map);
+        Reply reply = new Reply(replyId, Prefs.getUser(this).getUsername(), complaint.getComplaintId(), message, map);
 
         reference.child(replyId).setValue(reply).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -395,24 +396,22 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         builder.setView(v);
         pdChangeStatusSubmitButton = v.findViewById(R.id.submitButton);
         pdChangeStatusLoader = v.findViewById(R.id.progressLoader);
-       // pdChangeStatusRadioGroup = v.findViewById(R.id.radioGroup);
+        // pdChangeStatusRadioGroup = v.findViewById(R.id.radioGroup);
         pdChangeStatusTitle = v.findViewById(R.id.textViewTitle);
-        RelativeLayout relativeLayout=v.findViewById(R.id.relative);
-        ImageView icon1=v.findViewById(R.id.icon1);
-        ImageView icon2=v.findViewById(R.id.icon2);
-        TextView textView1=v.findViewById(R.id.text1);
-        TextView textView2=v.findViewById(R.id.text2);
+        RelativeLayout relativeLayout = v.findViewById(R.id.relative);
+        ImageView icon1 = v.findViewById(R.id.icon1);
+        ImageView icon2 = v.findViewById(R.id.icon2);
+        TextView textView1 = v.findViewById(R.id.text1);
+        TextView textView2 = v.findViewById(R.id.text2);
 
-        if(status.equals(Helper.PENDING)){
+        if (status.equals(Helper.PENDING)) {
             icon1.setBackgroundResource(R.drawable.ic_pause_circle);
             icon2.setBackgroundResource(R.drawable.ic_check_circle);
-        }
-        else if(status.equals(Helper.IN_PROGRESS)){
+        } else if (status.equals(Helper.IN_PROGRESS)) {
             icon1.setBackgroundResource(R.drawable.ic_pending);
             icon2.setBackgroundResource(R.drawable.ic_check_circle);
             textView1.setText(Helper.PENDING);
-        }
-        else{
+        } else {
             icon1.setBackgroundResource(R.drawable.ic_pending);
             icon2.setBackgroundResource(R.drawable.ic_pause_circle);
             textView1.setText(Helper.PENDING);
@@ -441,8 +440,8 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                 relativeLayout.setVisibility(View.GONE);
                 changeStatusState = 1;
                 alertDialogChangeStatus.setCancelable(false);
-                if(status.equals(Helper.PENDING))new_status=Helper.IN_PROGRESS;
-                else new_status=Helper.PENDING;
+                if (status.equals(Helper.PENDING)) new_status = Helper.IN_PROGRESS;
+                else new_status = Helper.PENDING;
                 changeStatus(new_status);
             }
         });
@@ -457,8 +456,8 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                 relativeLayout.setVisibility(View.GONE);
                 changeStatusState = 1;
                 alertDialogChangeStatus.setCancelable(false);
-                if(status.equals(Helper.RESOLVED))new_status=Helper.IN_PROGRESS;
-                else new_status=Helper.RESOLVED;
+                if (status.equals(Helper.RESOLVED)) new_status = Helper.IN_PROGRESS;
+                else new_status = Helper.RESOLVED;
                 changeStatus(new_status);
             }
         });

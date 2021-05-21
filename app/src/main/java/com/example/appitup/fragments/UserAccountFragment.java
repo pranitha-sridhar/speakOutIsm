@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +38,7 @@ import butterknife.Unbinder;
 import static android.app.Activity.RESULT_OK;
 
 public class UserAccountFragment extends Fragment {
+    final int IMAGE_REQUEST = 100;
     @BindView(R.id.username)
     TextView username;
     @BindView(R.id.display_name)
@@ -53,12 +53,10 @@ public class UserAccountFragment extends Fragment {
     ImageView check_icon;
     @BindView(R.id.profile_picture)
     CircularImageView circularImageView;
-
     Unbinder unbinder;
-    String display,pictureUri,usernameString,mailString,uid;
-    boolean name_changed=false,uri_changed=false;
+    String display, pictureUri, usernameString, mailString, uid;
+    boolean name_changed = false, uri_changed = false;
     FirebaseAuth mAuth;
-    final int IMAGE_REQUEST = 100;
     Uri filepath;
     DatabaseReference reference;
     int userType;
@@ -84,23 +82,22 @@ public class UserAccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_account, container, false);
-        unbinder = ButterKnife.bind(this,view);
-        mAuth=FirebaseAuth.getInstance();
+        unbinder = ButterKnife.bind(this, view);
+        mAuth = FirebaseAuth.getInstance();
 
-        usernameString=Prefs.getUser(getContext()).getUsername();
+        usernameString = Prefs.getUser(getContext()).getUsername();
         username.setText(usernameString);
-        display=Prefs.getUser(getContext()).getDisplayName();
+        display = Prefs.getUser(getContext()).getDisplayName();
         display_name.setText(display);
-        mailString=Prefs.getUser(getContext()).getEmail();
+        mailString = Prefs.getUser(getContext()).getEmail();
         mailid.setText(mailString);
-        uid=Prefs.getUser(getContext()).getUid();
-        pictureUri=Prefs.getUser(getContext()).getProfileUri();
-        userType=Prefs.getUser(getContext()).getUserType();
+        uid = Prefs.getUser(getContext()).getUid();
+        pictureUri = Prefs.getUser(getContext()).getProfileUri();
+        userType = Prefs.getUser(getContext()).getUserType();
 
-        if(pictureUri!=null && !pictureUri.isEmpty()){
+        if (pictureUri != null && !pictureUri.isEmpty()) {
             Glide.with(view).load(pictureUri).into(circularImageView);
-        }
-        else pictureUri="";
+        } else pictureUri = "";
 
         edit_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,13 +113,13 @@ public class UserAccountFragment extends Fragment {
         check_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                display=editText.getText().toString();
+                display = editText.getText().toString();
                 check_icon.setVisibility(View.GONE);
                 editText.setVisibility(View.GONE);
                 display_name.setVisibility(View.VISIBLE);
                 display_name.setText(display);
                 edit_icon.setVisibility(View.VISIBLE);
-                name_changed=true;
+                name_changed = true;
                 change_in_DB();
                 change_in_PREF();
             }
@@ -134,17 +131,17 @@ public class UserAccountFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"),IMAGE_REQUEST);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), IMAGE_REQUEST);
             }
         });
         return view;
 
     }
 
-    public void change_in_DB(){
-        if(Prefs.getUser(getContext()).getUserType()==Helper.USER_STUDENT)
+    public void change_in_DB() {
+        if (Prefs.getUser(getContext()).getUserType() == Helper.USER_STUDENT)
             reference = FirebaseDatabase.getInstance().getReference("StudentUsers").child(mAuth.getCurrentUser().getUid());
-        if(Prefs.getUser(getContext()).getUserType()==Helper.USER_ADMINISTRATOR)
+        if (Prefs.getUser(getContext()).getUserType() == Helper.USER_ADMINISTRATOR)
             reference = FirebaseDatabase.getInstance().getReference("AdminUsers").child(mAuth.getCurrentUser().getUid());
         reference.child("displayName").setValue(display).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -162,12 +159,12 @@ public class UserAccountFragment extends Fragment {
         });
     }
 
-   public void change_in_PREF(){
-        User user1=new User(usernameString,mailString,display, pictureUri,uid,userType);
-        Prefs.setUserData(getContext(),user1);
+    public void change_in_PREF() {
+        User user1 = new User(usernameString, mailString, display, pictureUri, uid, userType);
+        Prefs.setUserData(getContext(), user1);
     }
 
-    public void upload_picture_in_cloud(){
+    public void upload_picture_in_cloud() {
         srefer = FirebaseStorage.getInstance().getReference().child("images/" + mAuth.getCurrentUser().getUid());
         //progressBar.setVisibility(View.VISIBLE);
         srefer.delete();
@@ -180,22 +177,21 @@ public class UserAccountFragment extends Fragment {
                         @Override
                         public void onSuccess(Uri uri) {
                             pictureUri = uri.toString();
-                            uri_changed=true;
+                            uri_changed = true;
                             //Toast.makeText(getContext(), "Picture Uploaded", Toast.LENGTH_SHORT).show();
                             change_in_DB();
                             change_in_PREF();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Helper.toast(getContext(),"Error");
-                                }
-                            });
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Helper.toast(getContext(), "Error");
+                        }
+                    });
                     //progressBar.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     //progressBar.setVisibility(View.GONE);
-                    Helper.toast(getContext(),"Picture failed to be Uploaded");
+                    Helper.toast(getContext(), "Picture failed to be Uploaded");
                 }
 
             }
@@ -208,7 +204,7 @@ public class UserAccountFragment extends Fragment {
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             filepath = data.getData();
             Glide.with(this).load(filepath).into(circularImageView);
-            uri_changed=true;
+            uri_changed = true;
             upload_picture_in_cloud();
         }
     }

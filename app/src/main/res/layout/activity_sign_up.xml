@@ -142,11 +142,13 @@
                     android:drawablePadding="10dp"
                     android:drawableTint="@color/purple_500"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:paddingBottom="20dp"
                     android:textColor="@color/black"
-                    android:drawableLeft="@drawable/ic_account"/>
+                    android:drawableLeft="@drawable/ic_account" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -166,10 +168,12 @@
                     android:drawableTint="@color/purple_500"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
                     android:layout_marginHorizontal="10dp"
                     android:textColor="@color/black"
                     android:paddingBottom="20dp"
-                    android:drawableLeft="@drawable/ic_contact_mail"/>
+                    android:drawableLeft="@drawable/ic_contact_mail" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -191,8 +195,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:textColor="@color/black"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
                     android:paddingBottom="20dp"
-                    android:drawableLeft="@drawable/ic_screen"/>
+                    android:drawableLeft="@drawable/ic_screen" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -216,6 +222,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:paddingBottom="20dp"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
                     android:drawableStart="@drawable/ic_password"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>

@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -65,11 +63,11 @@ public class AboutUsFragment extends Fragment {
         mail1.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                String data=mail1.getText().toString();
-                ClipboardManager cm = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clipData=ClipData.newPlainText("text",data);
+                String data = mail1.getText().toString();
+                ClipboardManager cm = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("text", data);
                 cm.setPrimaryClip(clipData);
-                Helper.toast(getContext(),"Copied to clipboard");
+                Helper.toast(getContext(), "Copied to clipboard");
                 return false;
             }
         });
@@ -85,11 +83,11 @@ public class AboutUsFragment extends Fragment {
         phone1.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                String data=phone1.getText().toString();
-                ClipboardManager cm = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clipData=ClipData.newPlainText("text",data);
+                String data = phone1.getText().toString();
+                ClipboardManager cm = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("text", data);
                 cm.setPrimaryClip(clipData);
-                Helper.toast(getContext(),"Copied to clipboard");
+                Helper.toast(getContext(), "Copied to clipboard");
                 return false;
             }
         });
@@ -98,7 +96,7 @@ public class AboutUsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
-                phoneIntent.setData(Uri.parse("tel:"+phone1.getText().toString().trim()));
+                phoneIntent.setData(Uri.parse("tel:" + phone1.getText().toString().trim()));
                 startActivity(phoneIntent);
             }
         });

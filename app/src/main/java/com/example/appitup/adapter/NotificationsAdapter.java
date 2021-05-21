@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,13 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appitup.R;
 import com.example.appitup.models.Notification;
-import com.example.appitup.models.User;
 import com.google.android.material.chip.Chip;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +25,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     Context context;
     NotificationsAdapter.NotificationsListener mListener;
 
-    public NotificationsAdapter(Context context,List list){
-        this.context=context;
-        this.list=list;
+    public NotificationsAdapter(Context context, List list) {
+        this.context = context;
+        this.list = list;
     }
 
     public void setUpOnNotificationListener(NotificationsAdapter.NotificationsListener mListener) {
@@ -47,25 +43,24 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.viewHolder holder, int position) {
-        Notification notification=list.get(position);
+        Notification notification = list.get(position);
         holder.title.setText(notification.getTitle());
         holder.message.setText(notification.getMessage());
-        String time=null;
-        long timeStamp= 0;
-        Map map=notification.getTimeStampMap();
-        if(map!=null)
-        {
-            timeStamp= (long) map.get("timeStamp");
+        String time = null;
+        long timeStamp = 0;
+        Map map = notification.getTimeStampMap();
+        if (map != null) {
+            timeStamp = (long) map.get("timeStamp");
             DateFormat dateFormat = getDateTimeInstance();
             Date netDate = (new Date(timeStamp));
-            time= dateFormat.format(netDate);
+            time = dateFormat.format(netDate);
         }
         holder.date.setText(time);
-        if(notification.getComplaint_id()==null) holder.chip.setVisibility(View.GONE);
+        if (notification.getComplaint_id() == null) holder.chip.setVisibility(View.GONE);
         holder.chip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mListener!=null)
+                if (mListener != null)
                     mListener.chipClicked(notification);
             }
         });
@@ -81,16 +76,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {
-        TextView title,message,date;
+        TextView title, message, date;
         Chip chip;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
 
-            title=itemView.findViewById(R.id.title_noti);
-            date=itemView.findViewById(R.id.date);
-            message=itemView.findViewById(R.id.message_noti);
-            chip=itemView.findViewById(R.id.action_chip);
+            title = itemView.findViewById(R.id.title_noti);
+            date = itemView.findViewById(R.id.date);
+            message = itemView.findViewById(R.id.message_noti);
+            chip = itemView.findViewById(R.id.action_chip);
         }
     }
 }

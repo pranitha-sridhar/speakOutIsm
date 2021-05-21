@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appitup.R;
 import com.example.appitup.models.Complaints;
 import com.example.appitup.utility.Helper;
-import com.google.android.material.chip.Chip;
 
 import java.util.List;
 
@@ -37,7 +35,7 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.viewHo
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         Complaints complaints = list.get(position);
-        holder.textViewNumber.setText(getItemCount()-position + ".");
+        holder.textViewNumber.setText(getItemCount() - position + ".");
         holder.textViewCategory.setText(complaints.getCategory() + " .Trending");
         holder.textViewTitle.setText(complaints.getSubject());
         holder.textViewUpvotes.setText(complaints.getUpvotes() + " Upvotes");
@@ -56,7 +54,7 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.viewHo
         return (list != null) ? list.size() : 0;
     }
 
-    public static class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder {
         TextView textViewNumber, textViewCategory, textViewUpvotes, textViewTitle;
         CardView cardViewAppStatus;
 

@@ -17,8 +17,6 @@ import com.example.appitup.models.Comment;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.text.DateFormat.getDateTimeInstance;
 
@@ -47,8 +45,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.viewHo
 
         String time = null;
         long timeStamp = 0;
-        if (chatMessages.getTimeStampMap() != null)
-        {
+        if (chatMessages.getTimeStampMap() != null) {
             timeStamp = (long) chatMessages.getTimeStampMap().get("timeStamp");
             DateFormat dateFormat = getDateTimeInstance();
             Date netDate = (new Date(timeStamp));

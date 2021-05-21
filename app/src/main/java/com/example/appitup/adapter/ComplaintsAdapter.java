@@ -27,6 +27,33 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
     Context context;
     List<Complaints> list;
     List<Complaints> filteredList1;
+    private final Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Complaints> filteredList = new ArrayList<>();
+            if (charSequence == null || getItemCount() == 0) {
+                filteredList.addAll(filteredList1);
+            } else {
+                list.size();
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for (Complaints complaint : filteredList1) {
+                    if (complaint.getStatus().toLowerCase().contains(filterPattern))
+                        filteredList.add(complaint);
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            list.clear();
+            if (filterResults.values != null)
+                list.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
     ComplaintsListener mListener;
     int cardType = 1; // 1-> Home Type Complaint card : 2-> Trending Type Complaint card
 
@@ -63,34 +90,6 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
         }
         return null;*/
     }
-
-    private final Filter exampleFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            List<Complaints> filteredList = new ArrayList<>();
-            if (charSequence == null || getItemCount() == 0) {
-                filteredList.addAll(filteredList1);
-            } else {
-                list.size();
-                String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (Complaints complaint : filteredList1) {
-                    if (complaint.getStatus().toLowerCase().contains(filterPattern))
-                        filteredList.add(complaint);
-                }
-            }
-            FilterResults filterResults = new FilterResults();
-            filterResults.values = filteredList;
-            return filterResults;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            list.clear();
-            if (filterResults.values != null)
-                list.addAll((List) filterResults.values);
-            notifyDataSetChanged();
-        }
-    };
 
     @Override
     public int getItemCount() {

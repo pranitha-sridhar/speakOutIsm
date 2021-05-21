@@ -1,14 +1,5 @@
 package com.example.appitup.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -23,19 +14,22 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrawalsuneet.dotsloader.loaders.TashieLoader;
 import com.bumptech.glide.Glide;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.adapter.CommentsAdapter;
-import com.example.appitup.adapter.ComplaintsAdapter;
-import com.example.appitup.fragments.HomeFragment;
 import com.example.appitup.models.Comment;
 import com.example.appitup.models.Complaints;
 import com.example.appitup.models.Notification;
@@ -46,12 +40,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -69,50 +61,7 @@ import butterknife.Unbinder;
 import static java.text.DateFormat.getDateTimeInstance;
 
 public class ComplaintActivity extends AppCompatActivity {
-@BindView(R.id.back)
-    ImageView backArrow;
-@BindView(R.id.reply)
-        ImageView reply;
-@BindView(R.id.textViewUsername)
-    TextView textViewUsername;
-@BindView(R.id.textViewTitle)
-        TextView textViewTitle;
-@BindView(R.id.textViewBody)
-        TextView textViewBody;
-@BindView(R.id.textViewDateTime)
-        TextView textViewDateTime;
-@BindView(R.id.chipStatus)
-    Chip chipStatus;
-@BindView(R.id.chipCategory)
-        Chip chipCategory;
-@BindView(R.id.chipSubcategory)
-        Chip chipSubcategory;
-@BindView(R.id.upVote)
-        ImageView upVote;
-@BindView(R.id.downVote)
-        ImageView downVote;
-@BindView(R.id.comment)
-        ImageView comment;
-@BindView(R.id.upVoteNumber)
-        TextView upVoteNumber;
-@BindView(R.id.downVoteNumber)
-        TextView downVoteNumber;
-@BindView(R.id.commentNumber)
-        TextView commentNumber;
-@BindView(R.id.constraintLayout)
-    ConstraintLayout constraintLayout;
-
-    Unbinder unbinder;
-    Complaints complaint;
-    String complaintId;
-    int commenter=0;
-
     private static final String TAG = "CommentsDialogFragment";
-
-    ImageView send;
-    EditText editTextMessage;
-    TashieLoader progressLoader;
-    RecyclerView recyclerView;
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -123,7 +72,8 @@ public class ComplaintActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             String msg = editTextMessage.getText().toString().trim();
             if (msg.isEmpty()) send.setVisibility(View.GONE);
-            else if(Prefs.getUser(getApplicationContext()).getUserType()==Helper.USER_STUDENT)send.setVisibility(View.VISIBLE);
+            else if (Prefs.getUser(getApplicationContext()).getUserType() == Helper.USER_STUDENT)
+                send.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -131,7 +81,46 @@ public class ComplaintActivity extends AppCompatActivity {
 
         }
     };
-
+    @BindView(R.id.back)
+    ImageView backArrow;
+    @BindView(R.id.reply)
+    ImageView reply;
+    @BindView(R.id.textViewUsername)
+    TextView textViewUsername;
+    @BindView(R.id.textViewTitle)
+    TextView textViewTitle;
+    @BindView(R.id.textViewBody)
+    TextView textViewBody;
+    @BindView(R.id.textViewDateTime)
+    TextView textViewDateTime;
+    @BindView(R.id.chipStatus)
+    Chip chipStatus;
+    @BindView(R.id.chipCategory)
+    Chip chipCategory;
+    @BindView(R.id.chipSubcategory)
+    Chip chipSubcategory;
+    @BindView(R.id.upVote)
+    ImageView upVote;
+    @BindView(R.id.downVote)
+    ImageView downVote;
+    @BindView(R.id.comment)
+    ImageView comment;
+    @BindView(R.id.upVoteNumber)
+    TextView upVoteNumber;
+    @BindView(R.id.downVoteNumber)
+    TextView downVoteNumber;
+    @BindView(R.id.commentNumber)
+    TextView commentNumber;
+    Unbinder unbinder;
+    Complaints complaint;
+    String complaintId;
+    @BindView(R.id.constraintLayout)
+    ConstraintLayout constraintLayout;
+    ImageView send;
+    EditText editTextMessage;
+    int commenter = 0;
+    TashieLoader progressLoader;
+    RecyclerView recyclerView;
     ArrayList<Comment> list = new ArrayList<>();
     TextView no_data_found, textViewComplaintTitle;
     CommentsAdapter adapter;
@@ -139,7 +128,6 @@ public class ComplaintActivity extends AppCompatActivity {
     boolean isConnected = true;
     boolean monitoringConnectivity = false;
     View parentLayout;
-    String string=null;
     private final ConnectivityManager.NetworkCallback connectivityCallback
             = new ConnectivityManager.NetworkCallback() {
         @Override
@@ -154,6 +142,7 @@ public class ComplaintActivity extends AppCompatActivity {
             isConnected = false;
         }
     };
+    String string = null;
 
     private void showBackOnlineUI() {
         Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
@@ -225,7 +214,7 @@ public class ComplaintActivity extends AppCompatActivity {
         setContentView(R.layout.activity_complaint);
         unbinder = ButterKnife.bind(this);
 
-        complaintId=getIntent().getStringExtra("complaintId");
+        complaintId = getIntent().getStringExtra("complaintId");
 
         loadComplaint();
 
@@ -255,11 +244,10 @@ public class ComplaintActivity extends AppCompatActivity {
         });
 
 
-
     }
 
-    public void loadComplaint(){
-        DatabaseReference reference= FirebaseDatabase.getInstance().getReference("Complaints").child(complaintId);
+    public void loadComplaint() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Complaints").child(complaintId);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot ds) {
@@ -313,12 +301,13 @@ public class ComplaintActivity extends AppCompatActivity {
                 // Get Comments List
                 ArrayList<Comment> commenters = new ArrayList<>();
                 if (ds.hasChild("listOfCommenter"))
-                    for (DataSnapshot s : ds.child("listOfCommenter").getChildren())
-                    {   long timeStamp2 = 0;
+                    for (DataSnapshot s : ds.child("listOfCommenter").getChildren()) {
+                        long timeStamp2 = 0;
                         Map<String, Long> map2 = new HashMap();
                         timeStamp2 = (long) s.child("timeStampMap").child("timeStamp").getValue();
                         map2.put("timeStamp", timeStamp2);
-                        commenters.add(new Comment(s.child("username").getValue().toString(),s.child("commentId").getValue().toString() ,s.child("comment").getValue().toString(), map2));}
+                        commenters.add(new Comment(s.child("username").getValue().toString(), s.child("commentId").getValue().toString(), s.child("comment").getValue().toString(), map2));
+                    }
 
 
                 // Check for anonymous users
@@ -334,7 +323,7 @@ public class ComplaintActivity extends AppCompatActivity {
 
 
                 // add complaint to list
-                complaint=new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status,
+                complaint = new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status,
                         anonymous, upvotes, downvotes, commenters, upvoters, downvoters, map, time, voteStatus);
 
                 display_card();
@@ -348,9 +337,9 @@ public class ComplaintActivity extends AppCompatActivity {
         });
     }
 
-    public void display_card(){
-        textViewUsername.setText("@"+complaint.getUsername());
-        if(complaint.getAnonymous().equals("true"))textViewUsername.setText("@Anonymous");
+    public void display_card() {
+        textViewUsername.setText("@" + complaint.getUsername());
+        if (complaint.getAnonymous().equals("true")) textViewUsername.setText("@Anonymous");
         textViewDateTime.setText(complaint.getTimeStampStr());
         textViewTitle.setText(complaint.getSubject());
         textViewBody.setText(complaint.getBody());
@@ -426,7 +415,7 @@ public class ComplaintActivity extends AppCompatActivity {
         textViewUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // usernameClicked(complaint);
+                usernameClicked(complaint);
             }
         });
 
@@ -451,7 +440,7 @@ public class ComplaintActivity extends AppCompatActivity {
                     editTextMessage.setError(null);
                 }
 
-                Map map=new HashMap();
+                Map map = new HashMap();
                 map.put("timeStamp", ServerValue.TIMESTAMP);
 
                 Comment comment = new Comment(Prefs.getUser(getApplicationContext()).getUsername(), commentMsg, map);
@@ -529,45 +518,39 @@ public class ComplaintActivity extends AppCompatActivity {
         });
     }
 
-
     public void usernameClicked(Complaints complaint) {
-        if(complaint.getAnonymous().equals("true") && Prefs.getUser(getApplicationContext()).getUserType()==Helper.USER_STUDENT){
-            Helper.toast(getApplicationContext(),"Anonymous User");
+        if (complaint.getAnonymous().equals("true") && Prefs.getUser(ComplaintActivity.this).getUserType() == Helper.USER_STUDENT) {
+            Helper.toast(ComplaintActivity.this, "Anonymous User");
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(ComplaintActivity.this);
         LayoutInflater inflater = this.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_profile,null));
+        builder.setView(inflater.inflate(R.layout.dialog_profile, null));
         AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(null);
         alertDialog.show();
 
-        CircularImageView imageView=alertDialog.findViewById(R.id.profile_picture1);
+        CircularImageView imageView = alertDialog.findViewById(R.id.profile_picture1);
         TextView username=alertDialog.findViewById(R.id.username1);
         TextView displayName=alertDialog.findViewById(R.id.display_name1);
-        TextView mail=alertDialog.findViewById(R.id.mailid1);
-        Button close=alertDialog.findViewById(R.id.closeButton);
+        TextView mail = alertDialog.findViewById(R.id.mailid1);
+        TashieLoader progressLoader = alertDialog.findViewById(R.id.progressLoader);
 
         String uid=complaint.getUid();
         DatabaseReference reference=FirebaseDatabase.getInstance().getReference("StudentUsers").child(uid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                username.setText(snapshot.child("username").getValue().toString());
+                progressLoader.setVisibility(View.GONE);
+                username.setText("@" + snapshot.child("username").getValue().toString());
                 displayName.setText(snapshot.child("displayName").getValue().toString());
                 mail.setText(snapshot.child("email").getValue().toString());
-                Glide.with(getApplicationContext()).load(snapshot.child("profileUri").getValue().toString()).into(imageView);
+                Glide.with(ComplaintActivity.this).load(snapshot.child("profileUri").getValue().toString()).into(imageView);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
             }
         });
     }

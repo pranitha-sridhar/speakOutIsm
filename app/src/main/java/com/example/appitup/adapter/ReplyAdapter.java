@@ -53,8 +53,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.viewHolder> 
         }
         holder.textViewMessage.setText(chatMessages.getMessage());
         //TODO: Add Date Time in Reply
-        String time=null;
-        long timeStamp= 0;
+        String time = null;
+        long timeStamp = 0;
         if (chatMessages.getTimeStampMap() != null) {
             timeStamp = (long) chatMessages.getTimeStampMap().get("timeStamp");
             DateFormat dateFormat = getDateTimeInstance();

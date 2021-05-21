@@ -36,14 +36,14 @@ public class User implements Serializable {
         this.userType = userType;
     }
 
-    public User(String username, String email, String displayName, String profileUri, String uid, int userType,boolean isBlocked) {
+    public User(String username, String email, String displayName, String profileUri, String uid, int userType, boolean isBlocked) {
         this.username = username;
         this.email = email;
         this.displayName = displayName;
         this.profileUri = profileUri;
         this.uid = uid;
         this.userType = userType;
-        this.isBlocked=isBlocked;
+        this.isBlocked = isBlocked;
     }
 
     public String getFcm_token() {
@@ -52,26 +52,6 @@ public class User implements Serializable {
 
     public void setFcm_token(String fcm_token) {
         this.fcm_token = fcm_token;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public void setProfileUri(String profileUri) {
-        this.profileUri = profileUri;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 
     public boolean isBlocked() {
@@ -94,19 +74,39 @@ public class User implements Serializable {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getProfileUri() {
         return profileUri;
     }
 
+    public void setProfileUri(String profileUri) {
+        this.profileUri = profileUri;
+    }
+
     public String getUid() {
         return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

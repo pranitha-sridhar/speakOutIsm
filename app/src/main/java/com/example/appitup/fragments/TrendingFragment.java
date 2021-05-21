@@ -1,27 +1,21 @@
 package com.example.appitup.fragments;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
-import com.example.appitup.activities.ConversationActivity;
-import com.example.appitup.adapter.ComplaintsAdapter;
 import com.example.appitup.adapter.TrendingAdapter;
 import com.example.appitup.models.Comment;
 import com.example.appitup.models.Complaints;
@@ -39,8 +33,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,7 +40,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -83,9 +74,9 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
     ArrayList<Complaints> list = new ArrayList<>();
     TrendingAdapter adapter;
     FirebaseAuth mAuth;
-    String[] xData={"Registration","Academics","DSW","Vendors of ISM","MIS/Parent Portal","Hostel","Health Centre","Library","Personal"};
-    float res=0f;
-    int i=0;
+    String[] xData = {"Registration", "Academics", "DSW", "Vendors of ISM", "MIS/Parent Portal", "Hostel", "Health Centre", "Library", "Personal"};
+    float res = 0f;
+    int i = 0;
     List<PieEntry> entries1 = new ArrayList<>();
     PieDataSet dataSet;
 
@@ -114,7 +105,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         unbinder = ButterKnife.bind(this, view);
 
         adapter = new TrendingAdapter(getContext(), list);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -161,7 +152,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         return view;
     }
 
-    public void add(){
+    public void add() {
         {
             //Toast.makeText(getContext(), ""+entries1.size(), Toast.LENGTH_SHORT).show();
             dataSet = new PieDataSet(entries1, "Category Wise Complaints");
@@ -199,36 +190,39 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
             //chart.notifyDataSetChanged();
             // undo all highlights
             //chart.highlightValues(null);
-            chart.invalidate();}
+            chart.invalidate();
+        }
     }
 
-    public void loadYData(){
+    public void loadYData() {
         entries1.clear();
-        i=0;
-        res=0;
-                    Query ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Registration");
-            ref.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    res= Float.parseFloat(String.valueOf((snapshot.getChildrenCount())));
-                    if(res>0) entries1.add(new PieEntry(res,xData[0]));
-                    i++;if(i==9)add();
-                    //Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
-                }
+        i = 0;
+        res = 0;
+        Query ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Registration");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                res = Float.parseFloat(String.valueOf((snapshot.getChildrenCount())));
+                if (res > 0) entries1.add(new PieEntry(res, xData[0]));
+                i++;
+                if (i == 9) add();
+                //Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+            }
+        });
 
-        ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Academics");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Academics");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 res = Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
-                if(res>0) entries1.add(new PieEntry(res,xData[1]));
-                i++;if(i==9)add();
+                if (res > 0) entries1.add(new PieEntry(res, xData[1]));
+                i++;
+                if (i == 9) add();
                 //add();
                 //Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
             }
@@ -239,15 +233,16 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
             }
         });
 
-        ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("DSW");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("DSW");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                res=Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
-                if(res>0) entries1.add(new PieEntry(res,xData[2]));
-                i++;if(i==9)add();
+                res = Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
+                if (res > 0) entries1.add(new PieEntry(res, xData[2]));
+                i++;
+                if (i == 9) add();
 
-               // Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -255,13 +250,14 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
 
             }
         });
-            ref= FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Vendors of ISM");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Vendors of ISM");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                res= Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
-                if(res>0) entries1.add(new PieEntry(res,xData[3]));
-                i++;if(i==9)add();
+                res = Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
+                if (res > 0) entries1.add(new PieEntry(res, xData[3]));
+                i++;
+                if (i == 9) add();
                 //Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
             }
 
@@ -270,13 +266,14 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
 
             }
         });
-             ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("MIS/Parent Portal");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("MIS/Parent Portal");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                res=Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
-                if(res>0) entries1.add(new PieEntry(res,xData[4]));
-                i++;if(i==9)add();
+                res = Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
+                if (res > 0) entries1.add(new PieEntry(res, xData[4]));
+                i++;
+                if (i == 9) add();
                 //Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
             }
 
@@ -285,13 +282,14 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
 
             }
         });
-             ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Hostel");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Hostel");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                res=Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
-                if(res>0) entries1.add(new PieEntry(res,xData[5]));
-                i++;if(i==9)add();
+                res = Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
+                if (res > 0) entries1.add(new PieEntry(res, xData[5]));
+                i++;
+                if (i == 9) add();
                 //Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
             }
 
@@ -300,14 +298,15 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
 
             }
         });
-             ref= FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Health Centre");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Health Centre");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                res= Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
-               // Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
-                if(res>0) entries1.add(new PieEntry(res,xData[6]));
-                i++;if(i==9)add();
+                res = Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
+                // Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
+                if (res > 0) entries1.add(new PieEntry(res, xData[6]));
+                i++;
+                if (i == 9) add();
             }
 
             @Override
@@ -316,14 +315,15 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
             }
         });
 
-             ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Library");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Library");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                res=Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
+                res = Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
                 //Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
-                if(res>0) entries1.add(new PieEntry(res,xData[7]));
-                i++;if(i==9)add();
+                if (res > 0) entries1.add(new PieEntry(res, xData[7]));
+                i++;
+                if (i == 9) add();
             }
 
             @Override
@@ -331,15 +331,16 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
 
             }
         });
-            ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Personal");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo("Personal");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                res=Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
-                if(res>0) entries1.add(new PieEntry(res,xData[8]));
-                i++;if(i==9)add();
-               // Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
-               //chart_settings();
+                res = Float.parseFloat(String.valueOf(snapshot.getChildrenCount()));
+                if (res > 0) entries1.add(new PieEntry(res, xData[8]));
+                i++;
+                if (i == 9) add();
+                // Toast.makeText(getContext(), " "+res, Toast.LENGTH_SHORT).show();
+                //chart_settings();
             }
 
             @Override
@@ -351,15 +352,15 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
     }
 
 
-    public void loadTop10Data(){
-        Query query=FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("upvotes").limitToFirst(10);
+    public void loadTop10Data() {
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("upvotes").limitToFirst(10);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list.clear();
-                for (DataSnapshot ds:snapshot.getChildren()){
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     String status = ds.child("status").getValue().toString();
-                    if(status.equals("private"))continue;
+                    if (status.equals("private")) continue;
                     String complaintId = ds.child("complaintId").getValue().toString();
                     String username = ds.child("username").getValue().toString();
                     String uid = ds.child("uid").getValue().toString();
@@ -449,12 +450,12 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         });
     }
 
-    public void loadCardData(){
-        DatabaseReference reference=FirebaseDatabase.getInstance().getReference().child("Complaints");
+    public void loadCardData() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Complaints");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot!=null)total.setText(Long.toString(snapshot.getChildrenCount()));
+                if (snapshot != null) total.setText(Long.toString(snapshot.getChildrenCount()));
             }
 
             @Override
@@ -463,7 +464,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
             }
         });
 
-        Query ref= FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("status").equalTo("RESOLVED");
+        Query ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("status").equalTo("RESOLVED");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -476,7 +477,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
             }
         });
 
-        ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("status").equalTo("IN-PROGRESS");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("status").equalTo("IN-PROGRESS");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -488,7 +489,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
 
             }
         });
-        ref=  FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("status").equalTo("PENDING");
+        ref = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("status").equalTo("PENDING");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

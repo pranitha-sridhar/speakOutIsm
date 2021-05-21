@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.agrawalsuneet.dotsloader.loaders.TashieLoader;
 import com.bumptech.glide.Glide;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
@@ -223,10 +224,6 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                             map2.put("timeStamp", timeStamp2);
                             commenters.add(new Comment(s.child("username").getValue().toString(),s.child("commentId").getValue().toString() ,s.child("comment").getValue().toString(), map2));}
 
-
-                    // Check for anonymous users
-                    //if (anonymous.equals("true")) username = "Anonymous";
-
                     //check vote status of complaint
                     int voteStatus = Helper.NOT_VOTED;
                     String loggedInUsername = Prefs.getUser(getContext()).getUsername();
@@ -365,20 +362,22 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         LayoutInflater inflater = this.getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_profile,null));
         AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(null);
         alertDialog.show();
 
         CircularImageView imageView=alertDialog.findViewById(R.id.profile_picture1);
         TextView username=alertDialog.findViewById(R.id.username1);
         TextView displayName=alertDialog.findViewById(R.id.display_name1);
-        TextView mail=alertDialog.findViewById(R.id.mailid1);
-        Button close=alertDialog.findViewById(R.id.closeButton);
+        TextView mail = alertDialog.findViewById(R.id.mailid1);
+        TashieLoader progressLoader = alertDialog.findViewById(R.id.progressLoader);
 
         String uid=complaint.getUid();
         DatabaseReference reference=FirebaseDatabase.getInstance().getReference("StudentUsers").child(uid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                username.setText(snapshot.child("username").getValue().toString());
+                progressLoader.setVisibility(View.GONE);
+                username.setText("@" + snapshot.child("username").getValue().toString());
                 displayName.setText(snapshot.child("displayName").getValue().toString());
                 mail.setText(snapshot.child("email").getValue().toString());
                 Glide.with(getContext()).load(snapshot.child("profileUri").getValue().toString()).into(imageView);
@@ -387,13 +386,6 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
             }
         });
     }
@@ -613,9 +605,6 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                             timeStamp2 = (long) s.child("timeStampMap").child("timeStamp").getValue();
                             map2.put("timeStamp", timeStamp2);
                             commenters.add(new Comment(s.child("username").getValue().toString(),s.child("commentId").getValue().toString() ,s.child("comment").getValue().toString(), map2));}
-
-                    // Check for anonymous users
-                    //if (anonymous.equals("true")) username = "Anonymous";
 
                     //check vote status of complaint
                     int voteStatus = Helper.NOT_VOTED;

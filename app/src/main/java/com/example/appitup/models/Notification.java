@@ -29,7 +29,7 @@ public class Notification {
         this.title = title;
         this.message = message;
         this.complaint_id = complaint_id;
-        this.timeStampMap=timeStampMap;
+        this.timeStampMap = timeStampMap;
     }
 
     public Notification(String title, String message, String complaint_id) {
@@ -82,12 +82,12 @@ public class Notification {
         return title;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public void setMessage(String message) {

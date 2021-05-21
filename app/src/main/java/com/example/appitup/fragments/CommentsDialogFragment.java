@@ -53,8 +53,6 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
     ImageView send;
     EditText editTextMessage;
-    TashieLoader progressLoader;
-    RecyclerView recyclerView;
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -65,7 +63,8 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             String msg = editTextMessage.getText().toString().trim();
             if (msg.isEmpty()) send.setVisibility(View.GONE);
-            else if(Prefs.getUser(getContext()).getUserType()==Helper.USER_STUDENT)send.setVisibility(View.VISIBLE);
+            else if (Prefs.getUser(getContext()).getUserType() == Helper.USER_STUDENT)
+                send.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -73,10 +72,12 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
 
         }
     };
-
+    TashieLoader progressLoader;
+    RecyclerView recyclerView;
     Complaints complaint;
     ArrayList<Comment> list = new ArrayList<>();
     TextView no_data_found, textViewComplaintTitle;
+    CommentsAdapter adapter;
 
     @Override
     public void onStart() {
@@ -88,8 +89,6 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
             bottomSheet.getLayoutParams().height = 1300;
         }
     }
-
-    CommentsAdapter adapter;
 
     @Nullable
     @Override
@@ -131,7 +130,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
                     editTextMessage.setError(null);
                 }
 
-                Map map=new HashMap();
+                Map map = new HashMap();
                 map.put("timeStamp", ServerValue.TIMESTAMP);
 
                 Comment comment = new Comment(Prefs.getUser(getContext()).getUsername(), commentMsg, map);
@@ -192,14 +191,14 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
                 String time = null;
                 long timeStamp = 0;
                 Map<String, Long> map = new HashMap();
-                if(ds.child("timeStampMap").child("timeStamp").exists()) {
-                    timeStamp= (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                if (ds.child("timeStampMap").child("timeStamp").exists()) {
+                    timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
                     DateFormat dateFormat = getDateTimeInstance();
                     Date netDate = (new Date(timeStamp));
-                    time= dateFormat.format(netDate);
-                    map.put("timeStamp",timeStamp);
+                    time = dateFormat.format(netDate);
+                    map.put("timeStamp", timeStamp);
                 }
-                list.add(new Comment(username, commentId, comment,map));
+                list.add(new Comment(username, commentId, comment, map));
                 adapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(list.size());
                 progressLoader.setVisibility(View.GONE);

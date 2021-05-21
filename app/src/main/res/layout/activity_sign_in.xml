@@ -99,6 +99,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:drawableTint="@color/purple_500"
                 android:drawablePadding="10dp"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_marginHorizontal="10dp"
                 android:textColor="@color/black"
@@ -128,8 +130,10 @@
                 android:layout_width="match_parent"
                 android:layout_marginHorizontal="10dp"
                 android:textColor="@color/black"
+                android:imeOptions="actionDone"
                 android:drawableStart="@drawable/ic_password"
                 android:paddingBottom="20dp"
+                android:singleLine="true"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>

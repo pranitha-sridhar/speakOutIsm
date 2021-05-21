@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.appitup.Database.Prefs;
 import com.example.appitup.R;
 import com.example.appitup.activities.ConversationActivity;
@@ -40,7 +38,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -72,7 +69,7 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
     ArrayList<Complaints> list = new ArrayList<>();
     ComplaintsAdapter adapter;
     FirebaseAuth mAuth;
-    String category=null;
+    String category = null;
     int j;
 
     public StatusFragment() {
@@ -99,19 +96,19 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
         unbinder = ButterKnife.bind(this, view);
 
         adapter = new ComplaintsAdapter(getContext(), list);
-        mAuth=FirebaseAuth.getInstance();
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
+        mAuth = FirebaseAuth.getInstance();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        Prefs.setFilter_selectedChip(getContext(),-1);
+        Prefs.setFilter_selectedChip(getContext(), -1);
         loadData(null);
 
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
-                if(Prefs.getFilter_selectedChip(getContext())==-1)
+                if (Prefs.getFilter_selectedChip(getContext()) == -1)
                     loadData(null);
                 else {
                     int i = Prefs.getFilter_selectedChip(getContext());
@@ -158,13 +155,13 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
     private void loadData(String categoryFil) {
         //showProgressDialogue();
         // after getting data from firebase add this to list and cal ' adapter.notifyDataSetChanged(); '
-        Query query= FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list.clear();
-                int i=Prefs.getFilter_selectedChip(getContext());
-                for (DataSnapshot ds:snapshot.getChildren()){
+                int i = Prefs.getFilter_selectedChip(getContext());
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     String category = ds.child("category").getValue().toString();
                     if (categoryFil != null && !categoryFil.equals(category)) continue;
                     String complaintId = ds.child("complaintId").getValue().toString();
@@ -243,13 +240,13 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
                     Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(chipGroup.getCheckedChipId()==R.id.pending){
+                if (chipGroup.getCheckedChipId() == R.id.pending) {
                     adapter.getFilter().filter(PENDING);
                 }
-                if(chipGroup.getCheckedChipId()==R.id.inprogress){
+                if (chipGroup.getCheckedChipId() == R.id.inprogress) {
                     adapter.getFilter().filter(IN_PROGRESS);
                 }
-                if(chipGroup.getCheckedChipId()==R.id.resolved){
+                if (chipGroup.getCheckedChipId() == R.id.resolved) {
                     adapter.getFilter().filter(RESOLVED);
                 }
                 shimmerFrameLayout.stopShimmer();
@@ -353,42 +350,8 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
     }
 
     @Override
-    public void usernameClicked(Complaints complaint){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_profile,null));
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        CircularImageView imageView=alertDialog.findViewById(R.id.profile_picture1);
-        TextView username=alertDialog.findViewById(R.id.username1);
-        TextView displayName=alertDialog.findViewById(R.id.display_name1);
-        TextView mail=alertDialog.findViewById(R.id.mailid1);
-        Button close=alertDialog.findViewById(R.id.closeButton);
-
-        String uid=complaint.getUid();
-        DatabaseReference reference=FirebaseDatabase.getInstance().getReference("StudentUsers").child(uid);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                username.setText(snapshot.child("username").getValue().toString());
-                displayName.setText(snapshot.child("displayName").getValue().toString());
-                mail.setText(snapshot.child("email").getValue().toString());
-                if(snapshot.child("profileUri").exists())Glide.with(getContext()).load(snapshot.child("profileUri").getValue().toString()).into(imageView);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
+    public void usernameClicked(Complaints complaint) {
+        // Users own complaint no need to show details
     }
 
     public void filter_icon() {
@@ -413,25 +376,48 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
         else if (i == 2) chipGroup.check(R.id.dsw1);
         else if (i == 3) chipGroup.check(R.id.vendors1);
         else if (i == 4) chipGroup.check(R.id.mis1);
-        else if(i==5)chipGroup.check(R.id.hostel1);else if(i==6)chipGroup.check(R.id.health1);
-        else if(i==7)chipGroup.check(R.id.library1);else if(i==8)chipGroup.check(R.id.personal1);
+        else if (i == 5) chipGroup.check(R.id.hostel1);
+        else if (i == 6) chipGroup.check(R.id.health1);
+        else if (i == 7) chipGroup.check(R.id.library1);
+        else if (i == 8) chipGroup.check(R.id.personal1);
 
-        j=i;
+        j = i;
         filterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(chipGroup.getCheckedChipId()==R.id.registration1) { category = "Registration";j = 0; }
-                else if(chipGroup.getCheckedChipId()==R.id.academics1){category="Academics";j=1;}
-                else if(chipGroup.getCheckedChipId()==R.id.dsw1){category="DSW";j=2;}
-                else if(chipGroup.getCheckedChipId()==R.id.vendors1){category="Vendors of ISM";j=3;}
-                else if(chipGroup.getCheckedChipId()==R.id.mis1){category="MIS/Parents Portal";j=4;}
-                else if(chipGroup.getCheckedChipId()==R.id.hostel1){category="Hostel";j=5;}
-                else if(chipGroup.getCheckedChipId()==R.id.health1){category="Health Centre";j=6;}
-                else if(chipGroup.getCheckedChipId()==R.id.library1){category="Library";j=7;}
-                else if(chipGroup.getCheckedChipId()==R.id.personal1){category="Personal";j=8;}
-                else {category="null";j=-1;}
+                if (chipGroup.getCheckedChipId() == R.id.registration1) {
+                    category = "Registration";
+                    j = 0;
+                } else if (chipGroup.getCheckedChipId() == R.id.academics1) {
+                    category = "Academics";
+                    j = 1;
+                } else if (chipGroup.getCheckedChipId() == R.id.dsw1) {
+                    category = "DSW";
+                    j = 2;
+                } else if (chipGroup.getCheckedChipId() == R.id.vendors1) {
+                    category = "Vendors of ISM";
+                    j = 3;
+                } else if (chipGroup.getCheckedChipId() == R.id.mis1) {
+                    category = "MIS/Parents Portal";
+                    j = 4;
+                } else if (chipGroup.getCheckedChipId() == R.id.hostel1) {
+                    category = "Hostel";
+                    j = 5;
+                } else if (chipGroup.getCheckedChipId() == R.id.health1) {
+                    category = "Health Centre";
+                    j = 6;
+                } else if (chipGroup.getCheckedChipId() == R.id.library1) {
+                    category = "Library";
+                    j = 7;
+                } else if (chipGroup.getCheckedChipId() == R.id.personal1) {
+                    category = "Personal";
+                    j = 8;
+                } else {
+                    category = "null";
+                    j = -1;
+                }
                 loadData(category);
-                Prefs.setFilter_selectedChip(getContext(),j);
+                Prefs.setFilter_selectedChip(getContext(), j);
                 alertDialog.dismiss();
             }
         });

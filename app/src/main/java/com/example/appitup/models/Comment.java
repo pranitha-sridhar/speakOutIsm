@@ -25,41 +25,41 @@ public class Comment implements Serializable {
         this.comment = comment;
     }
 
-    public Comment(String username, String comment,Map timeStampMap) {
+    public Comment(String username, String comment, Map timeStampMap) {
         this.username = username;
         this.comment = comment;
-        this.timeStampMap=timeStampMap;
-    }
-
-    public Comment(String username, String commentId, String comment,Map timeStampMap,String timeStampStr) {
-        this.username = username;
-        this.commentId = commentId;
-        this.comment = comment;
-        this.timeStampMap=timeStampMap;
-        this.timeStampStr=timeStampStr;
-    }
-
-    public Comment(String username, String commentId, String comment,Map timeStampMap) {
-        this.username = username;
-        this.commentId = commentId;
-        this.comment = comment;
-        this.timeStampMap=timeStampMap;
-    }
-
-    public void setTimeStampMap(Map timeStampMap) {
         this.timeStampMap = timeStampMap;
     }
 
-    public void setTimeStampStr(String timeStampStr) {
+    public Comment(String username, String commentId, String comment, Map timeStampMap, String timeStampStr) {
+        this.username = username;
+        this.commentId = commentId;
+        this.comment = comment;
+        this.timeStampMap = timeStampMap;
         this.timeStampStr = timeStampStr;
+    }
+
+    public Comment(String username, String commentId, String comment, Map timeStampMap) {
+        this.username = username;
+        this.commentId = commentId;
+        this.comment = comment;
+        this.timeStampMap = timeStampMap;
     }
 
     public Map getTimeStampMap() {
         return timeStampMap;
     }
 
+    public void setTimeStampMap(Map timeStampMap) {
+        this.timeStampMap = timeStampMap;
+    }
+
     public String getTimeStampStr() {
         return timeStampStr;
+    }
+
+    public void setTimeStampStr(String timeStampStr) {
+        this.timeStampStr = timeStampStr;
     }
 
     public String getCommentId() {

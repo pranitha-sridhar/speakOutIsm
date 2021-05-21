@@ -1,113 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:elevation="20dp"
+    app:cardCornerRadius="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="wrap_content"
-            android:layout_margin="15dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/usericon"
-            android:layout_weight="1"
-            android:id="@+id/profile_picture1"/>
-        <LinearLayout
-            android:layout_marginTop="30dp"
-            android:weightSum="3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:fontFamily="@font/rubik_light"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:text="Username"/>
-            <TextView
-                android:fontFamily="@font/rubik_light"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="19JE0725"
-                android:id="@+id/username1"/>
-        </LinearLayout>
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:paddingTop="20dp"
-            android:weightSum="3"
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                android:fontFamily="@font/rubik_light"
-                android:textSize="15sp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:text="Display Name"/>
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                android:fontFamily="@font/rubik_light"
-                android:textSize="15sp"
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/profile_picture1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="15dp"
                 android:layout_weight="1"
-                android:text="XYZ"
-                android:id="@+id/display_name1"/>
+                android:scaleType="centerInside"
+                android:src="@drawable/usericon" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="15sp"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/username1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubik_light"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/display_name1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/rubik_light"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/mailid1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+
+                    android:fontFamily="@font/rubik_light"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:textColor="@color/black"
-            android:layout_marginTop="20dp"
-            android:weightSum="3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:textColor="@color/black"
-                android:fontFamily="@font/rubik_light"
-                android:textSize="15sp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:text="Email ID"/>
-            <TextView
-                android:textColor="@color/black"
-                android:fontFamily="@font/rubik_light"
-                android:textSize="15sp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:id="@+id/mailid1"
-                android:text="xyz@ee.iitism.ac.in"/>
-        </LinearLayout>
-
-        <Button
-            android:layout_margin="10dp"
-            android:layout_gravity="center_horizontal"
+        <com.agrawalsuneet.dotsloader.loaders.TashieLoader
+            android:id="@+id/progressLoader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Close"
-            android:id="@+id/closeButton"/>
+            android:elevation="20dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tashieloader_animDelay="150"
+            app:tashieloader_animDur="500"
+            app:tashieloader_dotsColor="@color/background"
+            app:tashieloader_dotsDist="5dp"
+            app:tashieloader_dotsRadius="8dp"
+            app:tashieloader_interpolator="@android:anim/accelerate_interpolator"
+            app:tashieloader_noOfDots="6" />
 
-    </LinearLayout>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
