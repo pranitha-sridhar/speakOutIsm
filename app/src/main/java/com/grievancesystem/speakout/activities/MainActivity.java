@@ -48,6 +48,7 @@ import com.grievancesystem.speakout.fragments.UserAccountFragment;
 import com.grievancesystem.speakout.models.User;
 import com.grievancesystem.speakout.utility.Helper;
 
+import java.util.HashMap;
 import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -285,7 +286,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             databaseReference = FirebaseDatabase.getInstance().getReference("StudentUsers");
         else databaseReference = FirebaseDatabase.getInstance().getReference("AdminUsers");
 
-        databaseReference.child(user.getUid()).child("isLoggedIn").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("fcm_token", null);
+        data.put("isLoggedIn", false);
+        databaseReference.child(user.getUid()).updateChildren(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 alertDialogProgress.dismiss();
