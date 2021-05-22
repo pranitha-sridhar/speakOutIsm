@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="Once deleted the following complaint cannot be restored.It will delete its whol data including it replies, upvotes, downvotes, comments, etc.After deleting this complaint a notification will be sent to the user regarding this delte of his complaint bu he will never be able to find it again from anywhere."
+            android:text="Once deleted the following complaint cannot be restored.Complete data will be deleted including replies, upvotes, downvotes, comments, etc. After deleting, a notification will be sent to the user regarding the delete of their complaint but they will not be able to find it again from anywhere."
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -360,75 +360,16 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
                 list.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String status = ds.child("status").getValue().toString();
-                    if (status.equals("private")) continue;
-                    String complaintId = ds.child("complaintId").getValue().toString();
-                    String username = ds.child("username").getValue().toString();
-                    String uid = ds.child("uid").getValue().toString();
-                    String subject = ds.child("subject").getValue().toString();
-                    String body = ds.child("body").getValue().toString();
-                    String category = ds.child("category").getValue().toString();
-                    String subcategory = ds.child("subcategory").getValue().toString();
                     String visibility = ds.child("visibility").getValue().toString();
-
-                    String anonymous = ds.child("anonymous").getValue().toString();
-
-                    // Get Upvotes and Downvotes
+                    if (visibility.equals("private")) continue;
+                    String subject = ds.child("subject").getValue().toString();
+                    String category = ds.child("category").getValue().toString();
                     long upvotes = 0;
-                    long downvotes = 0;
                     if (ds.hasChild("upvotes"))
                         upvotes = (long) ds.child("upvotes").getValue();
-                    if (ds.hasChild("downvotes"))
-                        downvotes = (long) ds.child("downvotes").getValue();
-
-                    // Get Timestamp
-                    String time = null;
-                    long timeStamp = 0;
-                    Map<String, Long> map = new HashMap();
-                    if (ds.child("timeStampmap").child("timeStamp").exists()) {
-                        timeStamp = (long) ds.child("timeStampmap").child("timeStamp").getValue();
-                        DateFormat dateFormat = getDateTimeInstance();
-                        Date netDate = (new Date(timeStamp));
-                        time = dateFormat.format(netDate);
-                        map.put("timeStamp", timeStamp);
-                    } else {
-                        if (ds.child("timeStampStr").exists()) {
-                            time = ds.child("timeStampStr").getValue().toString();
-                        }
-                    }
-
-                    // Get Upvoters List
-                    ArrayList<Vote> upvoters = new ArrayList<>();
-                    if (ds.hasChild("listOfUpvoters"))
-                        for (DataSnapshot s : ds.child("listOfUpvoters").getChildren())
-                            upvoters.add(new Vote(s.child("complaint_id").getValue().toString(), s.child("username").getValue().toString()));
-
-                    // Get Downvoters List
-                    ArrayList<Vote> downvoters = new ArrayList<>();
-                    if (ds.hasChild("listOfDownvoters"))
-                        for (DataSnapshot s : ds.child("listOfDownvoters").getChildren())
-                            downvoters.add(new Vote(s.child("complaint_id").getValue().toString(), s.child("username").getValue().toString()));
-
-                    // Get Comments List
-                    ArrayList<Comment> commenters = new ArrayList<>();
-                    if (ds.hasChild("listOfCommenter"))
-                        for (DataSnapshot s : ds.child("listOfCommenter").getChildren())
-                            commenters.add(new Comment(s.child("username").getValue().toString(), s.child("comment").getValue().toString()));
-
-                    // Check for anonymous users
-                    if (anonymous.equals("true")) username = "Anonymous";
-
-                    //check vote status of complaint
-                    int voteStatus = Helper.NOT_VOTED;
-                    String loggedInUsername = Prefs.getUser(getContext()).getUsername();
-                    if (ds.child("listOfUpvoters").hasChild(loggedInUsername))
-                        voteStatus = Helper.UPVOTED;
-                    if (ds.child("listOfDownvoters").hasChild(loggedInUsername))
-                        voteStatus = Helper.DOWNVOTED;
-
 
                     // add complaint to list
-                    list.add(new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status,
-                            anonymous, upvotes, downvotes, commenters, upvoters, downvoters, map, time, voteStatus));
+                    list.add(new Complaints(subject, category, status, upvotes));
 
                 }
 

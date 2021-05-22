@@ -74,7 +74,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:maxHeight="60dp"
-            android:text="Subject : Course is Missing"
             android:textColor="#ED3A3A"
             app:layout_constraintEnd_toEndOf="@+id/textView6"
             app:layout_constraintStart_toStartOf="@+id/toolbarTitle"

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrawalsuneet.dotsloader.loaders.TashieLoader;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -43,6 +44,8 @@ import butterknife.Unbinder;
 public class AllUsersFragment extends Fragment implements UsersAdapter.UsersListener {
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
+    @BindView(R.id.shimmer2)
+    ShimmerFrameLayout shimmerFrameLayout;
 
     Unbinder unbinder;
     ArrayList<User> list = new ArrayList<>();
@@ -183,7 +186,12 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                     int userType = Integer.parseInt(ds.child("userType").getValue().toString());
                     list.add(new User(username, mail, display, profileUri, uid, userType, blocked));
                 }
+                if (list.isEmpty()){
+                    Helper.toast(getContext(),"No Users available");
+                }
                 adapter.notifyDataSetChanged();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -291,12 +299,18 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            setResultsDelUI("User has been blocked Successfully.");
-                            Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
-                                    , null, null, null, true);
-                            Helper.sendNotificationToUser(user.getUsername(), notification);
-                            list.get(position).setBlocked(true);
-                            adapter.notifyItemChanged(position);
+                            reference.child("isLoggedIn").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    setResultsDelUI("User has been blocked Successfully.");
+                                    Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
+                                            , null, null, null, true);
+                                    Helper.sendNotificationToUser(user.getUsername(), notification);
+                                    list.get(position).setBlocked(true);
+                                    adapter.notifyItemChanged(position);
+                                }
+                            });
+
                         } else
                             setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
                     }

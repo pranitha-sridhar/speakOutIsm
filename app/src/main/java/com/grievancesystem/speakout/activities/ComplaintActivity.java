@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrawalsuneet.dotsloader.loaders.TashieLoader;
 import com.bumptech.glide.Glide;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
@@ -116,11 +117,19 @@ public class ComplaintActivity extends AppCompatActivity {
     ImageView share_in_card;
     @BindView(R.id.share_toolbar)
     ImageView share;
+    @BindView(R.id.shimmer2)
+    ShimmerFrameLayout shimmerFrameLayout;
+    @BindView(R.id.shimmer3)
+    ShimmerFrameLayout shimmerFrameLayout2;
+    @BindView(R.id.constraintLayout)
+    ConstraintLayout constraintLayout;
+
+
+
     Unbinder unbinder;
     Complaints complaint;
     String complaintId;
-    @BindView(R.id.constraintLayout)
-    ConstraintLayout constraintLayout;
+    View view_complaint,view_comment;
     ImageView send;
     EditText editTextMessage;
     int commenter = 0;
@@ -248,6 +257,8 @@ public class ComplaintActivity extends AppCompatActivity {
         send = findViewById(R.id.send);
         no_data_found = findViewById(R.id.no_data_found);
         textViewComplaintTitle = findViewById(R.id.textViewComplaintTitle);
+        view_complaint=findViewById(R.id.complaint);
+        view_comment=findViewById(R.id.comments);
 
         textViewComplaintTitle.setVisibility(View.GONE);
         share_in_card.setVisibility(View.GONE);
@@ -269,6 +280,22 @@ public class ComplaintActivity extends AppCompatActivity {
                 }
             }
         });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (complaint!=null) {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
+                    String shareMessage = "\nGo through this grievance and react\n\n";
+                    shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId=" + complaint.getComplaintId() + "\n\n";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    startActivity(Intent.createChooser(shareIntent, "Choose One"));
+                }
+            }
+        });
+
     }
 
     public void loadComplaint() {
@@ -334,20 +361,6 @@ public class ComplaintActivity extends AppCompatActivity {
                         commenters.add(new Comment(s.child("username").getValue().toString(), s.child("commentId").getValue().toString(), s.child("comment").getValue().toString(), map2));
                     }
 
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
-                String shareMessage= "\nGo through this grievance and react\n\n";
-                shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId="+complaint.getComplaintId()+"\n\n";
-                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-                startActivity(Intent.createChooser(shareIntent, "Choose One"));
-            }
-        });
-
-
                 // Check for anonymous users
                 //if (anonymous.equals("true")) username = "Anonymous";
 
@@ -408,6 +421,10 @@ public class ComplaintActivity extends AppCompatActivity {
             upVote.setImageResource(R.drawable.ic_upvote_outlined);
         }
 
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        view_complaint.setVisibility(View.VISIBLE);
+
         upVote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -460,6 +477,10 @@ public class ComplaintActivity extends AppCompatActivity {
         initRecyclerView();
         list.clear();
         list.addAll(complaint.getListOfCommenter());
+
+        shimmerFrameLayout2.stopShimmer();
+        shimmerFrameLayout2.setVisibility(View.GONE);
+        view_comment.setVisibility(View.VISIBLE);
 
         if (Prefs.getUser(getApplicationContext()).getUserType() == Helper.USER_ADMINISTRATOR) {
             editTextMessage.setText("Only students can participate in this comment");

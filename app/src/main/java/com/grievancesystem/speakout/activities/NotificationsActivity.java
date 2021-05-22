@@ -9,12 +9,14 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +40,8 @@ import butterknife.Unbinder;
 public class NotificationsActivity extends AppCompatActivity implements NotificationsAdapter.NotificationsListener {
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
+    @BindView(R.id.shimmer3)
+    ShimmerFrameLayout shimmerFrameLayout;
 
     Unbinder unbinder;
     ArrayList<Notification> list = new ArrayList<>();
@@ -181,8 +185,13 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
                     }
                     list.add(new Notification(title, message, complaint_id, map));
                 }
+                if(list.isEmpty()){
+                    Helper.toast(NotificationsActivity.this,"No notifications");
+                }
                 //Helper.toast(getApplicationContext(),string);
                 adapter.notifyDataSetChanged();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
 
             @Override

@@ -30,6 +30,35 @@
         android:id="@+id/line"
         android:background="@color/purple_500"/>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        android:orientation="vertical"
+        app:shimmer_duration="600"
+        android:id="@+id/shimmer3"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/layout_shimmer_notifications" />
+            <include layout="@layout/layout_shimmer_notifications" />
+            <include layout="@layout/layout_shimmer_notifications" />
+            <include layout="@layout/layout_shimmer_notifications" />
+            <include layout="@layout/layout_shimmer_notifications" />
+            <include layout="@layout/layout_shimmer_notifications" />
+            <include layout="@layout/layout_shimmer_notifications" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:paddingHorizontal="10dp"
         android:paddingTop="30dp"

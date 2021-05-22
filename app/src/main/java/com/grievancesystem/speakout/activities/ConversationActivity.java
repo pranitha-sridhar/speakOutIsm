@@ -581,10 +581,15 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            setResultsDelUI("User has been blocked Successfully.");
-                            Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
-                                    , null, null, null, true);
-                            Helper.sendNotificationToUser(complaint.getUsername(), notification);
+                            reference.child("isLoggedIn").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    setResultsDelUI("User has been blocked Successfully.");
+                                    Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
+                                            , null, null, null, true);
+                                    Helper.sendNotificationToUser(complaint.getUsername(), notification);
+                                }
+                            });
                         } else
                             setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
                     }

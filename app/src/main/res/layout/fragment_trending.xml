@@ -40,10 +40,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <include layout="@layout/placeholder" />
-                <include layout="@layout/placeholder" />
-                <include layout="@layout/placeholder" />
-                <include layout="@layout/placeholder" />
+                <include layout="@layout/layout_shimmer_trending" />
+                <include layout="@layout/layout_shimmer_trending" />
+                <include layout="@layout/layout_shimmer_trending" />
+                <include layout="@layout/layout_shimmer_trending" />
+                <include layout="@layout/layout_shimmer_trending" />
+                <include layout="@layout/layout_shimmer_trending" />
+                <include layout="@layout/layout_shimmer_trending" />
             </LinearLayout>
 
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -130,8 +133,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:id="@+id/resolved"
-                        android:layout_height="wrap_content"
-                        android:text="5"/>
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -158,8 +160,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/inprogress"
-                        android:text="6"/>
+                        android:id="@+id/inprogress" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -186,8 +187,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/pending"
-                        android:text="1"/>
+                        android:id="@+id/pending" />
                 </LinearLayout>
 
 

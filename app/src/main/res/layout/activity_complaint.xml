@@ -45,6 +45,7 @@
                 android:src="@drawable/ic_reply_all"
                 android:layout_marginEnd="10dp"
                 android:id="@+id/reply"
+                android:layout_marginHorizontal="10dp"
                 android:layout_toStartOf="@id/share_toolbar"
                 app:tint="@color/white" />
 
@@ -54,7 +55,7 @@
                 android:src="@drawable/ic_share"
                 android:id="@+id/share_toolbar"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
+                android:layout_marginHorizontal="10dp"
                 app:tint="@color/white" />
 
         </RelativeLayout>
@@ -62,8 +63,29 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        android:orientation="vertical"
+        app:shimmer_duration="600"
+        android:id="@+id/shimmer2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/layout_shimmer_complaints" />
+        </LinearLayout>
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     <include
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
@@ -72,7 +94,29 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
 
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:foregroundGravity="center"
+        android:orientation="vertical"
+        app:shimmer_duration="600"
+        android:id="@+id/shimmer3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shimmer2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/layout_shimmer_comments" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <include
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/complaint"

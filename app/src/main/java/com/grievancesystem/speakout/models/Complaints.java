@@ -38,6 +38,13 @@ public class Complaints implements Serializable {
         this.timeStampmap = timeStampmap;
     }
 
+    public Complaints(String subject,String category,String status,long upvotes){
+        this.subject=subject;
+        this.category=category;
+        this.status=status;
+        this.upvotes=upvotes;
+    }
+
     public Complaints(String complaintId, String username, String uid, String subject, String body,
                       String category, String subcategory, String visibility, String status, String anonymous,
                       long upvotes, long downvotes, ArrayList<Comment> listOfCommenter,
