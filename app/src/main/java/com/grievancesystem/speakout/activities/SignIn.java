@@ -223,7 +223,7 @@ public class SignIn extends AppCompatActivity {
                     progressDialogueTitle.setText("Please wait, we are logging you out from other devices...");
                     signOutFromDB();
                     Notification notification = new Notification("Account Security - New Sign In Detected",
-                            "Since single sign on is allowed you are logging out from this device.", false);
+                            "Since single sign on is allowed you are logging out from this device.", true);
                     Helper.sendNotificationToUser(currentUser.getUsername(), notification);
                 }
             }
@@ -343,22 +343,22 @@ public class SignIn extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if ((Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified() && userType == Helper.USER_STUDENT) || (userType == Helper.USER_ADMINISTRATOR)) {
                         if (!user.isBlocked()) {
-//                            if (!user.isLoggedIn()) {
-                            alertDialogProgress.dismiss();
-                            Prefs.setUserData(SignIn.this, user);
-                            Prefs.setUserLoggedIn(SignIn.this, true);
+                            if (!user.isLoggedIn()) {
+                                alertDialogProgress.dismiss();
+                                Prefs.setUserData(SignIn.this, user);
+                                Prefs.setUserLoggedIn(SignIn.this, true);
 
-                            Intent intent = new Intent(SignIn.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-                            Helper.toast(SignIn.this, "Signed In Success!!");
-                            getFCMToken();
-//                            } else {
-//                                isLoggedIn = true;
-//                                currentUser = user;
-//                                setResultsUI("You are already LoggedIn in other device. Only Single Sign On is allowed by this application.\n Please SignOut from other devices and try again. To sign-out from other devices click \"Sign Out\"", user);
-//                            }
+                                Intent intent = new Intent(SignIn.this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                                Helper.toast(SignIn.this, "Signed In Success!!");
+                                getFCMToken();
+                            } else {
+                                isLoggedIn = true;
+                                currentUser = user;
+                                setResultsUI("You are already LoggedIn in other device. Only Single Sign On is allowed by this application.\n Please SignOut from other devices and try again. To sign-out from other devices click \"Sign Out\"", user);
+                            }
                         } else {
                             // user is blocked by the admin
                             Helper.signOutUser(SignIn.this, false);

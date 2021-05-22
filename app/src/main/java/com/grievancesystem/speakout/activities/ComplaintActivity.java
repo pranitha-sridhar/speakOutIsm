@@ -8,6 +8,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -214,7 +215,26 @@ public class ComplaintActivity extends AppCompatActivity {
         setContentView(R.layout.activity_complaint);
         unbinder = ButterKnife.bind(this);
 
-        complaintId = getIntent().getStringExtra("complaintId");
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
+        Log.i(TAG, "onCreate: " + appLinkAction + "  " + appLinkData + " " + appLinkData.getQueryParameter("complaintId"));
+        if (appLinkData != null) {
+            if (!Prefs.isUserLoggedIn(this)) {
+                Helper.toast(this, "Please login to Check Complaints");
+                startActivity(new Intent(this, SignIn.class));
+                return;
+            }
+            if (appLinkData.getQueryParameter("complaintId") != null)
+                complaintId = appLinkData.getQueryParameter("complaintId");
+            else {
+                Helper.toast(this, "Requested URL Not Found");
+                return;
+            }
+        } else {
+            complaintId = getIntent().getStringExtra("complaintId");
+        }
 
         loadComplaint();
 
@@ -237,13 +257,13 @@ public class ComplaintActivity extends AppCompatActivity {
         reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ComplaintActivity.this, ConversationActivity.class);
-                intent.putExtra("complaint", complaint);
-                startActivity(intent);
+                if (complaint != null) {
+                    Intent intent = new Intent(ComplaintActivity.this, ConversationActivity.class);
+                    intent.putExtra("complaint", complaint);
+                    startActivity(intent);
+                }
             }
         });
-
-
     }
 
     public void loadComplaint() {

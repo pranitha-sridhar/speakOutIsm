@@ -14,7 +14,19 @@
         android:theme="@style/Theme.AppItUp">
         <activity
             android:name="com.grievancesystem.speakout.activities.ComplaintActivity"
-            android:theme="@style/Theme.AppItUp.NoActionBar" />
+            android:theme="@style/Theme.AppItUp.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="grievancesystem.speakout"
+                    android:pathPrefix="/complaint"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <!-- FCM Service to Collect Notification Messages -->
         <service android:name="com.grievancesystem.speakout.utility.NotificationMessagingService">
             <intent-filter>

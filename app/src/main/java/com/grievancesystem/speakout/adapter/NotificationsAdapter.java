@@ -57,6 +57,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         }
         holder.date.setText(time);
         if (notification.getComplaint_id() == null) holder.chip.setVisibility(View.GONE);
+        else holder.chip.setVisibility(View.VISIBLE);
+
         holder.chip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
