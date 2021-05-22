@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -209,6 +210,14 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
                     }
                 }
             });
+
+            holder.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mListener!=null)
+                        mListener.shareClicked(complaints);
+                }
+            });
         } else if (cardType == 2) {
             viewHolderTrendingCard holder = (viewHolderTrendingCard) main_holder;
             holder.textViewNumber.setText(1 + position + ".");
@@ -234,12 +243,15 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
         void onCardClicked(Complaints complaints);
 
         void usernameClicked(Complaints complaint);
+
+        void shareClicked(Complaints complaint);
     }
 
     public static class viewHolderComplaintCard extends RecyclerView.ViewHolder {
         TextView textUserName, textViewDateTime, textViewTitle, textViewBody, upVoteNumber, downVoteNumber, commentNumber;
         Chip chipCategory, chipSubcategory, chipStatus;
         ImageButton upVote, downVote, comment;
+        ImageView share;
 
         public viewHolderComplaintCard(@NonNull View itemView) {
             super(itemView);
@@ -256,12 +268,14 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
             upVote = itemView.findViewById(R.id.upVote);
             downVote = itemView.findViewById(R.id.downVote);
             comment = itemView.findViewById(R.id.comment);
+            share=itemView.findViewById(R.id.share);
         }
     }
 
     public static class viewHolderTrendingCard extends RecyclerView.ViewHolder {
         TextView textViewNumber, textViewCategory, textViewUpvotes, textViewTitle;
         CardView cardViewAppStatus;
+
 
         public viewHolderTrendingCard(@NonNull View itemView) {
             super(itemView);
@@ -270,6 +284,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
             textViewUpvotes = itemView.findViewById(R.id.textViewUpvotes);
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
             cardViewAppStatus = itemView.findViewById(R.id.cardViewAppStatus);
+
         }
     }
 }

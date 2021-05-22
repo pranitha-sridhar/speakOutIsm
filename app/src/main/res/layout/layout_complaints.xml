@@ -82,21 +82,37 @@
             app:layout_constraintStart_toStartOf="@+id/textViewUsername"
             app:layout_constraintTop_toBottomOf="@+id/textViewUsername" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipStatus"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="IN-PROGRESS"
-            android:layout_marginEnd="10dp"
-            android:textColor="@color/white"
-            app:checkedIconTint="@color/white"
-            app:chipBackgroundColor="@color/inprogress_color"
-            app:chipStrokeColor="@android:color/darker_gray"
-            app:chipStrokeWidth="1dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textViewDateTime"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textViewUsername"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintBottom_toBottomOf="@+id/textViewDateTime"
+            app:layout_constraintTop_toTopOf="@+id/textViewUsername">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IN-PROGRESS"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/white"
+                app:checkedIconTint="@color/white"
+                app:chipBackgroundColor="@color/inprogress_color"
+                app:chipStrokeColor="@android:color/darker_gray"
+                app:chipStrokeWidth="1dp"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_share"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:id="@+id/share"/>
+
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/linearLayout"

@@ -354,6 +354,17 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
         // Users own complaint no need to show details
     }
 
+    @Override
+    public void shareClicked(Complaints complaint) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
+        String shareMessage= "\nGo through this grievance and react\n\n";
+        shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId="+complaint.getComplaintId()+"\n\n";
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+        startActivity(Intent.createChooser(shareIntent, "Choose One"));
+    }
+
     public void filter_icon() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 

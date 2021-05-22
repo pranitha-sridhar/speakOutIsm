@@ -112,6 +112,10 @@ public class ComplaintActivity extends AppCompatActivity {
     TextView downVoteNumber;
     @BindView(R.id.commentNumber)
     TextView commentNumber;
+    @BindView(R.id.share)
+    ImageView share_in_card;
+    @BindView(R.id.share_toolbar)
+    ImageView share;
     Unbinder unbinder;
     Complaints complaint;
     String complaintId;
@@ -219,7 +223,7 @@ public class ComplaintActivity extends AppCompatActivity {
         Intent appLinkIntent = getIntent();
         String appLinkAction = appLinkIntent.getAction();
         Uri appLinkData = appLinkIntent.getData();
-        Log.i(TAG, "onCreate: " + appLinkAction + "  " + appLinkData + " " + appLinkData.getQueryParameter("complaintId"));
+       // Log.i(TAG, "onCreate: " + appLinkAction + "  " + appLinkData + " " + appLinkData.getQueryParameter("complaintId"));
         if (appLinkData != null) {
             if (!Prefs.isUserLoggedIn(this)) {
                 Helper.toast(this, "Please login to Check Complaints");
@@ -246,6 +250,7 @@ public class ComplaintActivity extends AppCompatActivity {
         textViewComplaintTitle = findViewById(R.id.textViewComplaintTitle);
 
         textViewComplaintTitle.setVisibility(View.GONE);
+        share_in_card.setVisibility(View.GONE);
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,6 +333,19 @@ public class ComplaintActivity extends AppCompatActivity {
                         map2.put("timeStamp", timeStamp2);
                         commenters.add(new Comment(s.child("username").getValue().toString(), s.child("commentId").getValue().toString(), s.child("comment").getValue().toString(), map2));
                     }
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
+                String shareMessage= "\nGo through this grievance and react\n\n";
+                shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId="+complaint.getComplaintId()+"\n\n";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "Choose One"));
+            }
+        });
 
 
                 // Check for anonymous users
