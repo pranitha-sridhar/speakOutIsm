@@ -392,7 +392,7 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
 
     @Override
     public void shareClicked(Complaints complaint) {
-        try {
+        if(complaint.getVisibility().equals("public")){
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
@@ -400,8 +400,8 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
             shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId="+complaint.getComplaintId()+"\n\n";
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
             startActivity(Intent.createChooser(shareIntent, "Choose One"));
-        } catch(Exception e) {
-            //e.toString();
+        } else {
+            Helper.toast(getContext(),"Cannot share a private message.");
         }
     }
 

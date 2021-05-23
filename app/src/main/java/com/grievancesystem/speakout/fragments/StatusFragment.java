@@ -356,13 +356,17 @@ public class StatusFragment extends Fragment implements ComplaintsAdapter.Compla
 
     @Override
     public void shareClicked(Complaints complaint) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
-        String shareMessage= "\nGo through this grievance and react\n\n";
-        shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId="+complaint.getComplaintId()+"\n\n";
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-        startActivity(Intent.createChooser(shareIntent, "Choose One"));
+        if (complaint.getVisibility().equals("public")) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
+            String shareMessage = "\nGo through this grievance and react\n\n";
+            shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId=" + complaint.getComplaintId() + "\n\n";
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+            startActivity(Intent.createChooser(shareIntent, "Choose One"));
+        }else{
+            Helper.toast(getContext(),"Cannot share a private message");
+        }
     }
 
     public void filter_icon() {
