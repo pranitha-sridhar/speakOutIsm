@@ -59,7 +59,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
     RecyclerView recyclerView;
     @BindView(R.id.shimmer2)
     ShimmerFrameLayout shimmerFrameLayout;
-    @BindView(R.id.total)
+    @BindView(R.id.total_cards)
     TextView total;
     @BindView(R.id.resolved)
     TextView resolved;
@@ -396,7 +396,8 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot != null) total.setText(Long.toString(snapshot.getChildrenCount()));
+                if (snapshot != null ) total.setText(Long.toString(snapshot.getChildrenCount()));
+                if(total==null)return;
             }
 
             @Override

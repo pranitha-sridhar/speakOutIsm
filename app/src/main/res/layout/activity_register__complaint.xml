@@ -275,7 +275,6 @@
             <CheckBox
                 android:fontFamily="@font/rubik_light"
                 android:id="@+id/box"
-                android:checked="true"
                 style="@style/MyCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
