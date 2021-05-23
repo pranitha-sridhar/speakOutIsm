@@ -49,7 +49,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
     RecyclerView recyclerView;
     @BindView(R.id.shimmer2)
     ShimmerFrameLayout shimmerFrameLayout;
-    @BindView(R.id.total)
+    @BindView(R.id.total_cards)
     TextView total;
     @BindView(R.id.resolved)
     TextView resolved;

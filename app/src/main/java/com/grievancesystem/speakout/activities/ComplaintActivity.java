@@ -157,6 +157,7 @@ public class ComplaintActivity extends AppCompatActivity {
             isConnected = false;
         }
     };
+    String string = null;
 
     private void showBackOnlineUI() {
         if (parentLayout != null)
@@ -282,13 +283,17 @@ public class ComplaintActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (complaint!=null) {
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
-                    String shareMessage = "\n*SpeakOut*\nGo through this grievance and react\n";
-                    shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId=" + complaint.getComplaintId() + "\n\n";
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-                    startActivity(Intent.createChooser(shareIntent, "Choose One"));
+                    if (complaint.getVisibility().equals("public")) {
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("text/plain");
+                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
+                        String shareMessage = "\n*SpeakOut*\nGo through this grievance and react\n";
+                        shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId=" + complaint.getComplaintId() + "\n\n";
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                        startActivity(Intent.createChooser(shareIntent, "Choose One"));
+                    }else{
+                        Helper.toast(ComplaintActivity.this,"Cannot share a private message.");
+                    }
                 }
             }
         });

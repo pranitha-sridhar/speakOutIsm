@@ -46,16 +46,15 @@
         <TextView
             android:id="@+id/toolbarTitle"
             style="@style/TextAppearance.AppCompat.Headline"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:fontFamily="@font/rubik_light"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Conversations"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/imageViewStatus"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewStatus"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewBlockUser"
             app:layout_constraintStart_toEndOf="@+id/imageViewArrowBack"
-            app:layout_constraintTop_toTopOf="@+id/imageViewStatus" />
+            app:layout_constraintTop_toTopOf="@+id/imageViewBlockUser" />
 
         <TextView
             android:id="@+id/textView6"

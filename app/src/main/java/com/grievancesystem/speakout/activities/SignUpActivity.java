@@ -285,16 +285,29 @@ public class SignUpActivity extends AppCompatActivity {
     }*/
 
     private void checkIsAlreadyExist(String userName, String email, String name, String password) {
-        Query query = FirebaseDatabase.getInstance().getReference("StudentUsers").orderByChild("username").equalTo(userName);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query1 = FirebaseDatabase.getInstance().getReference("StudentUsers").orderByChild("username").equalTo(userName);
+        Query query2 = FirebaseDatabase.getInstance().getReference("AdminUsers").orderByChild("username").equalTo(userName);
+
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists())
-                    setResultsUI("This username already exist.");
-                else
-                    signUp(userName, email, name, password);
-            }
+                    setResultsUI("This username already exists. Try again with some other username");
+                else{
+                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists())setResultsUI("This username already exists. Try again with some other username");
+                            else signUp(userName, email, name, password);
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            setResultsUI(error.getMessage());
+                        }
+                    });
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 setResultsUI(error.getMessage());

@@ -36,6 +36,7 @@ import com.grievancesystem.speakout.models.User;
 import com.grievancesystem.speakout.utility.Helper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -301,27 +302,26 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("StudentUsers").child(user.getUid());
 
-        reference.child("isBlocked").setValue(true)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            reference.child("isLoggedIn").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    setResultsDelUI("User has been blocked Successfully.");
-                                    Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
-                                            , null, null, null, true);
-                                    Helper.sendNotificationToUser(user.getUsername(), notification);
-                                    list.get(position).setBlocked(true);
-                                    adapter.notifyItemChanged(position);
-                                }
-                            });
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("isBlocked", true);
+        data.put("isLoggedIn", false);
 
-                        } else
-                            setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
-                    }
-                });
+        reference.updateChildren(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    setResultsDelUI("User has been blocked Successfully.");
+                    Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
+                            , null, null, null, true);
+                    Helper.sendNotificationToUser(user.getUsername(), notification);
+                    list.get(position).setBlocked(true);
+                    adapter.notifyItemChanged(position);
+                }
+                else{
+                    setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
+                }
+            }
+        });
     }
 
     private void setResultsDelUI(String message) {
