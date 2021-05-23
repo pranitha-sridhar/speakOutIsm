@@ -42,9 +42,9 @@ import com.grievancesystem.speakout.fragments.AboutUsFragment;
 import com.grievancesystem.speakout.fragments.AllUsersFragment;
 import com.grievancesystem.speakout.fragments.FAQorHelpFragment;
 import com.grievancesystem.speakout.fragments.HomeFragment;
-import com.grievancesystem.speakout.fragments.StatusFragment;
 import com.grievancesystem.speakout.fragments.TrendingFragment;
 import com.grievancesystem.speakout.fragments.UserAccountFragment;
+import com.grievancesystem.speakout.fragments.YourComplaintsFragment;
 import com.grievancesystem.speakout.models.User;
 import com.grievancesystem.speakout.utility.Helper;
 
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 closeDrawer();
                 break;
             case R.id.nav_your_complaints:
-                openFragment(new StatusFragment());
+                openFragment(new YourComplaintsFragment());
                 title.setText(getString(R.string.your_complaints));
                 setToolbarUI(2);
                 closeDrawer();

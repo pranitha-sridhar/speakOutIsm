@@ -68,7 +68,6 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
     @BindView(R.id.filter)
     ImageView filter_image;
 
-
     Unbinder unbinder;
     ArrayList<Complaints> list = new ArrayList<>();
     ComplaintsAdapter adapter;
@@ -93,56 +92,45 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, view);
+        mAuth = FirebaseAuth.getInstance();
 
         adapter = new ComplaintsAdapter(getContext(), list);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+        adapter.setUpOnComplaintListener(this);
 
-        Prefs.setFilter_selectedChip(getContext(),-1);
+        Prefs.setFilter_selectedChip(getContext(), -1);
         loadData();
-
 
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
-                if(Prefs.getFilter_selectedChip(getContext())==-1)
-                loadData();
-                else {
-                    int i = Prefs.getFilter_selectedChip(getContext());
-                    if (i == 0) category = "Registration";
-                    else if (i == 1) category = "Academics";
-                    else if (i == 2) category = "DSW";
-                    else if (i == 3) category = "Vendors Of ISM";
-                    else if (i == 4) category = "MIS/Parents Portal";
-                    else if (i == 5) category = "Hostel";
-                    else if (i == 6) category = "Health Centre";
-                    else if (i == 7) category = "Library";
-                    else if (i == 8) category = "Personal";
-                    firebase_query(category);
-                }
-                adapter.notifyDataSetChanged();
-                ((Chip) chipGroup.getChildAt(0)).setTextColor(Color.BLACK);
-                ((Chip) chipGroup.getChildAt(1)).setTextColor(Color.BLACK);
-                ((Chip) chipGroup.getChildAt(2)).setTextColor(Color.BLACK);
+                if (adapter != null && chipGroup != null) {
 
-                if (checkedId == R.id.pending)
-                    ((Chip) chipGroup.getChildAt(0)).setTextColor(Color.WHITE);
-                else if (checkedId == R.id.inprogress)
-                    ((Chip) chipGroup.getChildAt(1)).setTextColor(Color.WHITE);
-                else if (checkedId == R.id.resolved)
-                    ((Chip) chipGroup.getChildAt(2)).setTextColor(Color.WHITE);
+                    ((Chip) chipGroup.getChildAt(0)).setTextColor(Color.BLACK);
+                    ((Chip) chipGroup.getChildAt(1)).setTextColor(Color.BLACK);
+                    ((Chip) chipGroup.getChildAt(2)).setTextColor(Color.BLACK);
+
+                    if (chipGroup.getCheckedChipId() == R.id.pending) {
+                        adapter.getFilter().filter(PENDING);
+                        ((Chip) chipGroup.getChildAt(0)).setTextColor(Color.WHITE);
+                    } else if (chipGroup.getCheckedChipId() == R.id.inprogress) {
+                        adapter.getFilter().filter(IN_PROGRESS);
+                        ((Chip) chipGroup.getChildAt(1)).setTextColor(Color.WHITE);
+                    } else if (chipGroup.getCheckedChipId() == R.id.resolved) {
+                        adapter.getFilter().filter(RESOLVED);
+                        ((Chip) chipGroup.getChildAt(2)).setTextColor(Color.WHITE);
+                    }
+                }
             }
         });
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-        adapter.setUpOnComplaintListener(this);
 
         filter_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,28 +143,30 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
     }
 
     private void loadData() {
-        //showProgressDialogue();
-        if(Prefs.getUser(getContext()).getUserType()==Helper.USER_ADMINISTRATOR){
+        if (Prefs.getUser(getContext()).getUserType() == Helper.USER_ADMINISTRATOR) {
             loadAllDataAdmin();
             return;
         }
-        // after getting data from firebase add this to list and cal ' adapter.notifyDataSetChanged(); '
-        Query query= FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("visibility").equalTo("public");
+
+        list.clear();
+        adapter.getFilter().filter("");
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("visibility").equalTo("public");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (getContext() == null) return;
                 list.clear();
-                for (DataSnapshot ds:snapshot.getChildren()){
-                    String complaintId = ds.child("complaintId").getValue().toString();
-                    String username = ds.child("username").getValue().toString();
-                    String uid = ds.child("uid").getValue().toString();
-                    String subject = ds.child("subject").getValue().toString();
-                    String body = ds.child("body").getValue().toString();
-                    String category = ds.child("category").getValue().toString();
-                    String subcategory = ds.child("subcategory").getValue().toString();
-                    String visibility = ds.child("visibility").getValue().toString();
-                    String status = ds.child("status").getValue().toString();
-                    String anonymous = ds.child("anonymous").getValue().toString();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String complaintId = String.valueOf(ds.child("complaintId").getValue());
+                    String username = String.valueOf(ds.child("username").getValue());
+                    String uid = String.valueOf(ds.child("uid").getValue());
+                    String subject = String.valueOf(ds.child("subject").getValue());
+                    String body = String.valueOf(ds.child("body").getValue());
+                    String category = String.valueOf(ds.child("category").getValue());
+                    String subcategory = String.valueOf(ds.child("subcategory").getValue());
+                    String visibility = String.valueOf(ds.child("visibility").getValue());
+                    String status = String.valueOf(ds.child("status").getValue());
+                    String anonymous = String.valueOf(ds.child("anonymous").getValue());
 
                     // Get Upvotes and Downvotes
                     long upvotes = 0;
@@ -239,28 +229,34 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
 
                 }
 
-                if (list.isEmpty()) {
+                if (adapter != null && chipGroup != null && shimmerFrameLayout != null) {
+                    adapter.notifyDataSetChanged();
                     shimmerFrameLayout.stopShimmer();
                     shimmerFrameLayout.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
-                    return;
+
+                    if (list.isEmpty()) {
+                        Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.pending) {
+                        adapter.getFilter().filter(PENDING);
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.inprogress) {
+                        adapter.getFilter().filter(IN_PROGRESS);
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.resolved) {
+                        adapter.getFilter().filter(RESOLVED);
+                    }
                 }
-                if(chipGroup.getCheckedChipId()==R.id.pending){
-                    adapter.getFilter().filter(PENDING);
-                }
-                if(chipGroup.getCheckedChipId()==R.id.inprogress){
-                    adapter.getFilter().filter(IN_PROGRESS);
-                }
-                if(chipGroup.getCheckedChipId()==R.id.resolved){
-                    adapter.getFilter().filter(RESOLVED);
-                }
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                if (shimmerFrameLayout != null) {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    Helper.toast(getContext(), error.getMessage());
+                }
             }
         });
 
@@ -376,11 +372,13 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                progressLoader.setVisibility(View.GONE);
-                username.setText("@" + snapshot.child("username").getValue().toString());
-                displayName.setText(snapshot.child("displayName").getValue().toString());
-                mail.setText(snapshot.child("email").getValue().toString());
-                Glide.with(getContext()).load(snapshot.child("profileUri").getValue().toString()).into(imageView);
+                if (username != null && displayName != null && progressLoader != null && mail != null) {
+                    progressLoader.setVisibility(View.GONE);
+                    username.setText("@" + snapshot.child("username").getValue());
+                    displayName.setText(String.valueOf(snapshot.child("displayName").getValue()));
+                    mail.setText(String.valueOf(snapshot.child("email").getValue()));
+                    Glide.with(getContext()).load(String.valueOf(snapshot.child("profileUri").getValue())).into(imageView);
+                }
             }
 
             @Override
@@ -396,7 +394,7 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
-            String shareMessage= "\nGo through this grievance and react\n\n";
+            String shareMessage = "\n*SpeakOut*\nGo through this grievance and react\n";
             shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId="+complaint.getComplaintId()+"\n\n";
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
             startActivity(Intent.createChooser(shareIntent, "Choose One"));
@@ -415,63 +413,95 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
         alertDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         alertDialog.getWindow().setBackgroundDrawable(null);
         alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+        alertDialog.setCancelable(false);
         alertDialog.show();
 
         Button filterBtn = alertDialog.findViewById(R.id.sort);
         ChipGroup chipGroup = alertDialog.findViewById(R.id.chip_group3);
-        category = "Registration";
+        category = "no_filter";
 
         int i = Prefs.getFilter_selectedChip(getContext());
-        if (i == 0) chipGroup.check(R.id.registration1);
+        if (i == -1) chipGroup.check(R.id.no_filter);
+        else if (i == 0) chipGroup.check(R.id.registration1);
         else if (i == 1) chipGroup.check(R.id.academics1);
         else if (i == 2) chipGroup.check(R.id.dsw1);
         else if (i == 3) chipGroup.check(R.id.vendors1);
         else if (i == 4) chipGroup.check(R.id.mis1);
-        else if(i==5)chipGroup.check(R.id.hostel1);else if(i==6)chipGroup.check(R.id.health1);
-        else if(i==7)chipGroup.check(R.id.library1);else if(i==8)chipGroup.check(R.id.personal1);
+        else if (i == 5) chipGroup.check(R.id.hostel1);
+        else if (i == 6) chipGroup.check(R.id.health1);
+        else if (i == 7) chipGroup.check(R.id.library1);
+        else if (i == 8) chipGroup.check(R.id.personal1);
 
-        j=i;
+        j = i;
         filterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(chipGroup.getCheckedChipId()==R.id.registration1) { category = "Registration";j = 0; }
-                else if(chipGroup.getCheckedChipId()==R.id.academics1){category="Academics";j=1;}
-                else if(chipGroup.getCheckedChipId()==R.id.dsw1){category="DSW";j=2;}
-                else if(chipGroup.getCheckedChipId()==R.id.vendors1){category="Vendors of ISM";j=3;}
-                else if(chipGroup.getCheckedChipId()==R.id.mis1){category="MIS/Parents Portal";j=4;}
-                else if(chipGroup.getCheckedChipId()==R.id.hostel1){category="Hostel";j=5;}
-                else if(chipGroup.getCheckedChipId()==R.id.health1){category="Health Centre";j=6;}
-                else if(chipGroup.getCheckedChipId()==R.id.library1){category="Library";j=7;}
-                else if(chipGroup.getCheckedChipId()==R.id.personal1){category="Personal";j=8;}
-                else {category="null";j=-1;}
+                if (chipGroup.getCheckedChipId() == R.id.no_filter) {
+                    category = "no_filter";
+                    j = -1;
+                } else if (chipGroup.getCheckedChipId() == R.id.registration1) {
+                    category = "Registration";
+                    j = 0;
+                } else if (chipGroup.getCheckedChipId() == R.id.academics1) {
+                    category = "Academics";
+                    j = 1;
+                } else if (chipGroup.getCheckedChipId() == R.id.dsw1) {
+                    category = "DSW";
+                    j = 2;
+                } else if (chipGroup.getCheckedChipId() == R.id.vendors1) {
+                    category = "Vendors of ISM";
+                    j = 3;
+                } else if (chipGroup.getCheckedChipId() == R.id.mis1) {
+                    category = "MIS/Parents Portal";
+                    j = 4;
+                } else if (chipGroup.getCheckedChipId() == R.id.hostel1) {
+                    category = "Hostel";
+                    j = 5;
+                } else if (chipGroup.getCheckedChipId() == R.id.health1) {
+                    category = "Health Centre";
+                    j = 6;
+                } else if (chipGroup.getCheckedChipId() == R.id.library1) {
+                    category = "Library";
+                    j = 7;
+                } else if (chipGroup.getCheckedChipId() == R.id.personal1) {
+                    category = "Personal";
+                    j = 8;
+                }
                 firebase_query(category);
-                Prefs.setFilter_selectedChip(getContext(),j);
+                Prefs.setFilter_selectedChip(getContext(), j);
                 alertDialog.dismiss();
             }
         });
     }
 
-    public void firebase_query(String category){
-        shimmerFrameLayout.startShimmer();
-        if(category.equals("null"))loadData();
+    public void firebase_query(String category) {
         list.clear();
-        //adapter.notifyDataSetChanged();
-        Query query=FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo(category);
+        adapter.getFilter().filter("");
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
+        if (category.equals("no_filter")) {
+            loadData();
+            return;
+        }
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").orderByChild("category").equalTo(category);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds:snapshot.getChildren()){
-                    String status = ds.child("status").getValue().toString();
-                    if (Prefs.getUser(getContext()).getUserType()==Helper.USER_STUDENT && status.equals("private"))continue;
-                    String complaintId = ds.child("complaintId").getValue().toString();
-                    String username = ds.child("username").getValue().toString();
-                    String uid = ds.child("uid").getValue().toString();
-                    String subject = ds.child("subject").getValue().toString();
-                    String body = ds.child("body").getValue().toString();
-                    String category = ds.child("category").getValue().toString();
-                    String subcategory = ds.child("subcategory").getValue().toString();
-                    String visibility = ds.child("visibility").getValue().toString();
-                    String anonymous = ds.child("anonymous").getValue().toString();
+                if (getContext() == null) return;
+                list.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String status = String.valueOf(ds.child("status").getValue());
+                    if (Prefs.getUser(getContext()).getUserType() == Helper.USER_STUDENT && status.equals("private"))
+                        continue;
+                    String complaintId = String.valueOf(ds.child("complaintId").getValue());
+                    String username = String.valueOf(ds.child("username").getValue());
+                    String uid = String.valueOf(ds.child("uid").getValue());
+                    String subject = String.valueOf(ds.child("subject").getValue());
+                    String body = String.valueOf(ds.child("body").getValue());
+                    String category = String.valueOf(ds.child("category").getValue());
+                    String subcategory = String.valueOf(ds.child("subcategory").getValue());
+                    String visibility = String.valueOf(ds.child("visibility").getValue());
+                    String anonymous = String.valueOf(ds.child("anonymous").getValue());
 
                     // Get Upvotes and Downvotes
                     long upvotes = 0;
@@ -531,49 +561,57 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     list.add(new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status,
                             anonymous, upvotes, downvotes, commenters, upvoters, downvoters, map, time, voteStatus));
                 }
-                if (list.isEmpty()) {
-                    //alertDialogProgress.dismiss();
-                    Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
-                    adapter.notifyDataSetChanged();
-                    return;
+                if (adapter != null && chipGroup != null && shimmerFrameLayout != null) {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+
+                    if (list.isEmpty()) {
+                        Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.pending) {
+                        adapter.getFilter().filter(PENDING);
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.inprogress) {
+                        adapter.getFilter().filter(IN_PROGRESS);
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.resolved) {
+                        adapter.getFilter().filter(RESOLVED);
+                    }
                 }
-                if(chipGroup.getCheckedChipId()==R.id.pending){
-                    adapter.getFilter().filter(PENDING);
-                }
-                if(chipGroup.getCheckedChipId()==R.id.inprogress){
-                    adapter.getFilter().filter(IN_PROGRESS);
-                }
-                if(chipGroup.getCheckedChipId()==R.id.resolved){
-                    adapter.getFilter().filter(RESOLVED);
-                }
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                if (shimmerFrameLayout != null) {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    Helper.toast(getContext(), error.getMessage());
+                }
             }
         });
     }
 
-    public void loadAllDataAdmin(){
-        DatabaseReference reference=FirebaseDatabase.getInstance().getReference("Complaints");
+    public void loadAllDataAdmin() {
+        list.clear();
+        adapter.getFilter().filter("");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Complaints");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (getContext() == null) return;
                 list.clear();
-                for (DataSnapshot ds:snapshot.getChildren()){
-                    String complaintId = ds.child("complaintId").getValue().toString();
-                    String username = ds.child("username").getValue().toString();
-                    String uid = ds.child("uid").getValue().toString();
-                    String subject = ds.child("subject").getValue().toString();
-                    String body = ds.child("body").getValue().toString();
-                    String category = ds.child("category").getValue().toString();
-                    String subcategory = ds.child("subcategory").getValue().toString();
-                    String visibility = ds.child("visibility").getValue().toString();
-                    String status = ds.child("status").getValue().toString();
-                    String anonymous = ds.child("anonymous").getValue().toString();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String complaintId = String.valueOf(ds.child("complaintId").getValue());
+                    String username = String.valueOf(ds.child("username").getValue());
+                    String uid = String.valueOf(ds.child("uid").getValue());
+                    String subject = String.valueOf(ds.child("subject").getValue());
+                    String body = String.valueOf(ds.child("body").getValue());
+                    String category = String.valueOf(ds.child("category").getValue());
+                    String subcategory = String.valueOf(ds.child("subcategory").getValue());
+                    String visibility = String.valueOf(ds.child("visibility").getValue());
+                    String status = String.valueOf(ds.child("status").getValue());
+                    String anonymous = String.valueOf(ds.child("anonymous").getValue());
 
                     // Get Upvotes and Downvotes
                     long upvotes = 0;
@@ -614,12 +652,13 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     // Get Comments List
                     ArrayList<Comment> commenters = new ArrayList<>();
                     if (ds.hasChild("listOfCommenter"))
-                        for (DataSnapshot s : ds.child("listOfCommenter").getChildren())
-                        {   long timeStamp2 = 0;
+                        for (DataSnapshot s : ds.child("listOfCommenter").getChildren()) {
+                            long timeStamp2 = 0;
                             Map<String, Long> map2 = new HashMap();
                             timeStamp2 = (long) s.child("timeStampMap").child("timeStamp").getValue();
                             map2.put("timeStamp", timeStamp2);
-                            commenters.add(new Comment(s.child("username").getValue().toString(),s.child("commentId").getValue().toString() ,s.child("comment").getValue().toString(), map2));}
+                            commenters.add(new Comment(s.child("username").getValue().toString(), s.child("commentId").getValue().toString(), s.child("comment").getValue().toString(), map2));
+                        }
 
                     //check vote status of complaint
                     int voteStatus = Helper.NOT_VOTED;
@@ -634,26 +673,33 @@ public class HomeFragment extends Fragment implements ComplaintsAdapter.Complain
                     list.add(new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status,
                             anonymous, upvotes, downvotes, commenters, upvoters, downvoters, map, time, voteStatus));
                 }
-                if (list.isEmpty()) {
-                    Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
-                    return;
+                if (adapter != null && chipGroup != null && shimmerFrameLayout != null) {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+
+                    if (list.isEmpty()) {
+                        Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.pending) {
+                        adapter.getFilter().filter(PENDING);
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.inprogress) {
+                        adapter.getFilter().filter(IN_PROGRESS);
+                    }
+                    if (chipGroup.getCheckedChipId() == R.id.resolved) {
+                        adapter.getFilter().filter(RESOLVED);
+                    }
                 }
-                if(chipGroup.getCheckedChipId()==R.id.pending){
-                    adapter.getFilter().filter(PENDING);
-                }
-                if(chipGroup.getCheckedChipId()==R.id.inprogress){
-                    adapter.getFilter().filter(IN_PROGRESS);
-                }
-                if(chipGroup.getCheckedChipId()==R.id.resolved){
-                    adapter.getFilter().filter(RESOLVED);
-                }
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                if (shimmerFrameLayout != null) {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    Helper.toast(getContext(), error.getMessage());
+                }
             }
         });
     }

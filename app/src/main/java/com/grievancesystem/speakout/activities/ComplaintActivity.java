@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -33,10 +34,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.grievancesystem.speakout.Database.Prefs;
@@ -124,8 +127,6 @@ public class ComplaintActivity extends AppCompatActivity {
     @BindView(R.id.constraintLayout)
     ConstraintLayout constraintLayout;
 
-
-
     Unbinder unbinder;
     Complaints complaint;
     String complaintId;
@@ -156,20 +157,19 @@ public class ComplaintActivity extends AppCompatActivity {
             isConnected = false;
         }
     };
-    String string = null;
 
     private void showBackOnlineUI() {
-        Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
-                .setTextColor(getResources().getColor(android.R.color.white));
-        snackbar.show();
+        if (parentLayout != null)
+            Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
+                    .setTextColor(getResources().getColor(android.R.color.white)).show();
     }
 
     private void showNoInternetUI() {
-        Snackbar snackbar = Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getResources().getColor(android.R.color.black))
-                .setTextColor(getResources().getColor(android.R.color.white));
-        snackbar.show();
+        if (parentLayout != null)
+            Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(getResources().getColor(android.R.color.black))
+                    .setTextColor(getResources().getColor(android.R.color.white)).show();
     }
 
     @Override
@@ -232,7 +232,6 @@ public class ComplaintActivity extends AppCompatActivity {
         Intent appLinkIntent = getIntent();
         String appLinkAction = appLinkIntent.getAction();
         Uri appLinkData = appLinkIntent.getData();
-       // Log.i(TAG, "onCreate: " + appLinkAction + "  " + appLinkData + " " + appLinkData.getQueryParameter("complaintId"));
         if (appLinkData != null) {
             if (!Prefs.isUserLoggedIn(this)) {
                 Helper.toast(this, "Please login to Check Complaints");
@@ -248,8 +247,6 @@ public class ComplaintActivity extends AppCompatActivity {
         } else {
             complaintId = getIntent().getStringExtra("complaintId");
         }
-
-        loadComplaint();
 
         recyclerView = findViewById(R.id.comments_recycler);
         editTextMessage = findViewById(R.id.editTextMessage);
@@ -288,7 +285,7 @@ public class ComplaintActivity extends AppCompatActivity {
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Speak Out");
-                    String shareMessage = "\nGo through this grievance and react\n\n";
+                    String shareMessage = "\n*SpeakOut*\nGo through this grievance and react\n";
                     shareMessage = shareMessage + "https://grievancesystem.speakout/complaint/?complaintId=" + complaint.getComplaintId() + "\n\n";
                     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                     startActivity(Intent.createChooser(shareIntent, "Choose One"));
@@ -296,94 +293,110 @@ public class ComplaintActivity extends AppCompatActivity {
             }
         });
 
+        loadComplaint();
+        takeUpdatesOfComments();
     }
 
     public void loadComplaint() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Complaints").child(complaintId);
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot ds) {
-                String complaintId = ds.child("complaintId").getValue().toString();
-                String username = ds.child("username").getValue().toString();
-                String uid = ds.child("uid").getValue().toString();
-                String subject = ds.child("subject").getValue().toString();
-                String body = ds.child("body").getValue().toString();
-                String category = ds.child("category").getValue().toString();
-                String subcategory = ds.child("subcategory").getValue().toString();
-                String visibility = ds.child("visibility").getValue().toString();
-                String status = ds.child("status").getValue().toString();
-                String anonymous = ds.child("anonymous").getValue().toString();
+                if (ds.exists()) {
+                    String complaintId = String.valueOf(ds.child("complaintId").getValue());
+                    String username = String.valueOf(ds.child("username").getValue());
+                    String uid = String.valueOf(ds.child("uid").getValue());
+                    String subject = String.valueOf(ds.child("subject").getValue());
+                    String body = String.valueOf(ds.child("body").getValue());
+                    String category = String.valueOf(ds.child("category").getValue());
+                    String subcategory = String.valueOf(ds.child("subcategory").getValue());
+                    String visibility = String.valueOf(ds.child("visibility").getValue());
+                    String status = String.valueOf(ds.child("status").getValue());
+                    String anonymous = String.valueOf(ds.child("anonymous").getValue());
 
-                // Get Upvotes and Downvotes
-                long upvotes = 0;
-                long downvotes = 0;
-                if (ds.hasChild("upvotes"))
-                    upvotes = (long) ds.child("upvotes").getValue();
-                if (ds.hasChild("downvotes"))
-                    downvotes = (long) ds.child("downvotes").getValue();
+                    // Get Upvotes and Downvotes
+                    long upvotes = 0;
+                    long downvotes = 0;
+                    if (ds.hasChild("upvotes"))
+                        upvotes = (long) ds.child("upvotes").getValue();
+                    if (ds.hasChild("downvotes"))
+                        downvotes = (long) ds.child("downvotes").getValue();
 
-                // Get Timestamp
-                String time = null;
-                long timeStamp = 0;
-                Map<String, Long> map = new HashMap();
-                if (ds.child("timeStampmap").child("timeStamp").exists()) {
-                    timeStamp = (long) ds.child("timeStampmap").child("timeStamp").getValue();
-                    DateFormat dateFormat = getDateTimeInstance();
-                    Date netDate = (new Date(timeStamp));
-                    time = dateFormat.format(netDate);
-                    map.put("timeStamp", timeStamp);
-                } else {
-                    if (ds.child("timeStampStr").exists()) {
-                        time = ds.child("timeStampStr").getValue().toString();
+                    // Get Timestamp
+                    String time = null;
+                    long timeStamp = 0;
+                    Map<String, Long> map = new HashMap();
+                    if (ds.child("timeStampmap").child("timeStamp").exists()) {
+                        timeStamp = (long) ds.child("timeStampmap").child("timeStamp").getValue();
+                        DateFormat dateFormat = getDateTimeInstance();
+                        Date netDate = (new Date(timeStamp));
+                        time = dateFormat.format(netDate);
+                        map.put("timeStamp", timeStamp);
+                    } else {
+                        if (ds.child("timeStampStr").exists()) {
+                            time = ds.child("timeStampStr").getValue().toString();
+                        }
                     }
+
+                    // Get Upvoters List
+                    ArrayList<Vote> upvoters = new ArrayList<>();
+                    if (ds.hasChild("listOfUpvoters"))
+                        for (DataSnapshot s : ds.child("listOfUpvoters").getChildren())
+                            upvoters.add(new Vote(s.child("complaint_id").getValue().toString(), s.child("username").getValue().toString()));
+
+                    // Get Downvoters List
+                    ArrayList<Vote> downvoters = new ArrayList<>();
+                    if (ds.hasChild("listOfDownvoters"))
+                        for (DataSnapshot s : ds.child("listOfDownvoters").getChildren())
+                            downvoters.add(new Vote(s.child("complaint_id").getValue().toString(), s.child("username").getValue().toString()));
+
+                    // Get Comments List
+                    ArrayList<Comment> commenters = new ArrayList<>();
+                    if (ds.hasChild("listOfCommenter"))
+                        for (DataSnapshot s : ds.child("listOfCommenter").getChildren()) {
+                            long timeStamp2 = 0;
+                            Map<String, Long> map2 = new HashMap();
+                            timeStamp2 = (long) s.child("timeStampMap").child("timeStamp").getValue();
+                            map2.put("timeStamp", timeStamp2);
+                            commenters.add(new Comment(s.child("username").getValue().toString(), s.child("commentId").getValue().toString(), s.child("comment").getValue().toString(), map2));
+                        }
+
+                    // Check for anonymous users
+                    //if (anonymous.equals("true")) username = "Anonymous";
+
+                    //check vote status of complaint
+                    int voteStatus = Helper.NOT_VOTED;
+                    String loggedInUsername = Prefs.getUser(getApplicationContext()).getUsername();
+                    if (ds.child("listOfUpvoters").hasChild(loggedInUsername))
+                        voteStatus = Helper.UPVOTED;
+                    if (ds.child("listOfDownvoters").hasChild(loggedInUsername))
+                        voteStatus = Helper.DOWNVOTED;
+
+
+                    // add complaint to list
+                    complaint = new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status,
+                            anonymous, upvotes, downvotes, commenters, upvoters, downvoters, map, time, voteStatus);
+
+                    if (textViewUsername != null && upVoteNumber != null && recyclerView != null)
+                        display_card();
+                } else if (shimmerFrameLayout != null && shimmerFrameLayout2 != null) {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout2.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    shimmerFrameLayout2.setVisibility(View.GONE);
+                    Helper.toast(ComplaintActivity.this, "No Data Found");
                 }
-
-                // Get Upvoters List
-                ArrayList<Vote> upvoters = new ArrayList<>();
-                if (ds.hasChild("listOfUpvoters"))
-                    for (DataSnapshot s : ds.child("listOfUpvoters").getChildren())
-                        upvoters.add(new Vote(s.child("complaint_id").getValue().toString(), s.child("username").getValue().toString()));
-
-                // Get Downvoters List
-                ArrayList<Vote> downvoters = new ArrayList<>();
-                if (ds.hasChild("listOfDownvoters"))
-                    for (DataSnapshot s : ds.child("listOfDownvoters").getChildren())
-                        downvoters.add(new Vote(s.child("complaint_id").getValue().toString(), s.child("username").getValue().toString()));
-
-                // Get Comments List
-                ArrayList<Comment> commenters = new ArrayList<>();
-                if (ds.hasChild("listOfCommenter"))
-                    for (DataSnapshot s : ds.child("listOfCommenter").getChildren()) {
-                        long timeStamp2 = 0;
-                        Map<String, Long> map2 = new HashMap();
-                        timeStamp2 = (long) s.child("timeStampMap").child("timeStamp").getValue();
-                        map2.put("timeStamp", timeStamp2);
-                        commenters.add(new Comment(s.child("username").getValue().toString(), s.child("commentId").getValue().toString(), s.child("comment").getValue().toString(), map2));
-                    }
-
-                // Check for anonymous users
-                //if (anonymous.equals("true")) username = "Anonymous";
-
-                //check vote status of complaint
-                int voteStatus = Helper.NOT_VOTED;
-                String loggedInUsername = Prefs.getUser(getApplicationContext()).getUsername();
-                if (ds.child("listOfUpvoters").hasChild(loggedInUsername))
-                    voteStatus = Helper.UPVOTED;
-                if (ds.child("listOfDownvoters").hasChild(loggedInUsername))
-                    voteStatus = Helper.DOWNVOTED;
-
-
-                // add complaint to list
-                complaint = new Complaints(complaintId, username, uid, subject, body, category, subcategory, visibility, status,
-                        anonymous, upvotes, downvotes, commenters, upvoters, downvoters, map, time, voteStatus);
-
-                display_card();
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                if (shimmerFrameLayout != null && shimmerFrameLayout2 != null) {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout2.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    shimmerFrameLayout2.setVisibility(View.GONE);
+                    Helper.toast(ComplaintActivity.this, error.getMessage());
+                }
             }
         });
     }
@@ -439,6 +452,8 @@ public class ComplaintActivity extends AppCompatActivity {
                         upVoteNumber.setText(upVoters[0] + " upvotes");
                         downVoteNumber.setText(downVoters[0] + " downvotes");
                     }
+                    upVote.setImageResource(R.drawable.ic_upvote_filled);
+                    downVote.setImageResource(R.drawable.ic_downvote_outlined);
                     upVoteClicked(complaint);
 
                 }
@@ -475,8 +490,6 @@ public class ComplaintActivity extends AppCompatActivity {
         });
 
         initRecyclerView();
-        list.clear();
-        list.addAll(complaint.getListOfCommenter());
 
         shimmerFrameLayout2.stopShimmer();
         shimmerFrameLayout2.setVisibility(View.GONE);
@@ -508,6 +521,58 @@ public class ComplaintActivity extends AppCompatActivity {
         });
     }
 
+    private void takeUpdatesOfComments() {
+        //list.clear();
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaint.getComplaintId()).child("listOfCommenter");
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot ds, @Nullable String s) {
+                Log.i(TAG, "onChildAdded: called");
+                if (ds.exists() && list != null) {
+                    String commentId = String.valueOf(ds.child("commentId").getValue());
+                    String comment = String.valueOf(ds.child("comment").getValue());
+                    String username = String.valueOf(ds.child("username").getValue());
+                    String time = null;
+                    long timeStamp = 0;
+                    Map<String, Long> map = new HashMap();
+                    if (ds.child("timeStampMap").child("timeStamp").exists()) {
+                        timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                        DateFormat dateFormat = getDateTimeInstance();
+                        Date netDate = (new Date(timeStamp));
+                        time = dateFormat.format(netDate);
+                        map.put("timeStamp", timeStamp);
+                    }
+                    list.add(new Comment(username, commentId, comment, map));
+                }
+
+                if (adapter != null && recyclerView != null && progressLoader != null) {
+                    adapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollToPosition(list.size());
+                    progressLoader.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i(TAG, "onChildChanged: ");
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Log.i(TAG, "onChildRemoved: ");
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i(TAG, "onChildMoved: ");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i(TAG, "onCancelled: ");
+            }
+        });
+    }
 
     public void upVoteClicked(Complaints complaint) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();

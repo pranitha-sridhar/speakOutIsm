@@ -46,7 +46,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 import com.grievancesystem.speakout.Database.Prefs;
 import com.grievancesystem.speakout.R;
 import com.grievancesystem.speakout.adapter.ReplyAdapter;
@@ -56,17 +55,13 @@ import com.grievancesystem.speakout.models.Reply;
 import com.grievancesystem.speakout.models.User;
 import com.grievancesystem.speakout.utility.Helper;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static java.text.DateFormat.getDateTimeInstance;
 
 public class ConversationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int DELETING_THE_COMPLAINT = 101;
@@ -144,17 +139,17 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     };
 
     private void showBackOnlineUI() {
-        Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
-                .setTextColor(getResources().getColor(android.R.color.white));
-        snackbar.show();
+        if (parentLayout != null)
+            Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
+                    .setTextColor(getResources().getColor(android.R.color.white)).show();
     }
 
     private void showNoInternetUI() {
-        Snackbar snackbar = Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getResources().getColor(android.R.color.black))
-                .setTextColor(getResources().getColor(android.R.color.white));
-        snackbar.show();
+        if (parentLayout != null)
+            Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(getResources().getColor(android.R.color.black))
+                    .setTextColor(getResources().getColor(android.R.color.white)).show();
     }
 
     @Override
@@ -236,15 +231,17 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         }
 
         initRecyclerView();
-        loadReplies();
 
         if (Prefs.getUser(this).getUserType() != Helper.USER_ADMINISTRATOR
                 && !Prefs.getUser(this).getUsername().equals(complaint.getUsername())) {
             editTextMessage.setText("Only Admin or the owner of the complaint can participate to this conversation");
             editTextMessage.setEnabled(false);
         } else editTextMessage.addTextChangedListener(textWatcher);
+
+        checkUpdatesForReplies();
     }
 
+    /*
     private void loadReplies() {
         Query query = FirebaseDatabase.getInstance().getReference("Reply").child(complaint.getComplaintId());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -252,29 +249,33 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 list.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String replyId = ds.child("reply_id").getValue().toString();
-                    String sent_from = ds.child("sent_from").getValue().toString();
-                    String conversation_id = ds.child("conversation_id").getValue().toString();
-                    String message = ds.child("message").getValue().toString();
-                    String time = null;
-                    long timeStamp = 0;
-                    Map<String, Long> map = new HashMap();
-                    if (ds.child("timeStampMap").child("timeStamp").exists()) {
-                        timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
-                        DateFormat dateFormat = getDateTimeInstance();
-                        Date netDate = (new Date(timeStamp));
-                        time = dateFormat.format(netDate);
-                        map.put("timeStamp", timeStamp);
+                    if (ds.exists()) {
+                        String replyId = ds.child("reply_id").getValue().toString();
+                        String sent_from = ds.child("sent_from").getValue().toString();
+                        String conversation_id = ds.child("conversation_id").getValue().toString();
+                        String message = ds.child("message").getValue().toString();
+                        String time = null;
+                        long timeStamp = 0;
+                        Map<String, Long> map = new HashMap();
+                        if (ds.child("timeStampMap").child("timeStamp").exists()) {
+                            timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                            DateFormat dateFormat = getDateTimeInstance();
+                            Date netDate = (new Date(timeStamp));
+                            time = dateFormat.format(netDate);
+                            map.put("timeStamp", timeStamp);
+                        }
+                        list.add(new Reply(replyId, sent_from, conversation_id, message, map));
                     }
-                    list.add(new Reply(replyId, sent_from, conversation_id, message, map));
+                    if (list.isEmpty()) {
+                        Helper.toast(ConversationActivity.this, "No Conversation Found for this complaint");
+                    }
+                    if(adapter!=null && recyclerView!=null && progressLoader!=null) {
+                        adapter.notifyDataSetChanged();
+                        recyclerView.smoothScrollToPosition(list.size());
+                        progressLoader.setVisibility(View.GONE);
+                        checkUpdatesForReplies();
+                    }
                 }
-                if (list.isEmpty()) {
-                    Helper.toast(ConversationActivity.this, "No Conversation Found for this complaint");
-                }
-                adapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(list.size());
-                progressLoader.setVisibility(View.GONE);
-                checkUpdatesForReplies();
             }
 
             @Override
@@ -283,6 +284,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             }
         });
     }
+     */
 
     private void initRecyclerView() {
         adapter = new ReplyAdapter(list, ConversationActivity.this, complaint);
@@ -324,21 +326,25 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot ds, @Nullable String s) {
-                String replyId = ds.child("reply_id").getValue().toString();
-                String sent_from = ds.child("sent_from").getValue().toString();
-                String conversation_id = ds.child("conversation_id").getValue().toString();
-                String message = ds.child("message").getValue().toString();
-                String time = null;
-                long timeStamp = 0;
-                Map<String, Long> map = new HashMap();
-                if (ds.child("timeStampMap").child("timeStamp").exists()) {
-                    timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
-                    map.put("timeStamp", timeStamp);
+                if (ds.exists() && list != null) {
+                    String replyId = ds.child("reply_id").getValue().toString();
+                    String sent_from = ds.child("sent_from").getValue().toString();
+                    String conversation_id = ds.child("conversation_id").getValue().toString();
+                    String message = ds.child("message").getValue().toString();
+                    String time = null;
+                    long timeStamp = 0;
+                    Map<String, Long> map = new HashMap();
+                    if (ds.child("timeStampMap").child("timeStamp").exists()) {
+                        timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                        map.put("timeStamp", timeStamp);
+                    }
+                    list.add(new Reply(replyId, sent_from, conversation_id, message, map));
                 }
-                list.add(new Reply(replyId, sent_from, conversation_id, message, map));
-                adapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(list.size());
-                progressLoader.setVisibility(View.GONE);
+                if (adapter != null && recyclerView != null && progressLoader != null) {
+                    adapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollToPosition(list.size());
+                    progressLoader.setVisibility(View.GONE);
+                }
             }
 
             @Override

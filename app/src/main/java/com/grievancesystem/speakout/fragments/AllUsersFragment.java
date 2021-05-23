@@ -186,17 +186,24 @@ public class AllUsersFragment extends Fragment implements UsersAdapter.UsersList
                     int userType = Integer.parseInt(ds.child("userType").getValue().toString());
                     list.add(new User(username, mail, display, profileUri, uid, userType, blocked));
                 }
-                if (list.isEmpty()){
-                    Helper.toast(getContext(),"No Users available");
+                if (list.isEmpty()) {
+                    Helper.toast(getContext(), "No Users available");
                 }
-                adapter.notifyDataSetChanged();
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
+                if (adapter != null && shimmerFrameLayout != null) {
+                    adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                if (adapter != null && shimmerFrameLayout != null) {
+                    adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    Helper.toast(getContext(), error.getMessage());
+                }
             }
         });
     }

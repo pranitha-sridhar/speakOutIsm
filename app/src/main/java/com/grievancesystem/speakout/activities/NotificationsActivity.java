@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,17 +66,17 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
     String string = null;
 
     private void showBackOnlineUI() {
-        Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
-                .setTextColor(getResources().getColor(android.R.color.white));
-        snackbar.show();
+        if (parentLayout != null)
+            Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
+                    .setTextColor(getResources().getColor(android.R.color.white)).show();
     }
 
     private void showNoInternetUI() {
-        Snackbar snackbar = Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getResources().getColor(android.R.color.black))
-                .setTextColor(getResources().getColor(android.R.color.white));
-        snackbar.show();
+        if (parentLayout != null)
+            Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(getResources().getColor(android.R.color.black))
+                    .setTextColor(getResources().getColor(android.R.color.white)).show();
     }
 
     @Override
@@ -151,31 +150,30 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
         adapter = new NotificationsAdapter(getApplicationContext(), list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        loadData();
 
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         adapter.setUpOnNotificationListener(this);
+
+        loadData();
     }
 
     public void loadData() {
         list.clear();
         DatabaseReference query = FirebaseDatabase.getInstance().getReference("Notifications").child(Prefs.getUser(getApplicationContext()).getUsername());
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String key = "blah";
                     if (ds.getKey() != null) key = ds.getKey();
-                    String title = ds.child("title").getValue().toString();
+                    String title = String.valueOf(ds.child("title").getValue());
                     //if(key!=null)string+=" "+key ;
-                    String message = ds.child("message").getValue().toString();
+                    String message = String.valueOf(ds.child("message").getValue());
                     String complaint_id = null;
                     if (ds.child("complaint_id").exists()) {
-                        complaint_id = ds.child("complaint_id").getValue().toString();
+                        complaint_id = String.valueOf(ds.child("complaint_id").getValue());
                     }
                     long timeStamp = 0;
                     Map<String, Long> map = new HashMap();
@@ -185,13 +183,14 @@ public class NotificationsActivity extends AppCompatActivity implements Notifica
                     }
                     list.add(new Notification(title, message, complaint_id, map));
                 }
-                if(list.isEmpty()){
-                    Helper.toast(NotificationsActivity.this,"No notifications");
+                if (list.isEmpty()) {
+                    Helper.toast(NotificationsActivity.this, "No notifications");
                 }
-                //Helper.toast(getApplicationContext(),string);
-                adapter.notifyDataSetChanged();
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
+                if (adapter != null && shimmerFrameLayout != null) {
+                    adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override

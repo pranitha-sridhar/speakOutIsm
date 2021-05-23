@@ -33,26 +33,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.grievancesystem.speakout.Database.Prefs;
 import com.grievancesystem.speakout.R;
 import com.grievancesystem.speakout.adapter.TrendingAdapter;
-import com.grievancesystem.speakout.models.Comment;
 import com.grievancesystem.speakout.models.Complaints;
-import com.grievancesystem.speakout.models.Vote;
-import com.grievancesystem.speakout.utility.Helper;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static java.text.DateFormat.getDateTimeInstance;
 
 public class TrendingFragment extends Fragment implements OnChartValueSelectedListener {
     @BindView(R.id.complaints_recycler2)
@@ -64,7 +54,7 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
     @BindView(R.id.resolved)
     TextView resolved;
     @BindView(R.id.inprogress)
-    TextView inprogress;
+    TextView inProgress;
     @BindView(R.id.pending)
     TextView pending;
     @BindView(R.id.chart)
@@ -98,29 +88,24 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_trending, container, false);
-
+        mAuth = FirebaseAuth.getInstance();
         unbinder = ButterKnife.bind(this, view);
 
-        adapter = new TrendingAdapter(getContext(), list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new TrendingAdapter(getContext(), list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
 
         loadYData();
         loadTop10Data();
         loadCardData();
-        //loadYData();
-        //chart_settings();
 
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-        //adapter.setUpOnComplaintListener(this);
         chart.setOnChartValueSelectedListener(this);
-
 
         chart.setUsePercentValues(true);
         chart.getDescription().setEnabled(false);
@@ -182,15 +167,16 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
             data.setValueTextSize(11f);
             data.setValueTextColor(Color.BLACK);
             //data.setValueTypeface(tfLight);
-            //progressBar.setVisibility(View.GONE);
-            chart.setData(data);
-            shimmerFrameLayout.stopShimmer();
-            shimmerFrameLayout.setVisibility(View.GONE);
-            //chart.getData().notifyDataChanged();
-            //chart.notifyDataSetChanged();
-            // undo all highlights
-            //chart.highlightValues(null);
-            chart.invalidate();
+            if (chart != null && shimmerFrameLayout != null) {
+                chart.setData(data);
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                //chart.getData().notifyDataChanged();
+                //chart.notifyDataSetChanged();
+                // undo all highlights
+                //chart.highlightValues(null);
+                chart.invalidate();
+            }
         }
     }
 
@@ -396,7 +382,8 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot != null) total.setText(Long.toString(snapshot.getChildrenCount()));
+                if (snapshot.exists() && total != null)
+                    total.setText(Long.toString(snapshot.getChildrenCount()));
             }
 
             @Override
@@ -409,7 +396,8 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                resolved.setText(Long.toString(snapshot.getChildrenCount()));
+                if (snapshot.exists() && resolved != null)
+                    resolved.setText(Long.toString(snapshot.getChildrenCount()));
             }
 
             @Override
@@ -422,7 +410,8 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                inprogress.setText(Long.toString(snapshot.getChildrenCount()));
+                if (snapshot.exists() && inProgress != null)
+                    inProgress.setText(Long.toString(snapshot.getChildrenCount()));
             }
 
             @Override
@@ -434,7 +423,8 @@ public class TrendingFragment extends Fragment implements OnChartValueSelectedLi
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                pending.setText(Long.toString(snapshot.getChildrenCount()));
+                if (snapshot.exists() && pending != null)
+                    pending.setText(Long.toString(snapshot.getChildrenCount()));
             }
 
             @Override

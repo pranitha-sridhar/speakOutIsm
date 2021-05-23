@@ -14,6 +14,7 @@
         android:theme="@style/Theme.AppItUp">
         <activity
             android:name="com.grievancesystem.speakout.activities.ComplaintActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -36,6 +37,7 @@
 
         <activity
             android:name="com.grievancesystem.speakout.activities.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppItUp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,6 +65,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.grievancesystem.speakout.activities.NotificationsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NotificationTheme" />
         <activity
             android:name="com.grievancesystem.speakout.activities.SignIn"

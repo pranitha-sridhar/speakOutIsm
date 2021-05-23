@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 import com.grievancesystem.speakout.Database.Prefs;
 import com.grievancesystem.speakout.R;
 import com.grievancesystem.speakout.adapter.CommentsAdapter;
@@ -140,6 +139,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    /*
     private void loadComments() {
         Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaint.getComplaintId()).child("listOfCommenter");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -177,6 +177,7 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
             }
         });
     }
+     */
 
     private void takeUpdatesOfComments() {
         //list.clear();
@@ -185,23 +186,29 @@ public class CommentsDialogFragment extends BottomSheetDialogFragment {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot ds, @Nullable String s) {
-                String commentId = ds.child("commentId").getValue().toString();
-                String comment = ds.child("comment").getValue().toString();
-                String username = ds.child("username").getValue().toString();
-                String time = null;
-                long timeStamp = 0;
-                Map<String, Long> map = new HashMap();
-                if (ds.child("timeStampMap").child("timeStamp").exists()) {
-                    timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
-                    DateFormat dateFormat = getDateTimeInstance();
-                    Date netDate = (new Date(timeStamp));
-                    time = dateFormat.format(netDate);
-                    map.put("timeStamp", timeStamp);
+                Log.i(TAG, "onChildAdded: called");
+                if (ds.exists() && list != null) {
+                    String commentId = String.valueOf(ds.child("commentId").getValue());
+                    String comment = String.valueOf(ds.child("comment").getValue());
+                    String username = String.valueOf(ds.child("username").getValue());
+                    String time = null;
+                    long timeStamp = 0;
+                    Map<String, Long> map = new HashMap();
+                    if (ds.child("timeStampMap").child("timeStamp").exists()) {
+                        timeStamp = (long) ds.child("timeStampMap").child("timeStamp").getValue();
+                        DateFormat dateFormat = getDateTimeInstance();
+                        Date netDate = (new Date(timeStamp));
+                        time = dateFormat.format(netDate);
+                        map.put("timeStamp", timeStamp);
+                    }
+                    list.add(new Comment(username, commentId, comment, map));
                 }
-                list.add(new Comment(username, commentId, comment, map));
-                adapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(list.size());
-                progressLoader.setVisibility(View.GONE);
+
+                if (adapter != null && recyclerView != null && progressLoader != null) {
+                    adapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollToPosition(list.size());
+                    progressLoader.setVisibility(View.GONE);
+                }
             }
 
             @Override

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E5E2E2"
-    tools:context=".fragments.StatusFragment">
+    tools:context=".fragments.YourComplaintsFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,48 +30,49 @@
             android:textStyle="bold" />
 
         <com.google.android.material.chip.ChipGroup
-            android:layout_width="0dp"
+            android:id="@+id/chip_group"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textSort"
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/filter"
-            app:singleSelection="true"
             app:selectionRequired="true"
-            android:id="@+id/chip_group">
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/pending"
                 android:layout_width="wrap_content"
-                app:chipBackgroundColor="@color/stroke_tint"
+                android:layout_height="wrap_content"
                 android:checkable="true"
+                android:checked="true"
                 android:clickable="true"
                 android:focusable="true"
-                android:checked="true"
+                android:text="PENDING"
                 android:textColor="@color/white"
                 app:checkedIconTint="@color/white"
-                android:layout_height="wrap_content"
-                android:text="PENDING"
-                android:id="@+id/pending" />
+                app:chipBackgroundColor="@color/stroke_tint" />
 
             <com.google.android.material.chip.Chip
-                app:chipBackgroundColor="@color/stroke_tint"
-                app:checkedIconTint="@color/white"
+                android:id="@+id/inprogress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:checkable="true"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="IN-PROGRESS"
-                android:id="@+id/inprogress"/>
-            <com.google.android.material.chip.Chip
-                app:chipBackgroundColor="@color/stroke_tint"
                 app:checkedIconTint="@color/white"
+                app:chipBackgroundColor="@color/stroke_tint" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/resolved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:checkable="true"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="RESOLVED"
-                android:id="@+id/resolved"/>
+                app:checkedIconTint="@color/white"
+                app:chipBackgroundColor="@color/stroke_tint" />
 
         </com.google.android.material.chip.ChipGroup>
 
@@ -81,6 +82,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:padding="10dp"
+            android:visibility="gone"
             android:src="@drawable/ic_filter_list"
             android:id="@+id/filter"
             app:tint="@color/white" />

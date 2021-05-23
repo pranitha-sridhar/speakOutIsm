@@ -45,85 +45,123 @@
         <com.google.android.material.chip.Chip
             android:layout_width="wrap_content"
             app:chipBackgroundColor="@color/stroke_tint"
+            android:id="@+id/no_filter"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:checked="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="No Filter"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white" />
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
+            app:chipBackgroundColor="@color/stroke_tint"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_height="wrap_content"
             android:text="Registration"
             android:id="@+id/registration1" />
+
         <com.google.android.material.chip.Chip
             app:chipBackgroundColor="@color/stroke_tint"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Academics"
-            android:id="@+id/academics1"/>
+            android:id="@+id/academics1" />
+
         <com.google.android.material.chip.Chip
             app:chipBackgroundColor="@color/stroke_tint"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DSW"
-            android:id="@+id/dsw1"/>
+            android:id="@+id/dsw1" />
+
         <com.google.android.material.chip.Chip
             app:chipBackgroundColor="@color/stroke_tint"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Vendors of ISM"
-            android:id="@+id/vendors1"/>
+            android:id="@+id/vendors1" />
 
         <com.google.android.material.chip.Chip
             app:chipBackgroundColor="@color/stroke_tint"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MIS/Parent Portal"
-            android:id="@+id/mis1"/>
+            android:id="@+id/mis1" />
+
         <com.google.android.material.chip.Chip
             app:chipBackgroundColor="@color/stroke_tint"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hostel"
-            android:id="@+id/hostel1"/>
+            android:id="@+id/hostel1" />
+
         <com.google.android.material.chip.Chip
             app:chipBackgroundColor="@color/stroke_tint"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Health Centre"
-            android:id="@+id/health1"/>
+            android:id="@+id/health1" />
+
         <com.google.android.material.chip.Chip
             app:chipBackgroundColor="@color/stroke_tint"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Library"
-            android:id="@+id/library1"/>
+            android:id="@+id/library1" />
+
         <com.google.android.material.chip.Chip
             app:chipBackgroundColor="@color/stroke_tint"
+            android:textColor="@color/chip_text_tint"
+            app:checkedIconTint="@color/white"
             android:checkable="true"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Personal"
-            android:id="@+id/personal1"/>
+            android:id="@+id/personal1" />
     </com.google.android.material.chip.ChipGroup>
 
     <Button
@@ -134,6 +172,7 @@
         app:layout_constraintTop_toBottomOf="@id/chip_group3"
         android:layout_marginTop="20dp"
         android:text="Apply Filter"
+        android:backgroundTint="@color/inprogress_color"
         android:id="@+id/sort" />
 
 

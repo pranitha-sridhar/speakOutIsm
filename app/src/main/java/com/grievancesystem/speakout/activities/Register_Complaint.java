@@ -86,17 +86,17 @@ public class Register_Complaint extends AppCompatActivity {
     };
 
     private void showBackOnlineUI() {
-        Snackbar snackbar = Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
-                .setTextColor(getResources().getColor(android.R.color.white));
-        snackbar.show();
+        if (parentLayout != null)
+            Snackbar.make(parentLayout, "Back Online", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(getResources().getColor(android.R.color.holo_green_light))
+                    .setTextColor(getResources().getColor(android.R.color.white)).show();
     }
 
     private void showNoInternetUI() {
-        Snackbar snackbar = Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getResources().getColor(android.R.color.black))
-                .setTextColor(getResources().getColor(android.R.color.white));
-        snackbar.show();
+        if (parentLayout != null)
+            Snackbar.make(parentLayout, "No Internet Connection Available", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(getResources().getColor(android.R.color.black))
+                    .setTextColor(getResources().getColor(android.R.color.white)).show();
     }
 
     @Override
@@ -313,9 +313,9 @@ public class Register_Complaint extends AppCompatActivity {
                 reference.child(complaintId).setValue(complaints).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        progressBar.setVisibility(View.GONE);
-                        //Toast.makeText(getApplicationContext(), "Submitted", Toast.LENGTH_SHORT).show();
-                        Helper.toast(getApplicationContext(), "Submitted");
+                        if (progressBar != null)
+                            progressBar.setVisibility(View.GONE);
+                        Helper.toast(Register_Complaint.this, "Your Complaint has been Submitted Successfully");
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {

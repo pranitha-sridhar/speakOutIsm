@@ -27,20 +27,30 @@ import java.util.List;
 public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterable {
     Context context;
     List<Complaints> list;
-    List<Complaints> filteredList1;
+    List<Complaints> filteredList = new ArrayList<>();
+    ComplaintsListener mListener;
+    int cardType = 1; // 1-> Home Type Complaint card : 2-> Trending Type Complaint card
+
+    public ComplaintsAdapter(Context context, List<Complaints> list) {
+        this.context = context;
+        this.list = list;
+    }
+
     private final Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            List<Complaints> filteredList = new ArrayList<>();
-            if (charSequence == null || getItemCount() == 0) {
-                filteredList.addAll(filteredList1);
+            filteredList.clear();
+
+            if (charSequence == null || charSequence.length() == 0) {
+                filteredList.clear();
             } else {
-                list.size();
+                List<Complaints> newList = new ArrayList<>();
                 String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (Complaints complaint : filteredList1) {
+                for (Complaints complaint : list) {
                     if (complaint.getStatus().toLowerCase().contains(filterPattern))
-                        filteredList.add(complaint);
+                        newList.add(complaint);
                 }
+                filteredList.addAll(newList);
             }
             FilterResults filterResults = new FilterResults();
             filterResults.values = filteredList;
@@ -49,30 +59,19 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            list.clear();
-            if (filterResults.values != null)
-                list.addAll((List) filterResults.values);
             notifyDataSetChanged();
         }
     };
-    ComplaintsListener mListener;
-    int cardType = 1; // 1-> Home Type Complaint card : 2-> Trending Type Complaint card
 
-    public ComplaintsAdapter(Context context, List<Complaints> list) {
-        this.context = context;
-        this.list = list;
-        filteredList1 = list;
+    public void setUpOnComplaintListener(ComplaintsListener mListener) {
+        this.mListener = mListener;
     }
 
     public ComplaintsAdapter(Context context, List<Complaints> list, int cardType) {
         this.context = context;
         this.list = list;
-        filteredList1 = list;
+        this.filteredList = list;
         this.cardType = cardType;
-    }
-
-    public void setUpOnComplaintListener(ComplaintsListener mListener) {
-        this.mListener = mListener;
     }
 
     @NonNull
@@ -94,7 +93,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
 
     @Override
     public int getItemCount() {
-        return (list != null) ? list.size() : 0;
+        return (filteredList != null) ? filteredList.size() : 0;
     }
 
     @Override
@@ -104,7 +103,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder main_holder, int position) {
-        Complaints complaints = list.get(position);
+        Complaints complaints = filteredList.get(position);
         if (cardType == 1) {
             viewHolderComplaintCard holder = (viewHolderComplaintCard) main_holder;
             if (complaints.getAnonymous().equals("true")) holder.textUserName.setText("@Anonymous");
@@ -214,7 +213,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter implements Filterabl
             holder.share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(mListener!=null)
+                    if (mListener != null)
                         mListener.shareClicked(complaints);
                 }
             });
