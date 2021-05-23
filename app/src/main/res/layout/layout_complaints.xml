@@ -99,8 +99,9 @@
             <ImageView
                 android:layout_margin="10dp"
                 android:src="@drawable/ic_share"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
+                android:layout_width="25dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
                 android:id="@+id/share"/>
 
         </LinearLayout>

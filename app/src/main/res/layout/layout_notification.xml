@@ -52,9 +52,10 @@
             android:id="@+id/action_chip"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="GO TO COMPLAINT"
+            android:text="Go to Complaint"
             android:clickable="true"
             android:checkable="false"
+            android:textColor="@color/white"
             app:chipBackgroundColor="@android:color/holo_green_light"/>
 
 

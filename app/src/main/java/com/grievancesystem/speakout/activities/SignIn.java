@@ -223,7 +223,7 @@ public class SignIn extends AppCompatActivity {
                     progressDialogueTitle.setText("Please wait, we are logging you out from other devices...");
                     signOutFromDB();
                     Notification notification = new Notification("Account Security - New Sign In Detected",
-                            "Since single sign on is allowed you are logging out from this device.", true);
+                            "Since single sign in is allowed, you are being logged out from this device.", true);
                     Helper.sendNotificationToUser(currentUser.getUsername(), notification);
                 }
             }
@@ -333,7 +333,7 @@ public class SignIn extends AppCompatActivity {
         String email_id = user.getEmail();
 
         if (email_id == null || email_id.equals("Invalid") || !Patterns.EMAIL_ADDRESS.matcher(email_id).matches()) {
-            setResultsUI("There is No Proper Email Id found which is Linked with this Username");
+            setResultsUI("There is no corresponding Email linking with this Username");
             return;
         }
 
@@ -357,16 +357,16 @@ public class SignIn extends AppCompatActivity {
                             } else {
                                 isLoggedIn = true;
                                 currentUser = user;
-                                setResultsUI("You are already LoggedIn in other device. Only Single Sign On is allowed by this application.\n Please SignOut from other devices and try again. To sign-out from other devices click \"Sign Out\"", user);
+                                setResultsUI("You are already LoggedIn in some other device. Only Single Sign In is allowed by this application.\n Please SignOut from other devices and try again. To sign-out from other devices click \"Sign Out\"", user);
                             }
                         } else {
                             // user is blocked by the admin
                             Helper.signOutUser(SignIn.this, false);
-                            setResultsUI("This User is blocked by the Admin.\nPlease contact to your college and ask them to unblock this user.");
+                            setResultsUI("This User is blocked by the Admin.\nPlease contact your college and ask them to unblock this account.");
                         }
                     } else {
                         Helper.signOutUser(SignIn.this, false);
-                        setResultsUI("Email Id Not Verified\nPlease verify you mail id by clicking on the link sent to your email when you had created the account");
+                        setResultsUI("Email Id Not Verified\nPlease verify your mail id by clicking on the link, sent to your email when you had created the account");
                     }
                 } else setResultsUI(task.getException().getMessage());
             }

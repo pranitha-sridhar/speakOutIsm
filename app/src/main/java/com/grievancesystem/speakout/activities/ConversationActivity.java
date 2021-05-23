@@ -230,13 +230,14 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         send.setOnClickListener(this);
 
         if (Prefs.getUser(ConversationActivity.this).getUserType() == Helper.USER_STUDENT) {
-            imageViewStatus.setVisibility(View.INVISIBLE);
-            imageViewDeleteConvo.setVisibility(View.INVISIBLE);
+            imageViewStatus.setVisibility(View.GONE);
+            imageViewDeleteConvo.setVisibility(View.GONE);
             imageViewBlockUser.setVisibility(View.INVISIBLE);
         }
 
         initRecyclerView();
-        loadReplies();
+        //loadReplies();
+        checkUpdatesForReplies();
 
         if (Prefs.getUser(this).getUserType() != Helper.USER_ADMINISTRATOR
                 && !Prefs.getUser(this).getUsername().equals(complaint.getUsername())) {
@@ -576,24 +577,24 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("StudentUsers").child(complaint.getUid());
 
-        reference.child("isBlocked").setValue(true)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            reference.child("isLoggedIn").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    setResultsDelUI("User has been blocked Successfully.");
-                                    Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
-                                            , null, null, null, true);
-                                    Helper.sendNotificationToUser(complaint.getUsername(), notification);
-                                }
-                            });
-                        } else
-                            setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
-                    }
-                });
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("isBlocked", true);
+        data.put("isLoggedIn", false);
+
+        reference.updateChildren(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    setResultsDelUI("User has been blocked Successfully.");
+                    Notification notification = new Notification("SpeakOut  Account Issues", "Your SpeakOut account has been blocked by the Admin"
+                            , null, null, null, true);
+                    Helper.sendNotificationToUser(complaint.getUsername(), notification);
+                }
+                else{
+                    setResultsDelUI("Error In blocking the User : " + task.getException().getMessage());
+                }
+            }
+        });
     }
 
     private void deleteUserComplaint() {

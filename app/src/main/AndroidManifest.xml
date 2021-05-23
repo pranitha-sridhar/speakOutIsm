@@ -60,6 +60,7 @@
             android:theme="@style/Theme.AppItUp.NoActionBar" />
         <activity
             android:name="com.grievancesystem.speakout.activities.Register_Complaint"
+            android:theme="@style/NotificationTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.grievancesystem.speakout.activities.NotificationsActivity"
@@ -67,11 +68,11 @@
         <activity
             android:name="com.grievancesystem.speakout.activities.SignIn"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppItUp.NoActionBar" />
+            android:theme="@style/MyAuthTheme"/>
         <activity
             android:name="com.grievancesystem.speakout.activities.ResetPassword"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppItUp.NoActionBar" />
+            android:theme="@style/MyAuthTheme" />
         <activity
             android:name="com.grievancesystem.speakout.activities.MainActivity"
             android:screenOrientation="portrait"
@@ -79,7 +80,7 @@
         <activity
             android:name="com.grievancesystem.speakout.activities.SignUpActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppItUp.NoActionBar" />
+            android:theme="@style/MyAuthTheme" />
     </application>
 
 </manifest>

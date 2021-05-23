@@ -14,19 +14,20 @@
         android:background="#F6F3F3">
 
         <androidx.cardview.widget.CardView
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="30dp"
+            android:elevation="20dp"
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="190dp"
+            android:layout_width="280dp"
+            android:layout_height="150dp"
             android:id="@+id/icon_campus"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ism" />
@@ -252,7 +253,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="120dp"
                                     android:layout_centerHorizontal="true"
-                                    android:src="@drawable/pranitha" />
+                                    android:src="@drawable/prani5" />
 
                                 <TextView
                                     android:layout_width="match_parent"
