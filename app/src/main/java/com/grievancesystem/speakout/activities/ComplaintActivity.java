@@ -528,7 +528,7 @@ public class ComplaintActivity extends AppCompatActivity {
 
     private void takeUpdatesOfComments() {
         //list.clear();
-        Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaint.getComplaintId()).child("listOfCommenter");
+        Query query = FirebaseDatabase.getInstance().getReference("Complaints").child(complaintId).child("listOfCommenter");
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot ds, @Nullable String s) {
