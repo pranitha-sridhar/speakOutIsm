@@ -8,7 +8,7 @@ Developed by the students of ISM, the app highlights the problems faced by ISMit
 
 Both students and admins will be able to access the app. 
 
-Complaints divided on the basis of status(Pending, In-Progress & Pending) & various categories (&sub- categories) like Registration, Academics, DSW, MIS/ParentPortal, Health Centre etc.
+Complaints divided on the basis of status(Pending, In-Progress & Resolved) & various categories (&sub- categories) like Registration, Academics, DSW, MIS/ParentPortal, Health Centre etc.
 
 Can view all the public grievances, can upvote, downvote and comment on the complaints.
 
