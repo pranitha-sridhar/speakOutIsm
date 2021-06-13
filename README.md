@@ -1,14 +1,22 @@
 # Speak Out ISM
 Developed by the students of ISM, the app highlights the problems faced by ISMites accurately. 
-‘Speak Out’  lets the students to express their concerns and grievances in an efficient way, and allows the competent authority to redress them quickly. 
+‘Speak Out’  lets the students to express their concerns and grievances in an efficient way, and allows the competent authority to redress them quickly.
+
+
+# Sections:
+1) Grievance Redressal System
+2) Mess Management System
+3) Notice Board
+4) Campus Map
+5) Other Resources Access: MIS, Parent Portal, Mailer Daemon
 
 
 
-# Features in App:
-
+# Grievance Redressal System:
+## Features 
 Both students and admins will be able to access the app. 
 
-Complaints divided on the basis of status(Pending, In-Progress & Resolved) & various categories (&sub- categories) like Registration, Academics, DSW, MIS/ParentPortal, Health Centre etc.
+Complaints are divided on the basis of status(Pending, In-Progress & Resolved) & various categories (&sub- categories) like Registration, Academics, DSW, MIS/ParentPortal, Health Centre etc.
 
 Can view all the public grievances, can upvote, downvote and comment on the complaints.
 
@@ -23,7 +31,7 @@ Admin will be able to view the profile of all registered users.
 Can sort the complaints by status and/or by categories.
 
 
-
+## Push Notifications
 Using FCM, notifications can be pushed using Device-to-Device method. The student will be notified if:
   they been blocked/unblocked by the user,
   Admin has replied to their complaint,
@@ -31,7 +39,7 @@ Using FCM, notifications can be pushed using Device-to-Device method. The studen
   Some other student has commented to their complaint,
   If their complaint gets deleted by the admin,
   
-
+## Links for sharing
 A particular complaint can be shared to various other social platforms with the help of a link. On clicking that link, that particular complaint will be opened all with other corresponding details.
 
 
