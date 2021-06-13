@@ -50,10 +50,10 @@ A new hierarchy level for the Mess Admin will be introduced for the mess manager
 Includes: QR Code, Inventory, Attendance Records & Mess Schedule.
 
 ## QR Code
--With the help of QR Code, a consolidated list of records can be given about the number of people coming to mess
--Various problems that is caused due to absence of attendance system could be prevented. 
--While entering the mess, there will be a QR SCANNER which will scan the unique QR Code of every individual student coming to the mess and recording their attendance.
--An unique QR Code will be generated and displayed for students. And Mess Admin will have the feature to scan any QR Code to get an user's details.
+- With the help of QR Code, a consolidated list of records can be given about the number of people coming to mess
+- Various problems that is caused due to absence of attendance system could be prevented. 
+- While entering the mess, there will be a QR SCANNER which will scan the unique QR Code of every individual student coming to the mess and recording their attendance.
+- An unique QR Code will be generated and displayed for students. And Mess Admin will have the feature to scan any QR Code to get an user's details.
 
 ## Inventory
 Mess Manager can look up and keep adding or editing or deleting the inventory fields. 
@@ -104,18 +104,18 @@ Students will be able to access all the Institute's website from a single app. M
 **Server:** MongoDB
 
 **Google Firebase:**
--Authentication   
--Realtime Database
--Firebase Cloud Messaging
--Cloud Storage
+- Authentication   
+- Realtime Database
+- Firebase Cloud Messaging
+- Cloud Storage
 
 **Libraries Used:**
--Glide			      
--MPAndroidChart
--Shimmer
--Butterknife
--Circular ImageView
--Dots Loader Animation
+- Glide			      
+- MPAndroidChart
+- Shimmer
+- Butterknife
+- Circular ImageView
+- Dots Loader Animation
 
 
 # Data Security:
