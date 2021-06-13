@@ -49,19 +49,19 @@ A new hierarchy level for the Mess Admin will be introduced for the mess manager
 
 Includes: QR Code, Inventory, Attendance Records & Mess Schedule.
 
-## QR Code
+### QR Code
 - With the help of QR Code, a consolidated list of records can be given about the number of people coming to mess
 - Various problems that is caused due to absence of attendance system could be prevented. 
 - While entering the mess, there will be a QR SCANNER which will scan the unique QR Code of every individual student coming to the mess and recording their attendance.
 - An unique QR Code will be generated and displayed for students. And Mess Admin will have the feature to scan any QR Code to get an user's details.
 
-## Inventory
+### Inventory
 Mess Manager can look up and keep adding or editing or deleting the inventory fields. 
 
 A proper list could be published with all the necessary items,after selecting the respective hostel mess.
 
 
-## Attendance Records
+### Attendance Records
 A student can track his/her mess attendance, the frequency of how many times in a week or month do they go to the mess.
 
 Mess Manager will also be able to view the details of a student's records after scanning the respective student’s QR Code.
@@ -71,7 +71,7 @@ A detailed report of the whole week and month will be displayed on the screen, i
 Mess Manager can get the complete data of how many students had entered the mess per meal in a day or week or month.
 
 
-## Mess Schedule
+### Mess Schedule
 After choosing a particular hostel mess and the day of the week, students can view the mess plan accordingly.
 
 Admin can edit, add or delete the schedule if there is any change in the mess plan.
