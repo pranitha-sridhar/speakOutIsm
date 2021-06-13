@@ -1,5 +1,6 @@
 # Speak Out ISM
 Complete presentation is available here. [Speak Out Slides](https://docs.google.com/presentation/d/1-LfcW_-15KBgrjN-o9IvKaEQ4p86FSLnZgtq8DyZOJE/edit?usp=sharing).
+
 Developed by the students of ISM, the app highlights the problems faced by ISMites accurately. 
 ‘Speak Out’  lets the students to express their concerns and grievances in an efficient way, and allows the competent authority to redress them quickly.
 
