@@ -33,11 +33,11 @@ Can sort the complaints by status and/or by categories.
 
 ## Push Notifications
 Using FCM, notifications can be pushed using Device-to-Device method. The student will be notified if:
--They been blocked/unblocked by the user
--Admin has replied to their complaint
--If status of the complaint has been changed
--Some other student has commented to their complaint
--If their complaint gets deleted by the Admin
+- They been blocked/unblocked by the user
+- Admin has replied to their complaint
+- If status of the complaint has been changed
+- Some other student has commented to their complaint
+- If their complaint gets deleted by the Admin
   
 ## Links for sharing
 A particular complaint can be shared to various other social platforms with the help of a link. On clicking that link, that particular complaint will be opened all with other corresponding details about the upvotes, downvotes, comments and the conversation (between admin and the owner of the complaint).
